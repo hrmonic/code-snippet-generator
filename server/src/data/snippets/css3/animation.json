@@ -1,0 +1,14 @@
+{
+  "id": "css3-animation",
+  "name": "Animations CSS3",
+  "description": "Animations CSS3 avec keyframes",
+  "language": "css3",
+  "feature": "animation",
+  "code": "@keyframes fadeIn {\n    from {\n        opacity: 0;\n        transform: translateY(20px);\n    }\n    to {\n        opacity: 1;\n        transform: translateY(0);\n    }\n}\n\n@keyframes slideIn {\n    from {\n        transform: translateX(-100%);\n    }\n    to {\n        transform: translateX(0);\n    }\n}\n\n@keyframes pulse {\n    0%, 100% {\n        transform: scale(1);\n    }\n    50% {\n        transform: scale(1.05);\n    }\n}\n\n.fade-in {\n    animation: fadeIn 0.5s ease-in-out;\n}\n\n.slide-in {\n    animation: slideIn 0.3s ease-out;\n}\n\n.pulse {\n    animation: pulse 2s infinite;\n}",
+  "variables": [],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

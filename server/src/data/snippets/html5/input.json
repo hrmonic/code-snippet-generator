@@ -1,0 +1,14 @@
+{
+  "id": "html5-input",
+  "name": "Champs Input HTML5",
+  "description": "Collection de champs input HTML5 avec types modernes",
+  "language": "html5",
+  "feature": "input",
+  "code": "<div class=\"form-container\">\n    <input type=\"text\" placeholder=\"Texte\" required>\n    <input type=\"email\" placeholder=\"Email\" required>\n    <input type=\"tel\" placeholder=\"Téléphone\">\n    <input type=\"url\" placeholder=\"URL\">\n    <input type=\"number\" placeholder=\"Nombre\" min=\"0\" max=\"100\">\n    <input type=\"date\" placeholder=\"Date\">\n    <input type=\"time\" placeholder=\"Heure\">\n    <input type=\"datetime-local\" placeholder=\"Date et heure\">\n    <input type=\"color\" placeholder=\"Couleur\">\n    <input type=\"range\" min=\"0\" max=\"100\" value=\"50\">\n    <input type=\"search\" placeholder=\"Recherche\">\n    <input type=\"password\" placeholder=\"Mot de passe\" required>\n</div>",
+  "variables": [],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

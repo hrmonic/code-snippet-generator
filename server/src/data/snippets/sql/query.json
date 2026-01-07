@@ -1,0 +1,35 @@
+{
+  "id": "sql-query",
+  "name": "Requêtes SQL Sécurisées",
+  "description": "Requêtes SQL avec prepared statements",
+  "language": "sql",
+  "feature": "query",
+  "code": "-- SELECT avec filtres\nSELECT {{columns}} FROM {{tableName}} WHERE id = ?;\n\n-- INSERT sécurisé\nINSERT INTO {{tableName}} ({{columns}}) VALUES (?, ?, ?);\n\n-- UPDATE sécurisé\nUPDATE {{tableName}} SET column1 = ?, column2 = ? WHERE id = ?;\n\n-- DELETE sécurisé\nDELETE FROM {{tableName}} WHERE id = ?;\n\n-- SELECT avec JOIN\nSELECT u.id, u.name, p.title\nFROM {{tableName}} u\nINNER JOIN posts p ON u.id = p.user_id\nWHERE u.active = 1;\n\n-- SELECT avec agrégation\nSELECT COUNT(*) as total, status\nFROM {{tableName}}\nGROUP BY status;\n\n-- Exemple d'utilisation avec PDO (PHP)\n-- $stmt = $pdo->prepare(\"SELECT * FROM {{tableName}} WHERE id = ?\");\n-- $stmt->execute([$id]);\n-- $result = $stmt->fetch();",
+  "variables": [
+    {
+      "name": "tableName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de la table"
+    },
+    {
+      "name": "columns",
+      "type": "string",
+      "required": false,
+      "description": "Colonnes à sélectionner",
+      "defaultValue": "*"
+    },
+    {
+      "name": "operation",
+      "type": "string",
+      "required": false,
+      "description": "Type d'opération",
+      "defaultValue": "SELECT"
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

@@ -1,0 +1,27 @@
+{
+  "id": "html5-layout",
+  "name": "Layout HTML5 Responsive",
+  "description": "Structure HTML5 sémantique responsive",
+  "language": "html5",
+  "feature": "layout",
+  "code": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{title}}</title>\n</head>\n<body>\n    <header>\n        <nav>\n            <ul>\n                <li><a href=\"#\">Accueil</a></li>\n                <li><a href=\"#\">À propos</a></li>\n                <li><a href=\"#\">Contact</a></li>\n            </ul>\n        </nav>\n    </header>\n    \n    <main>\n        <article>\n            <h1>{{title}}</h1>\n            <section>\n                <p>Contenu principal</p>\n            </section>\n        </article>\n        \n        <aside>\n            <h2>Sidebar</h2>\n            <p>Contenu secondaire</p>\n        </aside>\n    </main>\n    \n    <footer>\n        <p>&copy; 2024 {{companyName}}</p>\n    </footer>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Titre de la page"
+    },
+    {
+      "name": "companyName",
+      "type": "string",
+      "required": false,
+      "description": "Nom de l'entreprise"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

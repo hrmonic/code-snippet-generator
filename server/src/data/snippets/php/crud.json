@@ -1,0 +1,28 @@
+{
+  "id": "php-crud",
+  "name": "CRUD PHP avec PDO",
+  "description": "CRUD complet avec PDO et protection contre SQL injection",
+  "language": "php",
+  "feature": "crud",
+  "code": "<?php\n\nclass {{entityName}}Controller {\n    private $db;\n    private $tableName = '{{tableName}}';\n    \n    public function __construct($db) {\n        $this->db = $db;\n    }\n    \n    // CREATE\n    public function create($data) {\n        $fields = implode(', ', array_keys($data));\n        $placeholders = ':' . implode(', :', array_keys($data));\n        \n        $sql = \"INSERT INTO {$this->tableName} ({$fields}) VALUES ({$placeholders})\";\n        $stmt = $this->db->prepare($sql);\n        \n        foreach ($data as $key => $value) {\n            $stmt->bindValue(':' . $key, $value);\n        }\n        \n        return $stmt->execute();\n    }\n    \n    // READ\n    public function findAll() {\n        $sql = \"SELECT * FROM {$this->tableName}\";\n        $stmt = $this->db->prepare($sql);\n        $stmt->execute();\n        return $stmt->fetchAll(PDO::FETCH_ASSOC);\n    }\n    \n    public function findById($id) {\n        $sql = \"SELECT * FROM {$this->tableName} WHERE id = :id\";\n        $stmt = $this->db->prepare($sql);\n        $stmt->bindValue(':id', $id, PDO::PARAM_INT);\n        $stmt->execute();\n        return $stmt->fetch(PDO::FETCH_ASSOC);\n    }\n    \n    // UPDATE\n    public function update($id, $data) {\n        $set = [];\n        foreach (array_keys($data) as $field) {\n            $set[] = \"{$field} = :{$field}\";\n        }\n        $setClause = implode(', ', $set);\n        \n        $sql = \"UPDATE {$this->tableName} SET {$setClause} WHERE id = :id\";\n        $stmt = $this->db->prepare($sql);\n        \n        foreach ($data as $key => $value) {\n            $stmt->bindValue(':' . $key, $value);\n        }\n        $stmt->bindValue(':id', $id, PDO::PARAM_INT);\n        \n        return $stmt->execute();\n    }\n    \n    // DELETE\n    public function delete($id) {\n        $sql = \"DELETE FROM {$this->tableName} WHERE id = :id\";\n        $stmt = $this->db->prepare($sql);\n        $stmt->bindValue(':id', $id, PDO::PARAM_INT);\n        return $stmt->execute();\n    }\n}\n\n// Utilisation\n$controller = new {{entityName}}Controller($pdo);\n$users = $controller->findAll();",
+  "variables": [
+    {
+      "name": "entityName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de l'entité (ex: User)"
+    },
+    {
+      "name": "tableName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de la table (ex: users)"
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  },
+  "tests": "<?php\n// Tests unitaires\nclass {{entityName}}ControllerTest extends PHPUnit\\Framework\\TestCase {\n    public function testCreate() {\n        // Test création\n    }\n    \n    public function testFindAll() {\n        // Test récupération\n    }\n}"
+}
+

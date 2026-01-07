@@ -1,0 +1,14 @@
+{
+  "id": "javascript-validation",
+  "name": "Validation de Formulaire JavaScript",
+  "description": "Validation de formulaire côté client avec messages d'erreur",
+  "language": "javascript",
+  "feature": "validation",
+  "code": "class FormValidator {\n    constructor(formId) {\n        this.form = document.getElementById(formId);\n        this.errors = {};\n    }\n\n    validate() {\n        this.errors = {};\n        const inputs = this.form.querySelectorAll('input, textarea, select');\n        \n        inputs.forEach(input => {\n            const value = input.value.trim();\n            const rules = input.dataset.rules ? input.dataset.rules.split('|') : [];\n            \n            rules.forEach(rule => {\n                if (!this.checkRule(value, rule, input)) {\n                    this.addError(input.name, this.getErrorMessage(rule));\n                }\n            });\n        });\n        \n        return Object.keys(this.errors).length === 0;\n    }\n\n    checkRule(value, rule, input) {\n        switch (rule) {\n            case 'required':\n                return value.length > 0;\n            case 'email':\n                return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);\n            case 'min':\n                const min = parseInt(input.dataset.min || '0');\n                return value.length >= min;\n            case 'max':\n                const max = parseInt(input.dataset.max || '1000');\n                return value.length <= max;\n            default:\n                return true;\n        }\n    }\n\n    addError(field, message) {\n        if (!this.errors[field]) {\n            this.errors[field] = [];\n        }\n        this.errors[field].push(message);\n    }\n\n    getErrorMessage(rule) {\n        const messages = {\n            required: 'Ce champ est requis',\n            email: 'Email invalide',\n            min: 'Trop court',\n            max: 'Trop long',\n        };\n        return messages[rule] || 'Erreur de validation';\n    }\n\n    displayErrors() {\n        Object.keys(this.errors).forEach(field => {\n            const input = this.form.querySelector(`[name=\"${field}\"]`);\n            if (input) {\n                input.classList.add('error');\n                const errorDiv = document.createElement('div');\n                errorDiv.className = 'error-message';\n                errorDiv.textContent = this.errors[field].join(', ');\n                input.parentNode.appendChild(errorDiv);\n            }\n        });\n    }\n}\n\n// Utilisation\nconst validator = new FormValidator('myForm');\nif (validator.validate()) {\n    // Soumettre le formulaire\n} else {\n    validator.displayErrors();\n}",
+  "variables": [],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

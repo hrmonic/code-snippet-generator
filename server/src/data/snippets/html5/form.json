@@ -1,0 +1,36 @@
+{
+  "id": "html5-form",
+  "name": "Formulaire HTML5",
+  "description": "Formulaire HTML5 avec validation native et champs sécurisés",
+  "language": "html5",
+  "feature": "form",
+  "code": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{formName}}</title>\n</head>\n<body>\n    <form action=\"{{action}}\" method=\"{{method}}\" novalidate>\n        <div class=\"form-group\">\n            <label for=\"name\">Nom</label>\n            <input type=\"text\" id=\"name\" name=\"name\" required minlength=\"2\" maxlength=\"50\">\n        </div>\n        \n        <div class=\"form-group\">\n            <label for=\"email\">Email</label>\n            <input type=\"email\" id=\"email\" name=\"email\" required>\n        </div>\n        \n        <div class=\"form-group\">\n            <label for=\"message\">Message</label>\n            <textarea id=\"message\" name=\"message\" rows=\"5\" required></textarea>\n        </div>\n        \n        <button type=\"submit\">Envoyer</button>\n    </form>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "formName",
+      "type": "string",
+      "required": true,
+      "description": "Nom du formulaire"
+    },
+    {
+      "name": "action",
+      "type": "string",
+      "required": false,
+      "description": "URL de soumission",
+      "defaultValue": "/submit"
+    },
+    {
+      "name": "method",
+      "type": "string",
+      "required": false,
+      "description": "Méthode HTTP",
+      "defaultValue": "POST"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true,
+    "csrf": true
+  }
+}
+

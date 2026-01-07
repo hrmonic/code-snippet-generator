@@ -1,0 +1,14 @@
+{
+  "id": "css3-layout",
+  "name": "Layout CSS3 avec Grid et Flexbox",
+  "description": "Layout responsive avec CSS Grid et Flexbox",
+  "language": "css3",
+  "feature": "layout",
+  "code": ".container {\n    display: grid;\n    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));\n    gap: 2rem;\n    padding: 2rem;\n}\n\n.header {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 1rem 2rem;\n    background-color: #f8f9fa;\n}\n\n.main-content {\n    display: flex;\n    flex-direction: column;\n    gap: 1.5rem;\n}\n\n.sidebar {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n}\n\n@media (max-width: 768px) {\n    .container {\n        grid-template-columns: 1fr;\n    }\n    \n    .header {\n        flex-direction: column;\n        gap: 1rem;\n    }\n}",
+  "variables": [],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

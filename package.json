@@ -1,0 +1,66 @@
+{
+  "name": "code-snippet-generator",
+  "version": "1.0.0",
+  "description": "Code Snippet Generator - Intelligent code generation tool for developers",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:frontend\"",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:server": "npm run dev --workspace=server",
+    "build": "npm run build --workspace=frontend && npm run build --workspace=server",
+    "test": "npm run test --workspace=frontend && npm run test --workspace=server",
+    "lint": "npm run lint --workspace=frontend && npm run lint --workspace=server",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "type-check": "npm run type-check --workspace=frontend && npm run type-check --workspace=server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.2.5"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hrmonic/code-snippet-generator.git"
+  },
+  "homepage": "https://github.com/hrmonic/code-snippet-generator#readme",
+  "bugs": {
+    "url": "https://github.com/hrmonic/code-snippet-generator/issues"
+  },
+  "keywords": [
+    "code-generator",
+    "code-generation",
+    "snippets",
+    "developer-tools",
+    "code-snippets",
+    "html5-generator",
+    "css3-generator",
+    "javascript-generator",
+    "php-generator",
+    "java-generator",
+    "sql-generator",
+    "crud-generator",
+    "api-generator",
+    "form-generator",
+    "react",
+    "nodejs",
+    "typescript",
+    "monaco-editor",
+    "vite",
+    "express",
+    "open-source",
+    "code-snippet-generator",
+    "ai-code",
+    "automated-code",
+    "code-templates"
+  ],
+  "author": "hrmonic",
+  "license": "MIT"
+}
+
