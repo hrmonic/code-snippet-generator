@@ -4,7 +4,7 @@ import { generateCode } from '../lib/generator';
 import { FeatureInfo } from './FeatureInfo';
 
 export function SnippetOptions() {
-  const { selectedLanguage, selectedFeature, options, setOptions, setGeneratedCode, setLoading, setError } =
+  const { selectedLanguage, selectedFeature, setOptions, setGeneratedCode, setLoading, setError } =
     useGeneratorStore();
   const [localOptions, setLocalOptions] = useState<Record<string, string>>({});
 
