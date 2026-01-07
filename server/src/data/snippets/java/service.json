@@ -8,15 +8,45 @@
   "variables": [
     {
       "name": "entityName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de l'entité",
       "required": true,
-      "description": "Nom de l'entité (ex: User)"
+      "description": "Nom de la classe Service (ex: User)",
+      "placeholder": "User"
     },
     {
       "name": "tableName",
-      "type": "string",
-      "required": true,
-      "description": "Nom de la table (ex: users)"
+      "type": "text",
+      "label": "Nom de la table",
+      "required": false,
+      "description": "Nom de la table (pour le repository)",
+      "placeholder": "users",
+      "defaultValue": "users"
+    },
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": false,
+      "description": "Package Java (ex: com.example.service)",
+      "placeholder": "com.example.service",
+      "defaultValue": "com.example.service"
+    },
+    {
+      "name": "includeValidation",
+      "type": "checkbox",
+      "label": "Validation des entités",
+      "required": false,
+      "description": "Ajouter la validation des entités",
+      "defaultValue": true
+    },
+    {
+      "name": "includeTransaction",
+      "type": "checkbox",
+      "label": "Annotation @Transactional",
+      "required": false,
+      "description": "Ajouter @Transactional sur la classe",
+      "defaultValue": true
     }
   ],
   "security": {

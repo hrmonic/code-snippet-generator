@@ -5,7 +5,72 @@
   "language": "css3",
   "feature": "layout",
   "code": ".container {\n    display: grid;\n    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));\n    gap: 2rem;\n    padding: 2rem;\n}\n\n.header {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 1rem 2rem;\n    background-color: #f8f9fa;\n}\n\n.main-content {\n    display: flex;\n    flex-direction: column;\n    gap: 1.5rem;\n}\n\n.sidebar {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n}\n\n@media (max-width: 768px) {\n    .container {\n        grid-template-columns: 1fr;\n    }\n    \n    .header {\n        flex-direction: column;\n        gap: 1rem;\n    }\n}",
-  "variables": [],
+  "variables": [
+    {
+      "name": "layoutType",
+      "type": "select",
+      "label": "Type de layout",
+      "required": true,
+      "description": "Choisissez le type de layout",
+      "defaultValue": "grid",
+      "options": [
+        { "value": "grid", "label": "Grid Layout" },
+        { "value": "flexbox", "label": "Flexbox Layout" },
+        { "value": "hybrid", "label": "Hybride (Grid + Flexbox)" },
+        { "value": "all", "label": "Tous les exemples" }
+      ]
+    },
+    {
+      "name": "gridColumns",
+      "type": "number",
+      "label": "Nombre de colonnes (Grid)",
+      "required": false,
+      "description": "Nombre de colonnes pour le grid",
+      "defaultValue": 3,
+      "min": 1,
+      "max": 12,
+      "dependsOn": {
+        "layoutType": ["grid", "hybrid", "all"]
+      }
+    },
+    {
+      "name": "gap",
+      "type": "select",
+      "label": "Espacement",
+      "required": false,
+      "description": "Espacement entre les éléments",
+      "defaultValue": "2rem",
+      "options": [
+        { "value": "1rem", "label": "Petit (1rem)" },
+        { "value": "1.5rem", "label": "Moyen (1.5rem)" },
+        { "value": "2rem", "label": "Grand (2rem)" }
+      ]
+    },
+    {
+      "name": "responsive",
+      "type": "checkbox",
+      "label": "Mode responsive",
+      "required": false,
+      "description": "Ajouter les media queries pour mobile",
+      "defaultValue": true
+    },
+    {
+      "name": "breakpoint",
+      "type": "select",
+      "label": "Point de rupture",
+      "required": false,
+      "description": "Breakpoint pour le mode responsive",
+      "defaultValue": "768",
+      "options": [
+        { "value": "640", "label": "640px (sm)" },
+        { "value": "768", "label": "768px (md)" },
+        { "value": "1024", "label": "1024px (lg)" }
+      ],
+      "dependsOn": {
+        "responsive": [true]
+      }
+    }
+  ],
   "security": {
     "sqlInjection": false,
     "xss": false

@@ -8,22 +8,115 @@
   "variables": [
     {
       "name": "cardTitle",
-      "type": "string",
+      "type": "text",
+      "label": "Titre de la card",
       "required": true,
-      "description": "Titre de la card"
+      "description": "Titre principal de la card",
+      "placeholder": "Mon titre"
     },
     {
       "name": "cardContent",
-      "type": "string",
+      "type": "textarea",
+      "label": "Contenu de la card",
       "required": true,
-      "description": "Contenu de la card"
+      "description": "Contenu principal de la card",
+      "placeholder": "Description du contenu..."
+    },
+    {
+      "name": "backgroundColor",
+      "type": "color",
+      "label": "Couleur de fond",
+      "required": false,
+      "description": "Couleur de fond de la card",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "name": "borderRadius",
+      "type": "select",
+      "label": "Rayon des bordures",
+      "required": false,
+      "description": "Border radius de la card",
+      "defaultValue": "8px",
+      "options": [
+        { "value": "0px", "label": "Carré" },
+        { "value": "4px", "label": "Petit" },
+        { "value": "8px", "label": "Moyen" },
+        { "value": "12px", "label": "Grand" },
+        { "value": "20px", "label": "Très grand" }
+      ]
+    },
+    {
+      "name": "padding",
+      "type": "select",
+      "label": "Espacement interne",
+      "required": false,
+      "description": "Padding de la card",
+      "defaultValue": "1.5rem",
+      "options": [
+        { "value": "1rem", "label": "Petit" },
+        { "value": "1.5rem", "label": "Moyen" },
+        { "value": "2rem", "label": "Grand" }
+      ]
+    },
+    {
+      "name": "maxWidth",
+      "type": "select",
+      "label": "Largeur maximale",
+      "required": false,
+      "description": "Largeur maximale de la card",
+      "defaultValue": "400px",
+      "options": [
+        { "value": "300px", "label": "300px" },
+        { "value": "400px", "label": "400px" },
+        { "value": "500px", "label": "500px" },
+        { "value": "100%", "label": "Pleine largeur" }
+      ]
+    },
+    {
+      "name": "hoverEffect",
+      "type": "checkbox",
+      "label": "Effet hover",
+      "required": false,
+      "description": "Ajouter un effet au survol",
+      "defaultValue": true
+    },
+    {
+      "name": "shadow",
+      "type": "checkbox",
+      "label": "Ombre",
+      "required": false,
+      "description": "Ajouter une ombre à la card",
+      "defaultValue": true
+    },
+    {
+      "name": "includeFooter",
+      "type": "checkbox",
+      "label": "Inclure un footer",
+      "required": false,
+      "description": "Ajouter une section footer avec bouton",
+      "defaultValue": true
     },
     {
       "name": "buttonText",
-      "type": "string",
+      "type": "text",
+      "label": "Texte du bouton",
       "required": false,
-      "description": "Texte du bouton",
-      "defaultValue": "En savoir plus"
+      "description": "Texte du bouton dans le footer",
+      "defaultValue": "En savoir plus",
+      "dependsOn": {
+        "includeFooter": [true]
+      }
+    },
+    {
+      "name": "buttonColor",
+      "type": "color",
+      "label": "Couleur du bouton",
+      "required": false,
+      "description": "Couleur de fond du bouton",
+      "defaultValue": "#667eea",
+      "dependsOn": {
+        "includeFooter": [true]
+      }
     }
   ],
   "security": {

@@ -35,9 +35,8 @@ class CodeGenerator {
 
     const result = strategy.generate(snippet, request.options);
     
-    // Si le résultat est un tableau, on retourne le premier élément pour la compatibilité
-    // Le frontend pourra être amélioré pour gérer plusieurs fichiers
-    return Array.isArray(result) ? result[0] : result;
+    // Retourner le résultat tel quel (peut être un seul fichier ou un tableau)
+    return result;
   }
 }
 

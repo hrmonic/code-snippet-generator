@@ -8,15 +8,43 @@
   "variables": [
     {
       "name": "tableName1",
-      "type": "string",
+      "type": "text",
+      "label": "Première table",
       "required": true,
-      "description": "Première table"
+      "description": "Nom de la première table",
+      "placeholder": "users"
     },
     {
       "name": "tableName2",
-      "type": "string",
+      "type": "text",
+      "label": "Deuxième table",
       "required": false,
-      "description": "Deuxième table"
+      "description": "Nom de la deuxième table (optionnel)",
+      "placeholder": "accounts"
+    },
+    {
+      "name": "includeSavepoints",
+      "type": "checkbox",
+      "label": "Points de sauvegarde (Savepoints)",
+      "required": false,
+      "description": "Inclure les exemples avec SAVEPOINT",
+      "defaultValue": false
+    },
+    {
+      "name": "includeIsolationLevels",
+      "type": "checkbox",
+      "label": "Niveaux d'isolation",
+      "required": false,
+      "description": "Inclure les exemples avec isolation levels",
+      "defaultValue": false
+    },
+    {
+      "name": "includeCodeExamples",
+      "type": "checkbox",
+      "label": "Exemples de code (PDO)",
+      "required": false,
+      "description": "Inclure les exemples de code PHP avec PDO",
+      "defaultValue": true
     }
   ],
   "security": {

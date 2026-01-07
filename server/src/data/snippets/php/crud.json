@@ -8,15 +8,43 @@
   "variables": [
     {
       "name": "entityName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de l'entité",
       "required": true,
-      "description": "Nom de l'entité (ex: User)"
+      "description": "Nom de la classe Controller (ex: User)",
+      "placeholder": "User"
     },
     {
       "name": "tableName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la table",
       "required": true,
-      "description": "Nom de la table (ex: users)"
+      "description": "Nom de la table en base de données (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "includeAllMethods",
+      "type": "checkbox",
+      "label": "Toutes les méthodes CRUD",
+      "required": false,
+      "description": "Inclure CREATE, READ, UPDATE, DELETE",
+      "defaultValue": true
+    },
+    {
+      "name": "includeErrorHandling",
+      "type": "checkbox",
+      "label": "Gestion d'erreurs",
+      "required": false,
+      "description": "Ajouter la gestion d'erreurs avec try/catch",
+      "defaultValue": false
+    },
+    {
+      "name": "includeValidation",
+      "type": "checkbox",
+      "label": "Validation des données",
+      "required": false,
+      "description": "Ajouter la validation des données d'entrée",
+      "defaultValue": false
     }
   ],
   "security": {

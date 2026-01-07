@@ -8,27 +8,67 @@
   "variables": [
     {
       "name": "viewName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la vue",
       "required": true,
-      "description": "Nom de la vue"
+      "description": "Nom de la vue à créer",
+      "placeholder": "active_users"
     },
     {
       "name": "tableName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la table",
       "required": true,
-      "description": "Nom de la table"
+      "description": "Nom de la table principale",
+      "placeholder": "users"
+    },
+    {
+      "name": "viewTypes",
+      "type": "multiselect",
+      "label": "Types de vues",
+      "required": true,
+      "description": "Sélectionnez les types de vues à inclure",
+      "defaultValue": ["simple", "join"],
+      "options": [
+        { "value": "simple", "label": "Vue simple" },
+        { "value": "join", "label": "Vue avec JOIN" },
+        { "value": "aggregation", "label": "Vue avec agrégation" },
+        { "value": "calculated", "label": "Vue avec calculs" },
+        { "value": "materialized", "label": "Vue matérialisée" },
+        { "value": "union", "label": "Vue avec UNION" },
+        { "value": "subquery", "label": "Vue avec sous-requête" },
+        { "value": "window", "label": "Vue avec window functions" }
+      ]
     },
     {
       "name": "tableName1",
-      "type": "string",
+      "type": "text",
+      "label": "Première table (JOIN)",
       "required": false,
-      "description": "Première table"
+      "description": "Première table pour les vues avec JOIN",
+      "placeholder": "users",
+      "dependsOn": {
+        "viewTypes": ["join", "aggregation", "union"]
+      }
     },
     {
       "name": "tableName2",
-      "type": "string",
+      "type": "text",
+      "label": "Deuxième table (JOIN)",
       "required": false,
-      "description": "Deuxième table"
+      "description": "Deuxième table pour les vues avec JOIN",
+      "placeholder": "posts",
+      "dependsOn": {
+        "viewTypes": ["join", "aggregation", "union"]
+      }
+    },
+    {
+      "name": "includeManagement",
+      "type": "checkbox",
+      "label": "Commandes de gestion",
+      "required": false,
+      "description": "Inclure ALTER, DROP, SHOW CREATE VIEW",
+      "defaultValue": true
     }
   ],
   "security": {

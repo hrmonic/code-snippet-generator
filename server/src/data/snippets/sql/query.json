@@ -8,23 +8,57 @@
   "variables": [
     {
       "name": "tableName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la table",
       "required": true,
-      "description": "Nom de la table"
-    },
-    {
-      "name": "columns",
-      "type": "string",
-      "required": false,
-      "description": "Colonnes à sélectionner",
-      "defaultValue": "*"
+      "description": "Nom de la table en base de données",
+      "placeholder": "users"
     },
     {
       "name": "operation",
-      "type": "string",
+      "type": "select",
+      "label": "Type d'opération",
+      "required": true,
+      "description": "Type d'opération SQL à générer",
+      "defaultValue": "SELECT",
+      "options": [
+        { "value": "SELECT", "label": "SELECT" },
+        { "value": "INSERT", "label": "INSERT" },
+        { "value": "UPDATE", "label": "UPDATE" },
+        { "value": "DELETE", "label": "DELETE" },
+        { "value": "all", "label": "Toutes les opérations" }
+      ]
+    },
+    {
+      "name": "columns",
+      "type": "text",
+      "label": "Colonnes",
       "required": false,
-      "description": "Type d'opération",
-      "defaultValue": "SELECT"
+      "description": "Colonnes séparées par des virgules (laissez vide pour *)",
+      "placeholder": "id,name,email",
+      "defaultValue": "*"
+    },
+    {
+      "name": "includeJoin",
+      "type": "checkbox",
+      "label": "Exemple avec JOIN",
+      "required": false,
+      "description": "Inclure un exemple avec JOIN",
+      "defaultValue": false,
+      "dependsOn": {
+        "operation": ["SELECT", "all"]
+      }
+    },
+    {
+      "name": "includeAggregation",
+      "type": "checkbox",
+      "label": "Exemple avec agrégation",
+      "required": false,
+      "description": "Inclure un exemple avec COUNT, GROUP BY",
+      "defaultValue": false,
+      "dependsOn": {
+        "operation": ["SELECT", "all"]
+      }
     }
   ],
   "security": {

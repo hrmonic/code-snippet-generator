@@ -5,7 +5,64 @@
   "language": "css3",
   "feature": "variables",
   "code": ":root {\n    /* Couleurs principales */\n    --primary-color: #667eea;\n    --secondary-color: #764ba2;\n    --accent-color: #f093fb;\n    \n    /* Couleurs de texte */\n    --text-primary: #333333;\n    --text-secondary: #666666;\n    --text-light: #999999;\n    \n    /* Couleurs de fond */\n    --bg-primary: #ffffff;\n    --bg-secondary: #f8f9fa;\n    --bg-dark: #1a1a1a;\n    \n    /* Espacements */\n    --spacing-xs: 0.25rem;\n    --spacing-sm: 0.5rem;\n    --spacing-md: 1rem;\n    --spacing-lg: 1.5rem;\n    --spacing-xl: 2rem;\n    \n    /* Tailles de police */\n    --font-size-xs: 0.75rem;\n    --font-size-sm: 0.875rem;\n    --font-size-base: 1rem;\n    --font-size-lg: 1.25rem;\n    --font-size-xl: 1.5rem;\n    \n    /* Rayons de bordure */\n    --border-radius-sm: 4px;\n    --border-radius-md: 8px;\n    --border-radius-lg: 12px;\n    \n    /* Ombres */\n    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);\n    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);\n    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);\n    \n    /* Transitions */\n    --transition-fast: 0.15s ease;\n    --transition-base: 0.3s ease;\n    --transition-slow: 0.5s ease;\n}\n\n/* Thème sombre */\n[data-theme=\"dark\"] {\n    --primary-color: #8b5cf6;\n    --text-primary: #ffffff;\n    --text-secondary: #cccccc;\n    --bg-primary: #1a1a1a;\n    --bg-secondary: #2d2d2d;\n}\n\n/* Utilisation des variables */\n.button {\n    background-color: var(--primary-color);\n    color: var(--text-primary);\n    padding: var(--spacing-md) var(--spacing-lg);\n    border-radius: var(--border-radius-md);\n    font-size: var(--font-size-base);\n    box-shadow: var(--shadow-md);\n    transition: all var(--transition-base);\n}\n\n.button:hover {\n    background-color: var(--secondary-color);\n    box-shadow: var(--shadow-lg);\n}\n\n.card {\n    background-color: var(--bg-primary);\n    padding: var(--spacing-lg);\n    border-radius: var(--border-radius-lg);\n    box-shadow: var(--shadow-sm);\n}\n\n/* Variables avec fallback */\n.element {\n    color: var(--custom-color, #000000);\n    margin: var(--custom-margin, 1rem);\n}\n\n/* Variables calculées */\n.container {\n    --container-width: 1200px;\n    --container-padding: var(--spacing-md);\n    max-width: calc(var(--container-width) + var(--container-padding) * 2);\n    padding: var(--container-padding);\n}",
-  "variables": [],
+  "variables": [
+    {
+      "name": "includeTheme",
+      "type": "checkbox",
+      "label": "Thème sombre",
+      "required": false,
+      "description": "Inclure un thème sombre avec data-theme",
+      "defaultValue": true
+    },
+    {
+      "name": "primaryColor",
+      "type": "color",
+      "label": "Couleur primaire",
+      "required": false,
+      "description": "Couleur primaire du thème",
+      "defaultValue": "#667eea"
+    },
+    {
+      "name": "secondaryColor",
+      "type": "color",
+      "label": "Couleur secondaire",
+      "required": false,
+      "description": "Couleur secondaire du thème",
+      "defaultValue": "#764ba2"
+    },
+    {
+      "name": "includeSpacing",
+      "type": "checkbox",
+      "label": "Variables d'espacement",
+      "required": false,
+      "description": "Inclure les variables d'espacement",
+      "defaultValue": true
+    },
+    {
+      "name": "includeTypography",
+      "type": "checkbox",
+      "label": "Variables typographiques",
+      "required": false,
+      "description": "Inclure les variables de taille de police",
+      "defaultValue": true
+    },
+    {
+      "name": "includeShadows",
+      "type": "checkbox",
+      "label": "Variables d'ombres",
+      "required": false,
+      "description": "Inclure les variables d'ombres",
+      "defaultValue": true
+    },
+    {
+      "name": "includeExamples",
+      "type": "checkbox",
+      "label": "Exemples d'utilisation",
+      "required": false,
+      "description": "Inclure des exemples d'utilisation des variables",
+      "defaultValue": true
+    }
+  ],
   "security": {
     "sqlInjection": false,
     "xss": false

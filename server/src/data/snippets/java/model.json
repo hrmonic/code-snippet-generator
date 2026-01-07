@@ -8,15 +8,60 @@
   "variables": [
     {
       "name": "entityName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de l'entité",
       "required": true,
-      "description": "Nom de l'entité (ex: User)"
+      "description": "Nom de la classe entité (ex: User)",
+      "placeholder": "User"
     },
     {
       "name": "tableName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la table",
       "required": true,
-      "description": "Nom de la table (ex: users)"
+      "description": "Nom de la table en base de données (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": false,
+      "description": "Package Java (ex: com.example.model)",
+      "placeholder": "com.example.model",
+      "defaultValue": "com.example.model"
+    },
+    {
+      "name": "includeTimestamps",
+      "type": "checkbox",
+      "label": "Inclure les timestamps",
+      "required": false,
+      "description": "Ajouter createdAt et updatedAt avec @PrePersist et @PreUpdate",
+      "defaultValue": true
+    },
+    {
+      "name": "fields",
+      "type": "text",
+      "label": "Champs additionnels",
+      "required": false,
+      "description": "Champs supplémentaires séparés par des virgules (ex: name,email,age)",
+      "placeholder": "name,email,age"
+    },
+    {
+      "name": "includeToString",
+      "type": "checkbox",
+      "label": "Méthode toString()",
+      "required": false,
+      "description": "Générer la méthode toString()",
+      "defaultValue": true
+    },
+    {
+      "name": "includeEqualsHashCode",
+      "type": "checkbox",
+      "label": "equals() et hashCode()",
+      "required": false,
+      "description": "Générer les méthodes equals() et hashCode()",
+      "defaultValue": false
     }
   ],
   "security": {

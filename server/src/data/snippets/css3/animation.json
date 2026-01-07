@@ -5,7 +5,91 @@
   "language": "css3",
   "feature": "animation",
   "code": "@keyframes fadeIn {\n    from {\n        opacity: 0;\n        transform: translateY(20px);\n    }\n    to {\n        opacity: 1;\n        transform: translateY(0);\n    }\n}\n\n@keyframes slideIn {\n    from {\n        transform: translateX(-100%);\n    }\n    to {\n        transform: translateX(0);\n    }\n}\n\n@keyframes pulse {\n    0%, 100% {\n        transform: scale(1);\n    }\n    50% {\n        transform: scale(1.05);\n    }\n}\n\n.fade-in {\n    animation: fadeIn 0.5s ease-in-out;\n}\n\n.slide-in {\n    animation: slideIn 0.3s ease-out;\n}\n\n.pulse {\n    animation: pulse 2s infinite;\n}",
-  "variables": [],
+  "variables": [
+    {
+      "name": "animationType",
+      "type": "select",
+      "label": "Type d'animation",
+      "required": true,
+      "description": "Choisissez le type d'animation à générer",
+      "defaultValue": "fadeIn",
+      "options": [
+        { "value": "fadeIn", "label": "Fade In" },
+        { "value": "slideIn", "label": "Slide In" },
+        { "value": "pulse", "label": "Pulse" },
+        { "value": "all", "label": "Toutes les animations" }
+      ]
+    },
+    {
+      "name": "duration",
+      "type": "select",
+      "label": "Durée",
+      "required": false,
+      "description": "Durée de l'animation",
+      "defaultValue": "0.5s",
+      "options": [
+        { "value": "0.2s", "label": "Rapide (0.2s)" },
+        { "value": "0.5s", "label": "Moyen (0.5s)" },
+        { "value": "1s", "label": "Lent (1s)" },
+        { "value": "2s", "label": "Très lent (2s)" }
+      ],
+      "dependsOn": {
+        "animationType": ["fadeIn", "slideIn"]
+      }
+    },
+    {
+      "name": "timingFunction",
+      "type": "select",
+      "label": "Fonction de timing",
+      "required": false,
+      "description": "Courbe d'accélération",
+      "defaultValue": "ease-in-out",
+      "options": [
+        { "value": "linear", "label": "Linear" },
+        { "value": "ease", "label": "Ease" },
+        { "value": "ease-in", "label": "Ease In" },
+        { "value": "ease-out", "label": "Ease Out" },
+        { "value": "ease-in-out", "label": "Ease In Out" }
+      ],
+      "dependsOn": {
+        "animationType": ["fadeIn", "slideIn"]
+      }
+    },
+    {
+      "name": "iterationCount",
+      "type": "select",
+      "label": "Nombre d'itérations",
+      "required": false,
+      "description": "Nombre de fois que l'animation se répète",
+      "defaultValue": "1",
+      "options": [
+        { "value": "1", "label": "Une fois" },
+        { "value": "2", "label": "Deux fois" },
+        { "value": "3", "label": "Trois fois" },
+        { "value": "infinite", "label": "Infini" }
+      ],
+      "dependsOn": {
+        "animationType": ["pulse", "all"]
+      }
+    },
+    {
+      "name": "direction",
+      "type": "select",
+      "label": "Direction du slide",
+      "required": false,
+      "description": "Direction de l'animation slide",
+      "defaultValue": "left",
+      "options": [
+        { "value": "left", "label": "De gauche" },
+        { "value": "right", "label": "De droite" },
+        { "value": "top", "label": "Du haut" },
+        { "value": "bottom", "label": "Du bas" }
+      ],
+      "dependsOn": {
+        "animationType": ["slideIn", "all"]
+      }
+    }
+  ],
   "security": {
     "sqlInjection": false,
     "xss": false

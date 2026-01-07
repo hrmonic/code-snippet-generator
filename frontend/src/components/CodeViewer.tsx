@@ -1,25 +1,49 @@
-import { useState } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { CodeEditor } from '../editor/CodeEditor';
 import { useGeneratorStore } from '../store/useGeneratorStore';
-import { copyToClipboard, downloadFile } from '../lib/utils';
 import { CodeStats } from './CodeStats';
+import { usePreview } from '../hooks/usePreview';
+import { ExportMenu } from './ExportMenu';
+import { LoadingSpinner } from './LoadingSpinner';
 
-export function CodeViewer() {
-  const { generatedCode, selectedLanguage, error, isLoading } = useGeneratorStore();
+function CodeViewerComponent() {
+  const { generatedCode, previewCode, selectedLanguage, selectedFeature, options, error, isLoading, setPreviewCode } = useGeneratorStore();
+  const [showPreview, setShowPreview] = useState(true);
+  const [selectedFileIndex, setSelectedFileIndex] = useState(0);
 
-  if (isLoading) {
+  // Utiliser le hook de prévisualisation
+  const { previewCode: autoPreview, isGenerating: isGeneratingPreview } = usePreview(
+    selectedLanguage,
+    selectedFeature,
+    options,
+    showPreview && !generatedCode // Activer seulement si pas de code généré
+  );
+
+  // Mettre à jour le store avec la prévisualisation automatique
+  useEffect(() => {
+    if (autoPreview && !generatedCode) {
+      setPreviewCode(autoPreview);
+    }
+  }, [autoPreview, generatedCode, setPreviewCode]);
+
+  // Gérer les fichiers multiples (pour CRUD Java par exemple)
+  const isMultipleFiles = Array.isArray(generatedCode);
+  const files = isMultipleFiles ? generatedCode : generatedCode ? [generatedCode] : [];
+  const displayCode = files[selectedFileIndex] || previewCode || null;
+  const isPreview = !generatedCode && !!previewCode;
+  
+  // Réinitialiser l'index si nécessaire
+  useEffect(() => {
+    if (isMultipleFiles && selectedFileIndex >= files.length) {
+      setSelectedFileIndex(0);
+    }
+  }, [isMultipleFiles, files.length, selectedFileIndex]);
+
+  if (isLoading || (isGeneratingPreview && !displayCode)) {
     return (
       <div className="card shadow-lg">
-        <div className="flex flex-col items-center justify-center py-16">
-          <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary-200 border-t-primary-600"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-8 h-8 bg-primary-600 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-          <span className="mt-6 text-gray-600 text-lg font-medium">Génération en cours...</span>
-          <p className="mt-2 text-sm text-gray-500">Cela peut prendre quelques secondes</p>
-        </div>
+        <LoadingSpinner size="lg" text={isLoading ? 'Génération en cours...' : 'Prévisualisation en cours...'} />
+        <p className="text-center text-sm text-gray-500 mt-2">Cela peut prendre quelques secondes</p>
       </div>
     );
   }
@@ -43,7 +67,7 @@ export function CodeViewer() {
     );
   }
 
-  if (!generatedCode) {
+  if (!displayCode) {
     return (
       <div className="card shadow-lg">
         <div className="text-center py-16 text-gray-500">
@@ -63,100 +87,78 @@ export function CodeViewer() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div className="flex items-center gap-2">
           <div className="w-1 h-8 bg-gradient-to-b from-primary-600 to-indigo-600 rounded-full"></div>
-          <h2 className="text-2xl font-bold text-gray-900">Code généré</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            {isPreview ? 'Prévisualisation' : 'Code généré'}
+          </h2>
+          {isPreview && (
+            <span className="ml-3 px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+              Aperçu
+            </span>
+          )}
         </div>
-        <div className="flex gap-3">
-          <CopyButton code={generatedCode} />
-          <DownloadButton code={generatedCode} language={selectedLanguage} />
+        <div className="flex flex-col gap-3">
+          <div className="flex gap-3 flex-wrap">
+            {isPreview && (
+              <button
+                onClick={() => setShowPreview(!showPreview)}
+                className="btn-secondary text-sm px-4 py-2.5 flex items-center gap-2"
+                aria-label={showPreview ? 'Masquer la prévisualisation' : 'Afficher la prévisualisation'}
+                aria-pressed={showPreview}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                {showPreview ? 'Masquer' : 'Afficher'} prévisualisation
+              </button>
+            )}
+            <ExportMenu
+              code={isMultipleFiles ? files : displayCode}
+              language={selectedLanguage}
+              feature={selectedFeature || null}
+              isPreview={isPreview}
+            />
+          </div>
+          {isMultipleFiles && files.length > 1 && (
+            <div className="flex gap-2 flex-wrap items-center">
+              <span className="text-sm text-gray-600 font-medium">Fichiers générés :</span>
+              {files.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedFileIndex(index)}
+                  className={`px-3 py-1.5 text-sm rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                    selectedFileIndex === index
+                      ? 'bg-primary-600 text-white shadow-md'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                  aria-label={`Afficher le fichier ${index + 1}`}
+                  aria-pressed={selectedFileIndex === index}
+                >
+                  Fichier {index + 1}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+      {isPreview && (
+        <div className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <p className="text-sm text-blue-800">
+            <strong>Prévisualisation en temps réel</strong> - Le code est généré automatiquement lorsque vous modifiez les options.
+            Cliquez sur "Générer le code" pour obtenir la version finale.
+          </p>
+        </div>
+      )}
       <div className="mb-4">
-        <CodeStats code={generatedCode} />
+        <CodeStats code={displayCode} />
       </div>
       <div className="border-2 border-gray-200 rounded-xl overflow-hidden">
-        <CodeEditor code={generatedCode} language={selectedLanguage || 'javascript'} />
+        <CodeEditor code={displayCode} language={selectedLanguage || 'javascript'} />
       </div>
     </div>
   );
 }
 
-function CopyButton({ code }: { code: string }) {
-  const [copied, setCopied] = useState(false);
+// Optimisation avec React.memo
+export const CodeViewer = memo(CodeViewerComponent);
 
-  const handleCopy = async () => {
-    try {
-      await copyToClipboard(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error('Erreur lors de la copie:', error);
-    }
-  };
-
-  return (
-    <button
-      onClick={handleCopy}
-      className="btn-secondary text-sm px-4 py-2.5 flex items-center gap-2 hover:bg-gray-200 transition-colors"
-    >
-      {copied ? (
-        <>
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-          </svg>
-          Copié !
-        </>
-      ) : (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-          Copier
-        </>
-      )}
-    </button>
-  );
-}
-
-function DownloadButton({ code, language }: { code: string; language: string | null }) {
-  const getExtension = () => {
-    const extensions: Record<string, string> = {
-      html5: 'html',
-      css3: 'css',
-      javascript: 'js',
-      java: 'java',
-      php: 'php',
-      sql: 'sql',
-    };
-    return extensions[language || 'javascript'] || 'txt';
-  };
-
-  const getMimeType = () => {
-    const mimeTypes: Record<string, string> = {
-      html5: 'text/html',
-      css3: 'text/css',
-      javascript: 'text/javascript',
-      java: 'text/x-java-source',
-      php: 'text/x-php',
-      sql: 'text/x-sql',
-    };
-    return mimeTypes[language || 'javascript'] || 'text/plain';
-  };
-
-  const handleDownload = () => {
-    const extension = getExtension();
-    const filename = `code.${extension}`;
-    downloadFile(code, filename, getMimeType());
-  };
-
-  return (
-    <button
-      onClick={handleDownload}
-      className="btn-secondary text-sm px-4 py-2.5 flex items-center gap-2 hover:bg-gray-200 transition-colors"
-    >
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-      </svg>
-      Télécharger
-    </button>
-  );
-}

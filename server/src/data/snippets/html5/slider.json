@@ -8,9 +8,85 @@
   "variables": [
     {
       "name": "sliderTitle",
-      "type": "string",
+      "type": "text",
+      "label": "Titre du slider",
       "required": true,
-      "description": "Titre du slider"
+      "description": "Titre principal du slider",
+      "placeholder": "Mon Slider"
+    },
+    {
+      "name": "numberOfSlides",
+      "type": "number",
+      "label": "Nombre de slides",
+      "required": true,
+      "description": "Nombre de slides dans le slider",
+      "defaultValue": 3,
+      "min": 2,
+      "max": 10
+    },
+    {
+      "name": "slideHeight",
+      "type": "select",
+      "label": "Hauteur des slides",
+      "required": false,
+      "description": "Hauteur des slides",
+      "defaultValue": "400px",
+      "options": [
+        { "value": "300px", "label": "300px" },
+        { "value": "400px", "label": "400px" },
+        { "value": "500px", "label": "500px" },
+        { "value": "600px", "label": "600px" }
+      ]
+    },
+    {
+      "name": "includeNavigation",
+      "type": "checkbox",
+      "label": "Boutons de navigation",
+      "required": false,
+      "description": "Ajouter les boutons précédent/suivant",
+      "defaultValue": true
+    },
+    {
+      "name": "includeDots",
+      "type": "checkbox",
+      "label": "Indicateurs (dots)",
+      "required": false,
+      "description": "Ajouter les indicateurs de slide",
+      "defaultValue": true
+    },
+    {
+      "name": "autoPlay",
+      "type": "checkbox",
+      "label": "Lecture automatique",
+      "required": false,
+      "description": "Défilement automatique des slides",
+      "defaultValue": true
+    },
+    {
+      "name": "autoPlayInterval",
+      "type": "number",
+      "label": "Intervalle (ms)",
+      "required": false,
+      "description": "Délai entre chaque slide en millisecondes",
+      "defaultValue": 5000,
+      "min": 1000,
+      "max": 10000,
+      "dependsOn": {
+        "autoPlay": [true]
+      }
+    },
+    {
+      "name": "transitionDuration",
+      "type": "select",
+      "label": "Durée de transition",
+      "required": false,
+      "description": "Durée de l'animation de transition",
+      "defaultValue": "0.5s",
+      "options": [
+        { "value": "0.3s", "label": "Rapide (0.3s)" },
+        { "value": "0.5s", "label": "Moyen (0.5s)" },
+        { "value": "1s", "label": "Lent (1s)" }
+      ]
     }
   ],
   "security": {

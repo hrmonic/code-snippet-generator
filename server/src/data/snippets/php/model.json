@@ -8,15 +8,35 @@
   "variables": [
     {
       "name": "entityName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de l'entité",
       "required": true,
-      "description": "Nom de l'entité"
+      "description": "Nom de la classe Model (ex: User)",
+      "placeholder": "User"
     },
     {
       "name": "tableName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la table",
       "required": true,
-      "description": "Nom de la table"
+      "description": "Nom de la table en base de données (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "includeSoftDelete",
+      "type": "checkbox",
+      "label": "Soft delete",
+      "required": false,
+      "description": "Ajouter le support du soft delete (deleted_at)",
+      "defaultValue": false
+    },
+    {
+      "name": "includeTimestamps",
+      "type": "checkbox",
+      "label": "Timestamps",
+      "required": false,
+      "description": "Inclure created_at et updated_at",
+      "defaultValue": true
     }
   ],
   "security": {

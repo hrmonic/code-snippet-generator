@@ -8,16 +8,70 @@
   "variables": [
     {
       "name": "baseURL",
-      "type": "string",
+      "type": "text",
+      "label": "URL de base",
       "required": true,
       "description": "URL de base de l'API",
+      "placeholder": "http://localhost:3000/api",
       "defaultValue": "http://localhost:3000/api"
     },
     {
       "name": "endpoint",
-      "type": "string",
+      "type": "text",
+      "label": "Endpoint",
       "required": true,
-      "description": "Endpoint à appeler"
+      "description": "Endpoint à appeler",
+      "placeholder": "/api/users"
+    },
+    {
+      "name": "includeRetry",
+      "type": "checkbox",
+      "label": "Gestion des retry",
+      "required": false,
+      "description": "Inclure la logique de retry automatique",
+      "defaultValue": true
+    },
+    {
+      "name": "maxRetries",
+      "type": "number",
+      "label": "Nombre de tentatives",
+      "required": false,
+      "description": "Nombre maximum de tentatives en cas d'erreur",
+      "defaultValue": 3,
+      "min": 1,
+      "max": 10,
+      "dependsOn": {
+        "includeRetry": [true]
+      }
+    },
+    {
+      "name": "includeAuth",
+      "type": "checkbox",
+      "label": "Authentification",
+      "required": false,
+      "description": "Inclure les headers d'authentification",
+      "defaultValue": false
+    },
+    {
+      "name": "authToken",
+      "type": "text",
+      "label": "Token d'authentification",
+      "required": false,
+      "description": "Token Bearer pour l'authentification",
+      "placeholder": "Bearer token...",
+      "dependsOn": {
+        "includeAuth": [true]
+      }
+    },
+    {
+      "name": "timeout",
+      "type": "number",
+      "label": "Timeout (ms)",
+      "required": false,
+      "description": "Délai d'attente maximum en millisecondes",
+      "defaultValue": 5000,
+      "min": 1000,
+      "max": 60000
     }
   ],
   "security": {

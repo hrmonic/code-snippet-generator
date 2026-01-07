@@ -8,51 +8,66 @@
   "variables": [
     {
       "name": "tableName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la table",
       "required": true,
-      "description": "Nom de la table"
+      "description": "Nom de la table",
+      "placeholder": "users"
     },
     {
       "name": "columnName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la colonne",
       "required": true,
-      "description": "Nom de la colonne"
+      "description": "Nom de la colonne principale",
+      "placeholder": "email"
+    },
+    {
+      "name": "indexTypes",
+      "type": "multiselect",
+      "label": "Types d'index",
+      "required": true,
+      "description": "Sélectionnez les types d'index à inclure",
+      "defaultValue": ["simple", "unique"],
+      "options": [
+        { "value": "simple", "label": "Index simple" },
+        { "value": "composite", "label": "Index composite" },
+        { "value": "unique", "label": "Index unique" },
+        { "value": "partial", "label": "Index partiel" },
+        { "value": "expression", "label": "Index sur expression" },
+        { "value": "fulltext", "label": "Index full-text" },
+        { "value": "foreign", "label": "Index sur clé étrangère" }
+      ]
     },
     {
       "name": "column1",
-      "type": "string",
+      "type": "text",
+      "label": "Première colonne (composite)",
       "required": false,
-      "description": "Première colonne"
+      "description": "Première colonne pour index composite",
+      "placeholder": "name",
+      "dependsOn": {
+        "indexTypes": ["composite"]
+      }
     },
     {
       "name": "column2",
-      "type": "string",
+      "type": "text",
+      "label": "Deuxième colonne (composite)",
       "required": false,
-      "description": "Deuxième colonne"
+      "description": "Deuxième colonne pour index composite",
+      "placeholder": "email",
+      "dependsOn": {
+        "indexTypes": ["composite"]
+      }
     },
     {
-      "name": "column3",
-      "type": "string",
+      "name": "includeManagement",
+      "type": "checkbox",
+      "label": "Commandes de gestion",
       "required": false,
-      "description": "Troisième colonne"
-    },
-    {
-      "name": "foreignKeyColumn",
-      "type": "string",
-      "required": false,
-      "description": "Colonne de clé étrangère"
-    },
-    {
-      "name": "filterColumn",
-      "type": "string",
-      "required": false,
-      "description": "Colonne pour filtrage"
-    },
-    {
-      "name": "sortColumn",
-      "type": "string",
-      "required": false,
-      "description": "Colonne pour tri"
+      "description": "Inclure SHOW, DROP, REBUILD, etc.",
+      "defaultValue": true
     }
   ],
   "security": {

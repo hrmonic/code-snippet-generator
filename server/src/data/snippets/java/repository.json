@@ -8,15 +8,44 @@
   "variables": [
     {
       "name": "entityName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de l'entité",
       "required": true,
-      "description": "Nom de l'entité (ex: User)"
+      "description": "Nom de la classe Repository (ex: User)",
+      "placeholder": "User"
     },
     {
       "name": "tableName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la table",
       "required": true,
-      "description": "Nom de la table (ex: users)"
+      "description": "Nom de la table en base de données (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": false,
+      "description": "Package Java (ex: com.example.repository)",
+      "placeholder": "com.example.repository",
+      "defaultValue": "com.example.repository"
+    },
+    {
+      "name": "queryTypes",
+      "type": "multiselect",
+      "label": "Types de requêtes",
+      "required": true,
+      "description": "Sélectionnez les types de requêtes à inclure",
+      "defaultValue": ["method", "jpql"],
+      "options": [
+        { "value": "method", "label": "Requêtes par nom de méthode" },
+        { "value": "jpql", "label": "Requêtes JPQL" },
+        { "value": "native", "label": "Requêtes SQL natives" },
+        { "value": "join", "label": "Requêtes avec JOIN" },
+        { "value": "aggregation", "label": "Requêtes avec agrégation" },
+        { "value": "pagination", "label": "Pagination" }
+      ]
     }
   ],
   "security": {

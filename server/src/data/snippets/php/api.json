@@ -8,9 +8,50 @@
   "variables": [
     {
       "name": "endpoint",
-      "type": "string",
+      "type": "text",
+      "label": "Endpoint",
       "required": true,
-      "description": "Endpoint de l'API"
+      "description": "Nom de l'endpoint API",
+      "placeholder": "users"
+    },
+    {
+      "name": "includeCors",
+      "type": "checkbox",
+      "label": "Support CORS",
+      "required": false,
+      "description": "Ajouter les headers CORS",
+      "defaultValue": true
+    },
+    {
+      "name": "allowedMethods",
+      "type": "multiselect",
+      "label": "Méthodes HTTP autorisées",
+      "required": true,
+      "description": "Méthodes HTTP supportées",
+      "defaultValue": ["GET", "POST", "PUT", "DELETE"],
+      "options": [
+        { "value": "GET", "label": "GET" },
+        { "value": "POST", "label": "POST" },
+        { "value": "PUT", "label": "PUT" },
+        { "value": "DELETE", "label": "DELETE" },
+        { "value": "PATCH", "label": "PATCH" }
+      ]
+    },
+    {
+      "name": "includeValidation",
+      "type": "checkbox",
+      "label": "Validation des données",
+      "required": false,
+      "description": "Ajouter la validation des données d'entrée",
+      "defaultValue": true
+    },
+    {
+      "name": "includeErrorHandling",
+      "type": "checkbox",
+      "label": "Gestion d'erreurs",
+      "required": false,
+      "description": "Ajouter la gestion d'erreurs complète",
+      "defaultValue": true
     }
   ],
   "security": {

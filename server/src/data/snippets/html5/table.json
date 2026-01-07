@@ -8,27 +8,70 @@
   "variables": [
     {
       "name": "tableTitle",
-      "type": "string",
+      "type": "text",
+      "label": "Titre du tableau",
       "required": true,
-      "description": "Titre du tableau"
+      "description": "Titre principal du tableau",
+      "placeholder": "Tableau des données"
     },
     {
-      "name": "column1",
-      "type": "string",
+      "name": "numberOfColumns",
+      "type": "number",
+      "label": "Nombre de colonnes",
       "required": true,
-      "description": "Nom de la première colonne"
+      "description": "Nombre de colonnes dans le tableau",
+      "defaultValue": 3,
+      "min": 2,
+      "max": 10
     },
     {
-      "name": "column2",
-      "type": "string",
+      "name": "columnNames",
+      "type": "text",
+      "label": "Noms des colonnes",
       "required": true,
-      "description": "Nom de la deuxième colonne"
+      "description": "Noms des colonnes séparés par des virgules",
+      "placeholder": "Nom,Email,Âge",
+      "defaultValue": "Nom,Email,Âge"
     },
     {
-      "name": "column3",
-      "type": "string",
-      "required": true,
-      "description": "Nom de la troisième colonne"
+      "name": "includeSorting",
+      "type": "checkbox",
+      "label": "Tri des colonnes",
+      "required": false,
+      "description": "Ajouter la fonctionnalité de tri au clic",
+      "defaultValue": true
+    },
+    {
+      "name": "responsive",
+      "type": "checkbox",
+      "label": "Mode responsive",
+      "required": false,
+      "description": "Adapter le tableau pour mobile",
+      "defaultValue": true
+    },
+    {
+      "name": "stripedRows",
+      "type": "checkbox",
+      "label": "Lignes alternées",
+      "required": false,
+      "description": "Alterner les couleurs des lignes",
+      "defaultValue": false
+    },
+    {
+      "name": "hoverEffect",
+      "type": "checkbox",
+      "label": "Effet hover",
+      "required": false,
+      "description": "Mettre en évidence la ligne au survol",
+      "defaultValue": true
+    },
+    {
+      "name": "headerColor",
+      "type": "color",
+      "label": "Couleur de l'en-tête",
+      "required": false,
+      "description": "Couleur de fond de l'en-tête",
+      "defaultValue": "#f8f9fa"
     }
   ],
   "security": {

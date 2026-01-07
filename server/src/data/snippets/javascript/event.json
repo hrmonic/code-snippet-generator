@@ -5,7 +5,66 @@
   "language": "javascript",
   "feature": "event",
   "code": "// Event Manager classique\nclass EventManager {\n    constructor() {\n        this.events = {};\n    }\n    \n    on(event, callback) {\n        if (!this.events[event]) {\n            this.events[event] = [];\n        }\n        this.events[event].push(callback);\n    }\n    \n    off(event, callback) {\n        if (this.events[event]) {\n            this.events[event] = this.events[event].filter(cb => cb !== callback);\n        }\n    }\n    \n    emit(event, data) {\n        if (this.events[event]) {\n            this.events[event].forEach(callback => callback(data));\n        }\n    }\n    \n    once(event, callback) {\n        const onceCallback = (data) => {\n            callback(data);\n            this.off(event, onceCallback);\n        };\n        this.on(event, onceCallback);\n    }\n}\n\n// Utilisation\nconst eventManager = new EventManager();\n\neventManager.on('userLogin', (user) => {\n    console.log('User logged in:', user);\n});\n\neventManager.emit('userLogin', { id: 1, name: 'John' });\n\n// Event delegation\nfunction setupEventDelegation(container, selector, eventType, handler) {\n    container.addEventListener(eventType, (e) => {\n        const target = e.target.closest(selector);\n        if (target) {\n            handler.call(target, e);\n        }\n    });\n}\n\n// Exemple: Gérer les clics sur tous les boutons dynamiques\nsetupEventDelegation(document.body, '.dynamic-button', 'click', function(e) {\n    console.log('Button clicked:', this.textContent);\n});\n\n// Event delegation avec données\nfunction delegateWithData(container, selector, eventType, handler) {\n    container.addEventListener(eventType, (e) => {\n        const target = e.target.closest(selector);\n        if (target) {\n            const data = {\n                element: target,\n                originalEvent: e,\n                data: target.dataset\n            };\n            handler(data);\n        }\n    });\n}\n\n// Custom events\nfunction createCustomEvent(eventName, detail) {\n    return new CustomEvent(eventName, {\n        detail: detail,\n        bubbles: true,\n        cancelable: true\n    });\n}\n\n// Émettre un custom event\nconst customEvent = createCustomEvent('userAction', { action: 'click', id: 123 });\ndocument.dispatchEvent(customEvent);\n\n// Écouter un custom event\ndocument.addEventListener('userAction', (e) => {\n    console.log('Custom event:', e.detail);\n});\n\n// Event listener avec options\nfunction addEventListenerWithOptions(element, eventType, handler, options = {}) {\n    const defaultOptions = {\n        capture: false,\n        once: false,\n        passive: true\n    };\n    \n    element.addEventListener(eventType, handler, { ...defaultOptions, ...options });\n}\n\n// Exemple avec passive (meilleure performance pour scroll)\naddEventListenerWithOptions(window, 'scroll', (e) => {\n    console.log('Scrolling');\n}, { passive: true });\n\n// Debounced event listener\nfunction addDebouncedEventListener(element, eventType, handler, delay = 300) {\n    let timeout;\n    element.addEventListener(eventType, (e) => {\n        clearTimeout(timeout);\n        timeout = setTimeout(() => handler(e), delay);\n    });\n}\n\n// Throttled event listener\nfunction addThrottledEventListener(element, eventType, handler, limit = 100) {\n    let inThrottle;\n    element.addEventListener(eventType, (e) => {\n        if (!inThrottle) {\n            handler(e);\n            inThrottle = true;\n            setTimeout(() => inThrottle = false, limit);\n        }\n    });\n}\n\n// Event listener avec cleanup\nfunction createEventListener(element, eventType, handler) {\n    element.addEventListener(eventType, handler);\n    \n    return () => {\n        element.removeEventListener(eventType, handler);\n    };\n}\n\n// Utilisation avec cleanup\nconst cleanup = createEventListener(window, 'resize', () => {\n    console.log('Window resized');\n});\n\n// Plus tard, nettoyer\n// cleanup();\n\n// Event listener pour plusieurs éléments\nfunction addEventListenerToAll(selector, eventType, handler) {\n    document.querySelectorAll(selector).forEach(element => {\n        element.addEventListener(eventType, handler);\n    });\n}\n\n// Event listener avec condition\nfunction addConditionalEventListener(element, eventType, handler, condition) {\n    element.addEventListener(eventType, (e) => {\n        if (condition(e)) {\n            handler(e);\n        }\n    });\n}\n\n// Exemple: Cliquer seulement si Ctrl est pressé\naddConditionalEventListener(\n    document,\n    'click',\n    (e) => console.log('Ctrl+Click'),\n    (e) => e.ctrlKey\n);",
-  "variables": [],
+  "variables": [
+    {
+      "name": "includeEventManager",
+      "type": "checkbox",
+      "label": "Event Manager classique",
+      "required": false,
+      "description": "Inclure la classe EventManager",
+      "defaultValue": true
+    },
+    {
+      "name": "includeDelegation",
+      "type": "checkbox",
+      "label": "Event delegation",
+      "required": false,
+      "description": "Inclure les exemples d'event delegation",
+      "defaultValue": true
+    },
+    {
+      "name": "includeCustomEvents",
+      "type": "checkbox",
+      "label": "Custom events",
+      "required": false,
+      "description": "Inclure les custom events",
+      "defaultValue": true
+    },
+    {
+      "name": "includeDebouncedThrottled",
+      "type": "checkbox",
+      "label": "Debounced/Throttled listeners",
+      "required": false,
+      "description": "Inclure les listeners avec debounce/throttle",
+      "defaultValue": false
+    },
+    {
+      "name": "debounceDelay",
+      "type": "number",
+      "label": "Délai debounce (ms)",
+      "required": false,
+      "description": "Délai pour le debounce",
+      "defaultValue": 300,
+      "min": 100,
+      "max": 2000,
+      "dependsOn": {
+        "includeDebouncedThrottled": [true]
+      }
+    },
+    {
+      "name": "throttleLimit",
+      "type": "number",
+      "label": "Limite throttle (ms)",
+      "required": false,
+      "description": "Limite pour le throttle",
+      "defaultValue": 100,
+      "min": 50,
+      "max": 1000,
+      "dependsOn": {
+        "includeDebouncedThrottled": [true]
+      }
+    }
+  ],
   "security": {
     "sqlInjection": false,
     "xss": true

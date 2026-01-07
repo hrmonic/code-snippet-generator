@@ -2,13 +2,15 @@
 
 <div align="center">
 
-![Code Snippet Generator](https://img.shields.io/badge/Code%20Snippet%20Generator-v1.0.0-blue?style=for-the-badge&logo=code&logoColor=white)
+![Code Snippet Generator](https://img.shields.io/badge/Code%20Snippet%20Generator-v2.0.0-blue?style=for-the-badge&logo=code&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen?style=for-the-badge&logo=node.js&logoColor=white)
 ![React](https://img.shields.io/badge/react-18.2.0-blue?style=for-the-badge&logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-5.3.3-blue?style=for-the-badge&logo=typescript&logoColor=white)
 
 **Générez du code structuré, sécurisé et testable en quelques clics pour HTML5, CSS3, JavaScript, Java, PHP et SQL**
+
+> ✨ **Nouveau en v2.0** : Options dynamiques, prévisualisation en temps réel, groupes d'options, validation en temps réel, export ZIP, et bien plus !
 
 [![GitHub stars](https://img.shields.io/github/stars/hrmonic/code-snippet-generator?style=social&label=Star)](https://github.com/hrmonic/code-snippet-generator/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/hrmonic/code-snippet-generator?style=social&label=Fork)](https://github.com/hrmonic/code-snippet-generator/network/members)
@@ -37,8 +39,9 @@
 | 🔒 **Sécurité** | Protection intégrée contre SQL injection, XSS et autres vulnérabilités |
 | 📝 **Qualité** | Code structuré, commenté et suivant les standards OWASP |
 | 🧪 **Testable** | Exemples de tests inclus pour chaque snippet généré |
-| 🎯 **Multi-langages** | Support de 6 langages populaires avec 13+ types de snippets |
+| 🎯 **Multi-langages** | Support de 6 langages populaires avec 40+ types de snippets |
 | 📱 **Responsive** | Interface moderne adaptée desktop et mobile |
+| 🎨 **UI/UX Professionnelle** | Interface intuitive avec options groupées et aide contextuelle |
 | 🆓 **100% Gratuit** | Open-source sous licence MIT |
 
 ---
@@ -48,22 +51,36 @@
 ### 🛠️ Génération de code intelligente
 
 - ✅ **6 langages supportés** : HTML5, CSS3, JavaScript, Java, PHP, SQL
-- ✅ **13+ types de snippets** : Formulaires, API REST, CRUD, Animations, Requêtes DB, Validation, Layouts
-- ✅ **Personnalisation avancée** : Options configurables selon vos besoins spécifiques
+- ✅ **40+ types de snippets** : Formulaires, API REST, CRUD, Animations, Requêtes DB, Validation, Layouts, et bien plus
+- ✅ **Options dynamiques** : Chargement automatique des options configurables pour chaque snippet
+- ✅ **Personnalisation avancée** : Options groupées par catégories (Style, Comportement, Sécurité, etc.)
 - ✅ **Code production-ready** : Aucun placeholder, code 100% fonctionnel et exécutable
+- ✅ **Fichiers multiples** : Support de la génération de plusieurs fichiers (ex: CRUD Java avec Controller, Model, Service)
 
 ### 📝 Éditeur de code intégré
 
 - ✅ **Monaco Editor** : L'éditeur de VS Code directement dans votre navigateur
 - ✅ **Syntax highlighting** : Coloration syntaxique pour tous les langages supportés
 - ✅ **Auto-complétion** : Suggestions intelligentes en temps réel
-- ✅ **Export facile** : Copie en un clic ou téléchargement du fichier généré
+- ✅ **Prévisualisation en temps réel** : Génération automatique du code pendant la configuration
+- ✅ **Export avancé** : Copie en un clic, téléchargement individuel ou ZIP pour fichiers multiples
+
+### 🎨 Interface utilisateur moderne
+
+- ✅ **UI/UX professionnelle** : Interface intuitive et moderne avec Tailwind CSS
+- ✅ **Options groupées** : Organisation des options par catégories avec sections repliables
+- ✅ **Aide contextuelle** : Tooltips et descriptions pour chaque option
+- ✅ **Validation en temps réel** : Feedback immédiat sur les erreurs de saisie
+- ✅ **Dépendances conditionnelles** : Affichage dynamique des options selon les sélections
+- ✅ **Loading states** : Indicateurs de chargement élégants pour toutes les opérations
+- ✅ **Accessibilité** : Support complet des attributs ARIA et navigation au clavier
 
 ### 🔒 Sécurité de niveau entreprise
 
 - ✅ **Protection SQL Injection** : Prepared statements dans tous les snippets SQL/PHP
 - ✅ **Protection XSS** : Échappement automatique des caractères dangereux
 - ✅ **Validation Zod** : Validation stricte côté backend de toutes les entrées
+- ✅ **Sanitization** : Nettoyage automatique des entrées utilisateur
 - ✅ **Conformité OWASP** : Code généré suivant les recommandations OWASP Top 10
 
 ### 🧪 Qualité et tests
@@ -71,6 +88,7 @@
 - ✅ **Tests inclus** : Exemples de tests unitaires pour chaque snippet
 - ✅ **Couverture élevée** : Objectif de 90%+ de couverture de code
 - ✅ **CI/CD intégré** : GitHub Actions pour tests automatiques
+- ✅ **TypeScript strict** : Typage fort pour une meilleure robustesse
 
 ---
 
@@ -101,34 +119,58 @@ npm run dev
 - **Frontend** : http://localhost:5173
 - **Backend API** : http://localhost:3000
 
+### 🎬 Utilisation rapide
+
+1. **Sélectionnez un langage** : Choisissez parmi HTML5, CSS3, JavaScript, Java, PHP ou SQL
+2. **Choisissez un type de snippet** : Formulaires, CRUD, API, Animations, etc.
+3. **Configurez les options** : Les options sont organisées par groupes (Style, Comportement, Sécurité, etc.)
+4. **Prévisualisez en temps réel** : Le code se génère automatiquement pendant que vous configurez
+5. **Générez le code final** : Cliquez sur "Générer le code" pour obtenir la version finale
+6. **Exportez** : Copiez dans le presse-papiers ou téléchargez (fichier unique ou ZIP pour plusieurs fichiers)
+
 ### 🐳 Alternative avec Docker (bientôt disponible)
 
 ```bash
 docker-compose up
 ```
 
+### 📝 Variables d'environnement
+
+Créez un fichier `.env` à la racine du projet (optionnel) :
+
+```env
+# Frontend
+VITE_API_URL=http://localhost:3000
+
+# Backend
+PORT=3000
+NODE_ENV=development
+```
+
 ---
 
 ## 💡 Exemples d'utilisation
 
-### Exemple 1 : Générer un CRUD PHP complet
+### Exemple 1 : Générer un CRUD Java complet (multi-fichiers)
 
-**Scénario** : Vous avez besoin d'un CRUD complet pour gérer des utilisateurs en PHP.
+**Scénario** : Vous avez besoin d'un CRUD complet pour gérer des utilisateurs en Java avec Spring.
 
 **Étapes** :
-1. Sélectionnez **PHP** 🐘 comme langage
+1. Sélectionnez **Java** ☕ comme langage
 2. Choisissez **CRUD** comme type de snippet
-3. Configurez les options :
-   - Nom de la table : `users`
-   - Nom de l'entité : `User`
-   - Champs : `id,name,email,created_at`
-4. Cliquez sur **"Générer le code"**
+3. Configurez les options dans les groupes :
+   - **Options de base** : Nom de l'entité `User`, nom de la table `users`
+   - **Champs** : Sélectionnez les champs nécessaires (id, name, email, etc.)
+   - **Options avancées** : Activez les validations, pagination, etc.
+4. Le code se prévisualise automatiquement pendant la configuration
+5. Cliquez sur **"Générer le code"**
 
-**Résultat** : Code complet avec `UserController.php` incluant :
-- ✅ Méthodes CRUD complètes (Create, Read, Update, Delete)
-- ✅ Protection SQL injection avec PDO
-- ✅ Code commenté et structuré
-- ✅ Gestion d'erreurs intégrée
+**Résultat** : Plusieurs fichiers générés :
+- ✅ `UserController.java` : Endpoints REST complets
+- ✅ `User.java` : Entité JPA avec annotations
+- ✅ `UserService.java` : Logique métier
+- ✅ Code commenté, sécurisé et prêt à l'emploi
+- ✅ Export possible en ZIP ou fichiers individuels
 
 ### Exemple 2 : Créer un formulaire HTML5 avec validation
 
@@ -137,35 +179,42 @@ docker-compose up
 **Étapes** :
 1. Sélectionnez **HTML5** 🌐
 2. Choisissez **Formulaire**
-3. Configurez :
-   - Nom du formulaire : `contact`
-   - Action : `/api/contact`
-   - Méthode : `POST`
-4. Générez le code
+3. Configurez les options dans les groupes :
+   - **Options de base** : Nom du formulaire `contact`, action `/api/contact`
+   - **Champs du formulaire** : Sélectionnez les champs (nom, email, message, etc.)
+   - **Style et Apparence** : Choisissez les couleurs, espacements, etc.
+   - **Comportement** : Activez la validation, les messages d'erreur, etc.
+4. La prévisualisation se met à jour automatiquement
+5. Générez le code final
 
 **Résultat** : Formulaire HTML5 complet avec :
 - ✅ Validation native HTML5
 - ✅ Champs sécurisés (email, tel, etc.)
 - ✅ Structure sémantique
-- ✅ Accessibilité intégrée
+- ✅ Accessibilité intégrée (ARIA)
+- ✅ Styles personnalisés selon vos choix
 
-### Exemple 3 : Client API JavaScript moderne
+### Exemple 3 : Navbar HTML5 responsive avec options avancées
 
-**Scénario** : Vous avez besoin d'un client HTTP pour interagir avec une API REST.
+**Scénario** : Vous avez besoin d'une barre de navigation responsive avec menu hamburger.
 
 **Étapes** :
-1. Sélectionnez **JavaScript** ⚡
-2. Choisissez **API Client**
-3. Configurez :
-   - URL de base : `http://localhost:3000/api`
-   - Endpoint : `/users`
-4. Générez le code
+1. Sélectionnez **HTML5** 🌐
+2. Choisissez **Navbar**
+3. Configurez les options :
+   - **Options de base** : Nom du site, langue de la page
+   - **Style et Apparence** : Couleur de fond, couleur du texte, ombre
+   - **Comportement** : Navbar sticky, effet hover, etc.
+   - **Liens de navigation** : Sélectionnez les liens (Accueil, À propos, Contact, etc.)
+4. La prévisualisation HTML se met à jour en temps réel
+5. Générez le code final
 
-**Résultat** : Classe `ApiClient` complète avec :
-- ✅ Méthodes GET, POST, PUT, DELETE
-- ✅ Gestion d'erreurs robuste
-- ✅ Support des headers personnalisés
-- ✅ Compatible avec async/await
+**Résultat** : Navbar HTML5 complète avec :
+- ✅ Menu hamburger responsive
+- ✅ Styles personnalisés selon vos choix
+- ✅ Navigation accessible au clavier
+- ✅ Code CSS intégré optimisé
+- ✅ Compatible mobile et desktop
 
 ---
 
@@ -213,11 +262,24 @@ code-snippet-generator/
 │   │   ├── components/          # Composants UI réutilisables
 │   │   │   ├── LanguageSelector.tsx
 │   │   │   ├── FeatureSelector.tsx
-│   │   │   ├── SnippetOptions.tsx
-│   │   │   └── CodeViewer.tsx
+│   │   │   ├── SnippetOptions.tsx  # Options dynamiques avec groupes
+│   │   │   ├── OptionInput.tsx      # Inputs typés (text, select, checkbox, etc.)
+│   │   │   ├── OptionGroup.tsx      # Groupes d'options repliables
+│   │   │   ├── OptionHelp.tsx       # Aide contextuelle
+│   │   │   ├── CodeViewer.tsx       # Éditeur avec prévisualisation
+│   │   │   ├── ExportMenu.tsx       # Export (copie, téléchargement, ZIP)
+│   │   │   └── LoadingSpinner.tsx   # Indicateurs de chargement
+│   │   ├── hooks/                # Hooks React personnalisés
+│   │   │   ├── useSnippetOptions.ts # Chargement des options depuis l'API
+│   │   │   └── usePreview.ts        # Prévisualisation en temps réel
 │   │   ├── editor/              # Intégration Monaco Editor
 │   │   ├── store/               # Zustand state management
+│   │   │   ├── useGeneratorStore.ts # État de génération
+│   │   │   └── useHistoryStore.ts   # Historique et favoris
 │   │   ├── lib/                 # Utilitaires et API client
+│   │   │   ├── generator.ts     # Client API pour génération
+│   │   │   ├── clipboard.ts     # Utilitaires copie presse-papiers
+│   │   │   └── download.ts      # Utilitaires téléchargement
 │   │   └── types/               # Types TypeScript
 │   └── package.json
 │
@@ -227,11 +289,13 @@ code-snippet-generator/
 │   │   │   ├── generate.ts      # POST /api/generate
 │   │   │   └── snippets.ts     # GET /api/snippets
 │   │   ├── lib/
-│   │   │   ├── codeGenerator.ts # Factory/Strategy patterns
-│   │   │   ├── snippetLoader.ts # Chargement des snippets
-│   │   │   └── security/        # Fonctions de sécurisation
+│   │   │   ├── codeGenerator.ts    # Factory/Strategy patterns
+│   │   │   ├── snippetLoader.ts    # Chargement des snippets
+│   │   │   ├── optionTransformer.ts # Transformation des options pour le frontend
+│   │   │   └── security/           # Fonctions de sécurisation
 │   │   └── data/
-│   │       └── snippets/        # Snippets JSON par langage
+│   │       ├── snippets/          # Snippets JSON par langage
+│   │       └── options/           # Cache des options transformées
 │   │           ├── html5/
 │   │           ├── css3/
 │   │           ├── javascript/
@@ -332,35 +396,62 @@ npm run test --workspace=frontend -- --watch
 
 ## 📦 Snippets disponibles
 
-### 🌐 HTML5
-- 📝 **Formulaires** : Validation native, champs sécurisés
+### 🌐 HTML5 (10 snippets)
+- 📝 **Formulaires** : Validation native, champs sécurisés, options avancées
 - 🎨 **Inputs** : Types HTML5 modernes (email, date, color, range)
 - 📐 **Layouts** : Structure sémantique responsive
+- 🧭 **Navbar** : Navigation responsive avec menu hamburger
+- 🃏 **Cards** : Composants de carte modernes
+- 📊 **Tables** : Tableaux HTML5 avec tri et pagination
+- 🎚️ **Sliders** : Carrousels et sliders interactifs
+- 🪗 **Accordion** : Sections repliables
+- 🪟 **Modal** : Fenêtres modales accessibles
 
-### 🎨 CSS3
+### 🎨 CSS3 (8 snippets)
 - 🎬 **Animations** : Keyframes (fadeIn, slideIn, pulse)
 - 📐 **Layouts** : Grid et Flexbox responsive
 - 📱 **Media queries** : Breakpoints optimisés
+- 🎨 **Buttons** : Boutons stylisés avec états hover/focus
+- 📊 **Grid** : Systèmes de grille CSS Grid avancés
+- 🔄 **Transforms** : Transformations CSS3 (rotate, scale, translate)
+- 🎨 **Variables** : CSS Custom Properties (variables CSS)
+- 📐 **Flexbox** : Layouts flexbox complets
 
-### ⚡ JavaScript
+### ⚡ JavaScript (10 snippets)
 - 🌐 **API Client** : Client HTTP avec fetch, gestion d'erreurs
 - ✅ **Validation** : Validation de formulaires côté client
 - 🎬 **Animations** : requestAnimationFrame pour performance
+- 🔄 **Debounce** : Fonctions debounce/throttle
+- 📦 **Storage** : Gestion localStorage/sessionStorage
+- 🎯 **Event Handling** : Gestionnaires d'événements avancés
+- 👁️ **Observer Pattern** : Implémentation du pattern Observer
+- ⏳ **Promises** : Gestion des promesses et async/await
+- 🏗️ **Classes** : Classes ES6+ avec héritage
+- 📡 **Fetch** : Client fetch avec retry et gestion d'erreurs
 
-### ☕ Java
-- 🏗️ **CRUD** : Controller + Model + Service avec Spring
+### ☕ Java (6 snippets)
+- 🏗️ **CRUD** : Controller + Model + Service avec Spring (génère plusieurs fichiers)
 - 🌐 **API REST** : Endpoints complets avec annotations
-- 📦 **Architecture** : Structure MVC professionnelle
+- 📦 **Model** : Classes d'entité JPA
+- 🔄 **Repository** : Interfaces Repository avec Spring Data
+- 🛠️ **Service** : Couche service avec logique métier
+- 📋 **DTO** : Data Transfer Objects pour les APIs
 
-### 🐘 PHP
+### 🐘 PHP (7 snippets)
 - 🏗️ **CRUD** : PDO sécurisé, protection SQL injection
 - 🌐 **API REST** : Validation, réponses JSON
-- 🔒 **Sécurité** : Prepared statements obligatoires
+- 🔒 **Auth** : Système d'authentification sécurisé
+- 🛡️ **Middleware** : Middleware pour validation et sécurité
+- 🛣️ **Router** : Routeur simple et efficace
+- 📦 **Model** : Classes de modèle avec PDO
+- ✅ **Validation** : Validateurs de données
 
-### 🗄️ SQL
-- 📊 **Requêtes** : SELECT, INSERT, UPDATE, DELETE
-- 🔒 **Sécurité** : Prepared statements uniquement
-- 📈 **Avancé** : JOIN, agrégation, sous-requêtes
+### 🗄️ SQL (5 snippets)
+- 📊 **Requêtes** : SELECT, INSERT, UPDATE, DELETE sécurisés
+- 🔗 **Joins** : INNER, LEFT, RIGHT JOIN avec exemples
+- 📈 **Indexes** : Création et optimisation d'index
+- 🔄 **Transactions** : Gestion des transactions ACID
+- 👁️ **Views** : Vues SQL pour abstraction de données
 
 ---
 
@@ -403,20 +494,39 @@ Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour le guide complet sur l'ajout de nou
 
 ---
 
+## 🆕 Nouvelles fonctionnalités (v2.0)
+
+### ✨ Améliorations récentes
+
+- ✅ **Options dynamiques** : Chargement automatique des options depuis l'API
+- ✅ **Prévisualisation en temps réel** : Génération automatique pendant la configuration
+- ✅ **Groupes d'options** : Organisation par catégories avec sections repliables
+- ✅ **Validation en temps réel** : Feedback immédiat sur les erreurs
+- ✅ **Dépendances conditionnelles** : Affichage dynamique des options
+- ✅ **Export ZIP** : Téléchargement de plusieurs fichiers en une archive
+- ✅ **Historique et favoris** : Stockage local des générations (à venir)
+- ✅ **Aide contextuelle** : Tooltips et descriptions pour chaque option
+- ✅ **Support multi-fichiers** : Génération de plusieurs fichiers (ex: CRUD Java)
+- ✅ **Accessibilité améliorée** : Support complet ARIA et navigation clavier
+
 ## 🗺️ Roadmap
 
+- [x] 📦 Export ZIP pour plusieurs fichiers
+- [x] 🎨 Options groupées par catégories
+- [x] 👁️ Prévisualisation en temps réel
+- [x] ✅ Validation en temps réel
 - [ ] 🌙 Mode sombre (Dark mode)
+- [ ] 📚 Historique des générations avec localStorage
+- [ ] ⭐ Système de favoris
 - [ ] 🐍 Support Python
 - [ ] 🦀 Support Rust
 - [ ] 🐹 Support Go
-- [ ] 📦 Export ZIP pour plusieurs fichiers
 - [ ] 🔌 Extension VS Code
 - [ ] 🌐 API publique pour intégration
 - [ ] 📝 Templates personnalisables
-- [ ] 📚 Historique des générations
 - [ ] 👥 Partage de snippets entre utilisateurs
 - [ ] 🔍 Recherche de snippets
-- [ ] ⭐ Système de favoris
+- [ ] 🧪 Tests E2E avec Playwright
 
 ---
 

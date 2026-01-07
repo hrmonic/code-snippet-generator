@@ -8,45 +8,88 @@
   "variables": [
     {
       "name": "accordionTitle",
-      "type": "string",
+      "type": "text",
+      "label": "Titre de l'accordion",
       "required": true,
-      "description": "Titre de l'accordion"
+      "description": "Titre principal de l'accordion",
+      "placeholder": "FAQ"
     },
     {
-      "name": "item1Title",
-      "type": "string",
+      "name": "numberOfItems",
+      "type": "number",
+      "label": "Nombre d'items",
       "required": true,
-      "description": "Titre du premier item"
+      "description": "Nombre d'éléments dans l'accordion",
+      "defaultValue": 3,
+      "min": 2,
+      "max": 10
     },
     {
-      "name": "item1Content",
-      "type": "string",
+      "name": "itemTitles",
+      "type": "text",
+      "label": "Titres des items",
       "required": true,
-      "description": "Contenu du premier item"
+      "description": "Titres séparés par des virgules",
+      "placeholder": "Question 1,Question 2,Question 3"
     },
     {
-      "name": "item2Title",
-      "type": "string",
+      "name": "itemContents",
+      "type": "textarea",
+      "label": "Contenus des items",
       "required": true,
-      "description": "Titre du deuxième item"
+      "description": "Contenus séparés par des lignes",
+      "placeholder": "Réponse 1\nRéponse 2\nRéponse 3"
     },
     {
-      "name": "item2Content",
-      "type": "string",
-      "required": true,
-      "description": "Contenu du deuxième item"
+      "name": "allowMultiple",
+      "type": "checkbox",
+      "label": "Plusieurs items ouverts",
+      "required": false,
+      "description": "Permettre d'avoir plusieurs items ouverts simultanément",
+      "defaultValue": false
     },
     {
-      "name": "item3Title",
-      "type": "string",
-      "required": true,
-      "description": "Titre du troisième item"
+      "name": "headerColor",
+      "type": "color",
+      "label": "Couleur de l'en-tête",
+      "required": false,
+      "description": "Couleur de fond de l'en-tête",
+      "defaultValue": "#f8f9fa"
     },
     {
-      "name": "item3Content",
-      "type": "string",
-      "required": true,
-      "description": "Contenu du troisième item"
+      "name": "activeHeaderColor",
+      "type": "color",
+      "label": "Couleur de l'en-tête actif",
+      "required": false,
+      "description": "Couleur de fond de l'en-tête actif",
+      "defaultValue": "#667eea"
+    },
+    {
+      "name": "borderRadius",
+      "type": "select",
+      "label": "Rayon des bordures",
+      "required": false,
+      "description": "Border radius des items",
+      "defaultValue": "8px",
+      "options": [
+        { "value": "0px", "label": "Carré" },
+        { "value": "4px", "label": "Petit" },
+        { "value": "8px", "label": "Moyen" },
+        { "value": "12px", "label": "Grand" }
+      ]
+    },
+    {
+      "name": "animationDuration",
+      "type": "select",
+      "label": "Durée d'animation",
+      "required": false,
+      "description": "Durée de l'animation d'ouverture/fermeture",
+      "defaultValue": "0.3s",
+      "options": [
+        { "value": "0.2s", "label": "Rapide" },
+        { "value": "0.3s", "label": "Moyen" },
+        { "value": "0.5s", "label": "Lent" }
+      ]
     }
   ],
   "security": {

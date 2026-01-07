@@ -73,17 +73,26 @@ export interface GenerateRequest {
 }
 
 export interface GenerateResponse {
-  code: string;
+  code?: string;
   filename?: string;
   language: Language;
   tests?: string;
+  files?: Array<{
+    code: string;
+    filename?: string;
+    tests?: string;
+  }>;
+  isMultiple?: boolean;
+  fileCount?: number;
+  preview?: boolean;
 }
 
 export interface GeneratorState {
   selectedLanguage: Language | null;
   selectedFeature: FeatureType | null;
   options: Record<string, unknown>;
-  generatedCode: string | null;
+  generatedCode: string | string[] | null;
   isLoading: boolean;
   error: string | null;
 }
+

@@ -8,15 +8,45 @@
   "variables": [
     {
       "name": "entityName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de l'entité",
       "required": true,
-      "description": "Nom de l'entité"
+      "description": "Nom de la classe Controller (ex: User)",
+      "placeholder": "User"
     },
     {
       "name": "endpoint",
-      "type": "string",
+      "type": "text",
+      "label": "Endpoint",
       "required": true,
-      "description": "Endpoint de l'API"
+      "description": "Endpoint de l'API (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": false,
+      "description": "Package Java (ex: com.example.rest)",
+      "placeholder": "com.example.rest",
+      "defaultValue": "com.example.rest"
+    },
+    {
+      "name": "apiVersion",
+      "type": "text",
+      "label": "Version de l'API",
+      "required": false,
+      "description": "Version de l'API dans le path",
+      "defaultValue": "v1",
+      "placeholder": "v1"
+    },
+    {
+      "name": "includeAllMethods",
+      "type": "checkbox",
+      "label": "Toutes les méthodes CRUD",
+      "required": false,
+      "description": "Inclure GET, POST, PUT, DELETE",
+      "defaultValue": true
     }
   ],
   "security": {

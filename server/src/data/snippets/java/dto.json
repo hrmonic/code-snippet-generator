@@ -8,9 +8,52 @@
   "variables": [
     {
       "name": "entityName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de l'entité",
       "required": true,
-      "description": "Nom de l'entité (ex: User)"
+      "description": "Nom de la classe DTO (ex: User)",
+      "placeholder": "User"
+    },
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": false,
+      "description": "Package Java (ex: com.example.dto)",
+      "placeholder": "com.example.dto",
+      "defaultValue": "com.example.dto"
+    },
+    {
+      "name": "includeValidation",
+      "type": "checkbox",
+      "label": "Annotations de validation",
+      "required": false,
+      "description": "Inclure les annotations Jakarta Validation",
+      "defaultValue": true
+    },
+    {
+      "name": "includeBuilder",
+      "type": "checkbox",
+      "label": "Builder pattern",
+      "required": false,
+      "description": "Inclure le pattern Builder",
+      "defaultValue": true
+    },
+    {
+      "name": "includeMapping",
+      "type": "checkbox",
+      "label": "Méthodes de mapping",
+      "required": false,
+      "description": "Inclure fromEntity() et toEntity()",
+      "defaultValue": true
+    },
+    {
+      "name": "fields",
+      "type": "text",
+      "label": "Champs additionnels",
+      "required": false,
+      "description": "Champs supplémentaires séparés par des virgules (ex: age,phoneNumber)",
+      "placeholder": "age,phoneNumber"
     }
   ],
   "security": {

@@ -5,7 +5,88 @@
   "language": "css3",
   "feature": "responsive",
   "code": "/* Mobile First Approach */\n\n/* Base styles (mobile) */\n.container {\n    width: 100%;\n    padding: 1rem;\n    margin: 0 auto;\n}\n\n/* Tablet (768px and up) */\n@media (min-width: 768px) {\n    .container {\n        max-width: 750px;\n        padding: 2rem;\n    }\n    \n    .grid {\n        display: grid;\n        grid-template-columns: repeat(2, 1fr);\n        gap: 1.5rem;\n    }\n}\n\n/* Desktop (1024px and up) */\n@media (min-width: 1024px) {\n    .container {\n        max-width: 1200px;\n        padding: 3rem;\n    }\n    \n    .grid {\n        grid-template-columns: repeat(3, 1fr);\n        gap: 2rem;\n    }\n}\n\n/* Large Desktop (1440px and up) */\n@media (min-width: 1440px) {\n    .container {\n        max-width: 1400px;\n    }\n    \n    .grid {\n        grid-template-columns: repeat(4, 1fr);\n    }\n}\n\n/* Orientation */\n@media (orientation: landscape) {\n    .header {\n        height: 60px;\n    }\n}\n\n@media (orientation: portrait) {\n    .header {\n        height: 80px;\n    }\n}\n\n/* Print styles */\n@media print {\n    .no-print {\n        display: none;\n    }\n    \n    body {\n        font-size: 12pt;\n        line-height: 1.5;\n    }\n}",
-  "variables": [],
+  "variables": [
+    {
+      "name": "breakpoints",
+      "type": "multiselect",
+      "label": "Breakpoints",
+      "required": true,
+      "description": "Sélectionnez les breakpoints à inclure",
+      "defaultValue": ["tablet", "desktop"],
+      "options": [
+        { "value": "tablet", "label": "Tablette (768px)" },
+        { "value": "desktop", "label": "Desktop (1024px)" },
+        { "value": "large", "label": "Large Desktop (1440px)" },
+        { "value": "orientation", "label": "Orientation" },
+        { "value": "print", "label": "Styles d'impression" }
+      ]
+    },
+    {
+      "name": "approach",
+      "type": "select",
+      "label": "Approche",
+      "required": false,
+      "description": "Approche de design responsive",
+      "defaultValue": "mobile-first",
+      "options": [
+        { "value": "mobile-first", "label": "Mobile First" },
+        { "value": "desktop-first", "label": "Desktop First" }
+      ]
+    },
+    {
+      "name": "includeGrid",
+      "type": "checkbox",
+      "label": "Exemple Grid",
+      "required": false,
+      "description": "Inclure un exemple de grid responsive",
+      "defaultValue": true
+    },
+    {
+      "name": "gridColumns",
+      "type": "select",
+      "label": "Colonnes Grid (mobile)",
+      "required": false,
+      "description": "Nombre de colonnes sur mobile",
+      "defaultValue": "1",
+      "options": [
+        { "value": "1", "label": "1 colonne" },
+        { "value": "2", "label": "2 colonnes" }
+      ],
+      "dependsOn": {
+        "includeGrid": [true]
+      }
+    },
+    {
+      "name": "gridColumnsTablet",
+      "type": "select",
+      "label": "Colonnes Grid (tablette)",
+      "required": false,
+      "description": "Nombre de colonnes sur tablette",
+      "defaultValue": "2",
+      "options": [
+        { "value": "2", "label": "2 colonnes" },
+        { "value": "3", "label": "3 colonnes" }
+      ],
+      "dependsOn": {
+        "includeGrid": [true]
+      }
+    },
+    {
+      "name": "gridColumnsDesktop",
+      "type": "select",
+      "label": "Colonnes Grid (desktop)",
+      "required": false,
+      "description": "Nombre de colonnes sur desktop",
+      "defaultValue": "3",
+      "options": [
+        { "value": "3", "label": "3 colonnes" },
+        { "value": "4", "label": "4 colonnes" }
+      ],
+      "dependsOn": {
+        "includeGrid": [true]
+      }
+    }
+  ],
   "security": {
     "sqlInjection": false,
     "xss": false

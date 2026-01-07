@@ -5,7 +5,45 @@
   "language": "javascript",
   "feature": "storage",
   "code": "class StorageManager {\n    constructor(storageType = 'localStorage') {\n        this.storage = storageType === 'localStorage' ? localStorage : sessionStorage;\n    }\n\n    set(key, value, expirationMinutes = null) {\n        const item = {\n            value: value,\n            timestamp: expirationMinutes ? Date.now() + (expirationMinutes * 60 * 1000) : null\n        };\n        this.storage.setItem(key, JSON.stringify(item));\n    }\n\n    get(key) {\n        const itemStr = this.storage.getItem(key);\n        if (!itemStr) return null;\n\n        try {\n            const item = JSON.parse(itemStr);\n            \n            // Vérifier l'expiration\n            if (item.timestamp && Date.now() > item.timestamp) {\n                this.remove(key);\n                return null;\n            }\n            \n            return item.value;\n        } catch (e) {\n            console.error('Error parsing storage item:', e);\n            return null;\n        }\n    }\n\n    remove(key) {\n        this.storage.removeItem(key);\n    }\n\n    clear() {\n        this.storage.clear();\n    }\n\n    getAll() {\n        const items = {};\n        for (let i = 0; i < this.storage.length; i++) {\n            const key = this.storage.key(i);\n            items[key] = this.get(key);\n        }\n        return items;\n    }\n\n    has(key) {\n        return this.storage.getItem(key) !== null;\n    }\n}\n\n// Utilisation\nconst storage = new StorageManager('localStorage');\n\n// Stocker avec expiration (30 minutes)\nstorage.set('userToken', 'abc123', 30);\n\n// Stocker sans expiration\nstorage.set('userPreferences', { theme: 'dark', lang: 'fr' });\n\n// Récupérer\nconst token = storage.get('userToken');\nconst prefs = storage.get('userPreferences');\n\n// Vérifier l'existence\nif (storage.has('userToken')) {\n    console.log('Token exists');\n}\n\n// Supprimer\nstorage.remove('userToken');\n\n// Tout récupérer\nconst allItems = storage.getAll();",
-  "variables": [],
+  "variables": [
+    {
+      "name": "storageType",
+      "type": "select",
+      "label": "Type de stockage",
+      "required": true,
+      "description": "Choisissez le type de stockage",
+      "defaultValue": "localStorage",
+      "options": [
+        { "value": "localStorage", "label": "LocalStorage" },
+        { "value": "sessionStorage", "label": "SessionStorage" },
+        { "value": "both", "label": "Les deux" }
+      ]
+    },
+    {
+      "name": "includeExpiration",
+      "type": "checkbox",
+      "label": "Support d'expiration",
+      "required": false,
+      "description": "Ajouter la fonctionnalité d'expiration automatique",
+      "defaultValue": true
+    },
+    {
+      "name": "includeHelpers",
+      "type": "checkbox",
+      "label": "Méthodes helper",
+      "required": false,
+      "description": "Inclure getAll(), has(), clear()",
+      "defaultValue": true
+    },
+    {
+      "name": "errorHandling",
+      "type": "checkbox",
+      "label": "Gestion d'erreurs",
+      "required": false,
+      "description": "Ajouter la gestion des erreurs de parsing",
+      "defaultValue": true
+    }
+  ],
   "security": {
     "sqlInjection": false,
     "xss": true

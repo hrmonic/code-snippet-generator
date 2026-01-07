@@ -8,15 +8,54 @@
   "variables": [
     {
       "name": "tableName1",
-      "type": "string",
+      "type": "text",
+      "label": "Première table",
       "required": true,
-      "description": "Première table (ex: users)"
+      "description": "Nom de la première table (ex: users)",
+      "placeholder": "users"
     },
     {
       "name": "tableName2",
-      "type": "string",
+      "type": "text",
+      "label": "Deuxième table",
       "required": true,
-      "description": "Deuxième table (ex: posts)"
+      "description": "Nom de la deuxième table (ex: posts)",
+      "placeholder": "posts"
+    },
+    {
+      "name": "joinTypes",
+      "type": "multiselect",
+      "label": "Types de JOIN",
+      "required": true,
+      "description": "Sélectionnez les types de JOIN à inclure",
+      "defaultValue": ["inner", "left"],
+      "options": [
+        { "value": "inner", "label": "INNER JOIN" },
+        { "value": "left", "label": "LEFT JOIN" },
+        { "value": "right", "label": "RIGHT JOIN" },
+        { "value": "full", "label": "FULL OUTER JOIN" },
+        { "value": "multiple", "label": "JOIN avec plusieurs tables" },
+        { "value": "aggregation", "label": "JOIN avec agrégation" },
+        { "value": "self", "label": "Self JOIN" }
+      ]
+    },
+    {
+      "name": "joinColumn1",
+      "type": "text",
+      "label": "Colonne de jointure (table 1)",
+      "required": false,
+      "description": "Colonne de jointure dans la première table",
+      "placeholder": "id",
+      "defaultValue": "id"
+    },
+    {
+      "name": "joinColumn2",
+      "type": "text",
+      "label": "Colonne de jointure (table 2)",
+      "required": false,
+      "description": "Colonne de jointure dans la deuxième table",
+      "placeholder": "user_id",
+      "defaultValue": "user_id"
     }
   ],
   "security": {

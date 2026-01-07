@@ -2,20 +2,23 @@ import { create } from 'zustand';
 import type { Language, FeatureType, GeneratorState } from '../types';
 
 interface GeneratorStore extends GeneratorState {
+  previewCode: string | null;
   setLanguage: (language: Language | null) => void;
   setFeature: (feature: FeatureType | null) => void;
   setOptions: (options: Record<string, unknown>) => void;
-  setGeneratedCode: (code: string | null) => void;
+  setGeneratedCode: (code: string | string[] | null) => void;
+  setPreviewCode: (code: string | null) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   reset: () => void;
 }
 
-const initialState: GeneratorState = {
+const initialState: GeneratorState & { previewCode: string | null } = {
   selectedLanguage: null,
   selectedFeature: null,
   options: {},
   generatedCode: null,
+  previewCode: null,
   isLoading: false,
   error: null,
 };
@@ -48,6 +51,10 @@ export const useGeneratorStore = create<GeneratorStore>((set) => ({
     set({
       generatedCode: code,
       error: null,
+    }),
+  setPreviewCode: (code) =>
+    set({
+      previewCode: code,
     }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),

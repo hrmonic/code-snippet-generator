@@ -5,7 +5,76 @@
   "language": "javascript",
   "feature": "validation",
   "code": "class FormValidator {\n    constructor(formId) {\n        this.form = document.getElementById(formId);\n        this.errors = {};\n    }\n\n    validate() {\n        this.errors = {};\n        const inputs = this.form.querySelectorAll('input, textarea, select');\n        \n        inputs.forEach(input => {\n            const value = input.value.trim();\n            const rules = input.dataset.rules ? input.dataset.rules.split('|') : [];\n            \n            rules.forEach(rule => {\n                if (!this.checkRule(value, rule, input)) {\n                    this.addError(input.name, this.getErrorMessage(rule));\n                }\n            });\n        });\n        \n        return Object.keys(this.errors).length === 0;\n    }\n\n    checkRule(value, rule, input) {\n        switch (rule) {\n            case 'required':\n                return value.length > 0;\n            case 'email':\n                return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);\n            case 'min':\n                const min = parseInt(input.dataset.min || '0');\n                return value.length >= min;\n            case 'max':\n                const max = parseInt(input.dataset.max || '1000');\n                return value.length <= max;\n            default:\n                return true;\n        }\n    }\n\n    addError(field, message) {\n        if (!this.errors[field]) {\n            this.errors[field] = [];\n        }\n        this.errors[field].push(message);\n    }\n\n    getErrorMessage(rule) {\n        const messages = {\n            required: 'Ce champ est requis',\n            email: 'Email invalide',\n            min: 'Trop court',\n            max: 'Trop long',\n        };\n        return messages[rule] || 'Erreur de validation';\n    }\n\n    displayErrors() {\n        Object.keys(this.errors).forEach(field => {\n            const input = this.form.querySelector(`[name=\"${field}\"]`);\n            if (input) {\n                input.classList.add('error');\n                const errorDiv = document.createElement('div');\n                errorDiv.className = 'error-message';\n                errorDiv.textContent = this.errors[field].join(', ');\n                input.parentNode.appendChild(errorDiv);\n            }\n        });\n    }\n}\n\n// Utilisation\nconst validator = new FormValidator('myForm');\nif (validator.validate()) {\n    // Soumettre le formulaire\n} else {\n    validator.displayErrors();\n}",
-  "variables": [],
+  "variables": [
+    {
+      "name": "formId",
+      "type": "text",
+      "label": "ID du formulaire",
+      "required": true,
+      "description": "ID de l'élément formulaire à valider",
+      "placeholder": "myForm",
+      "defaultValue": "myForm"
+    },
+    {
+      "name": "validationRules",
+      "type": "multiselect",
+      "label": "Règles de validation",
+      "required": true,
+      "description": "Sélectionnez les règles de validation à inclure",
+      "defaultValue": ["required", "email"],
+      "options": [
+        { "value": "required", "label": "Champ requis" },
+        { "value": "email", "label": "Validation email" },
+        { "value": "min", "label": "Longueur minimale" },
+        { "value": "max", "label": "Longueur maximale" },
+        { "value": "pattern", "label": "Pattern regex" },
+        { "value": "number", "label": "Validation nombre" },
+        { "value": "url", "label": "Validation URL" }
+      ]
+    },
+    {
+      "name": "errorDisplay",
+      "type": "select",
+      "label": "Affichage des erreurs",
+      "required": false,
+      "description": "Comment afficher les messages d'erreur",
+      "defaultValue": "below",
+      "options": [
+        { "value": "below", "label": "Sous le champ" },
+        { "value": "tooltip", "label": "Tooltip" },
+        { "value": "inline", "label": "En ligne" }
+      ]
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "label": "Langue des messages",
+      "required": false,
+      "description": "Langue des messages d'erreur",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" },
+        { "value": "es", "label": "Español" }
+      ]
+    },
+    {
+      "name": "realTimeValidation",
+      "type": "checkbox",
+      "label": "Validation en temps réel",
+      "required": false,
+      "description": "Valider les champs pendant la saisie",
+      "defaultValue": false
+    },
+    {
+      "name": "highlightErrors",
+      "type": "checkbox",
+      "label": "Mettre en évidence les erreurs",
+      "required": false,
+      "description": "Ajouter une classe CSS aux champs en erreur",
+      "defaultValue": true
+    }
+  ],
   "security": {
     "sqlInjection": false,
     "xss": true

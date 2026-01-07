@@ -8,15 +8,44 @@
   "variables": [
     {
       "name": "entityName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de l'entité",
       "required": true,
-      "description": "Nom de l'entité (ex: User)"
+      "description": "Nom de la classe entité (ex: User)",
+      "placeholder": "User"
     },
     {
       "name": "tableName",
-      "type": "string",
+      "type": "text",
+      "label": "Nom de la table",
       "required": true,
-      "description": "Nom de la table (ex: users)"
+      "description": "Nom de la table en base de données (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": false,
+      "description": "Package Java (ex: com.example.controller)",
+      "placeholder": "com.example.controller",
+      "defaultValue": "com.example.controller"
+    },
+    {
+      "name": "includeAllMethods",
+      "type": "checkbox",
+      "label": "Toutes les méthodes CRUD",
+      "required": false,
+      "description": "Inclure GET, POST, PUT, DELETE",
+      "defaultValue": true
+    },
+    {
+      "name": "generateMultipleFiles",
+      "type": "checkbox",
+      "label": "Générer plusieurs fichiers",
+      "required": false,
+      "description": "Générer Controller, Service et Repository séparément",
+      "defaultValue": false
     }
   ],
   "security": {

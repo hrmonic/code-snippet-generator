@@ -5,7 +5,72 @@
   "language": "javascript",
   "feature": "observer",
   "code": "// Pattern Observer classique\nclass Observer {\n    constructor() {\n        this.observers = [];\n    }\n    \n    subscribe(fn) {\n        this.observers.push(fn);\n        return () => this.unsubscribe(fn);\n    }\n    \n    unsubscribe(fn) {\n        this.observers = this.observers.filter(observer => observer !== fn);\n    }\n    \n    notify(data) {\n        this.observers.forEach(observer => observer(data));\n    }\n}\n\n// Utilisation\nconst observer = new Observer();\n\nconst unsubscribe1 = observer.subscribe(data => {\n    console.log('Observer 1:', data);\n});\n\nconst unsubscribe2 = observer.subscribe(data => {\n    console.log('Observer 2:', data);\n});\n\nobserver.notify({ message: 'Hello' });\n\n// Intersection Observer API - Détection de visibilité\nfunction createIntersectionObserver(callback, options = {}) {\n    const defaultOptions = {\n        root: null,\n        rootMargin: '0px',\n        threshold: 0.1,\n        ...options\n    };\n    \n    return new IntersectionObserver((entries) => {\n        entries.forEach(entry => {\n            callback(entry);\n        });\n    }, defaultOptions);\n}\n\n// Lazy loading d'images\nfunction lazyLoadImages() {\n    const imageObserver = createIntersectionObserver((entry) => {\n        if (entry.isIntersecting) {\n            const img = entry.target;\n            img.src = img.dataset.src;\n            img.classList.remove('lazy');\n            imageObserver.unobserve(img);\n        }\n    });\n    \n    document.querySelectorAll('img.lazy').forEach(img => {\n        imageObserver.observe(img);\n    });\n}\n\n// Animation au scroll\nfunction animateOnScroll() {\n    const animationObserver = createIntersectionObserver((entry) => {\n        if (entry.isIntersecting) {\n            entry.target.classList.add('animate');\n        }\n    }, { threshold: 0.5 });\n    \n    document.querySelectorAll('.animate-on-scroll').forEach(el => {\n        animationObserver.observe(el);\n    });\n}\n\n// Détection de fin de page (infinite scroll)\nfunction detectEndOfPage(callback) {\n    const sentinel = document.createElement('div');\n    sentinel.id = 'scroll-sentinel';\n    document.body.appendChild(sentinel);\n    \n    const observer = createIntersectionObserver((entry) => {\n        if (entry.isIntersecting) {\n            callback();\n        }\n    });\n    \n    observer.observe(sentinel);\n}\n\n// Mutation Observer - Observer les changements DOM\nfunction observeDOMChanges(target, callback) {\n    const observer = new MutationObserver((mutations) => {\n        mutations.forEach(mutation => {\n            callback(mutation);\n        });\n    });\n    \n    observer.observe(target, {\n        childList: true,\n        subtree: true,\n        attributes: true,\n        attributeOldValue: true\n    });\n    \n    return observer;\n}\n\n// Resize Observer - Observer les changements de taille\nfunction observeResize(element, callback) {\n    if (window.ResizeObserver) {\n        const observer = new ResizeObserver((entries) => {\n            entries.forEach(entry => {\n                callback(entry.contentRect);\n            });\n        });\n        \n        observer.observe(element);\n        return observer;\n    }\n    \n    // Fallback pour navigateurs sans support\n    let lastWidth = element.offsetWidth;\n    let lastHeight = element.offsetHeight;\n    \n    const checkSize = () => {\n        if (element.offsetWidth !== lastWidth || element.offsetHeight !== lastHeight) {\n            lastWidth = element.offsetWidth;\n            lastHeight = element.offsetHeight;\n            callback({ width: lastWidth, height: lastHeight });\n        }\n    };\n    \n    setInterval(checkSize, 100);\n}\n\n// Utilisation\nlazyLoadImages();\nanimateOnScroll();\n\ndetectEndOfPage(() => {\n    console.log('End of page reached');\n    // Charger plus de contenu\n});\n\nconst domObserver = observeDOMChanges(document.body, (mutation) => {\n    console.log('DOM changed:', mutation);\n});",
-  "variables": [],
+  "variables": [
+    {
+      "name": "observerTypes",
+      "type": "multiselect",
+      "label": "Types d'observers",
+      "required": true,
+      "description": "Sélectionnez les types d'observers à inclure",
+      "defaultValue": ["classic", "intersection"],
+      "options": [
+        { "value": "classic", "label": "Pattern Observer classique" },
+        { "value": "intersection", "label": "Intersection Observer API" },
+        { "value": "mutation", "label": "Mutation Observer" },
+        { "value": "resize", "label": "Resize Observer" }
+      ]
+    },
+    {
+      "name": "includeLazyLoading",
+      "type": "checkbox",
+      "label": "Lazy loading d'images",
+      "required": false,
+      "description": "Inclure l'exemple de lazy loading",
+      "defaultValue": true,
+      "dependsOn": {
+        "observerTypes": ["intersection"]
+      }
+    },
+    {
+      "name": "includeScrollAnimation",
+      "type": "checkbox",
+      "label": "Animation au scroll",
+      "required": false,
+      "description": "Inclure l'animation au scroll",
+      "defaultValue": true,
+      "dependsOn": {
+        "observerTypes": ["intersection"]
+      }
+    },
+    {
+      "name": "includeInfiniteScroll",
+      "type": "checkbox",
+      "label": "Infinite scroll",
+      "required": false,
+      "description": "Inclure la détection de fin de page",
+      "defaultValue": false,
+      "dependsOn": {
+        "observerTypes": ["intersection"]
+      }
+    },
+    {
+      "name": "intersectionThreshold",
+      "type": "select",
+      "label": "Seuil d'intersection",
+      "required": false,
+      "description": "Seuil pour déclencher l'intersection",
+      "defaultValue": "0.1",
+      "options": [
+        { "value": "0", "label": "0 (dès qu'il apparaît)" },
+        { "value": "0.1", "label": "0.1 (10%)" },
+        { "value": "0.5", "label": "0.5 (50%)" },
+        { "value": "1", "label": "1 (100%)" }
+      ],
+      "dependsOn": {
+        "observerTypes": ["intersection"]
+      }
+    }
+  ],
   "security": {
     "sqlInjection": false,
     "xss": false
