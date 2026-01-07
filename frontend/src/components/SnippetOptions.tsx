@@ -119,20 +119,31 @@ export function SnippetOptions() {
   );
 
   return (
-    <div className="card">
-      <h2 className="text-xl font-semibold mb-4">Options de configuration</h2>
+    <div className="card shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <div className="flex items-center gap-2 mb-6">
+        <div className="w-1 h-8 bg-gradient-to-b from-primary-600 to-indigo-600 rounded-full"></div>
+        <h2 className="text-2xl font-bold text-gray-900">Options de configuration</h2>
+      </div>
       <FeatureInfo language={selectedLanguage} feature={selectedFeature} />
       {featureOptions.length === 0 ? (
         <div className="space-y-4">
-          <p className="text-gray-600">
-            Aucune option requise pour cette combinaison. Cliquez sur Générer pour créer le code.
-          </p>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <div className="text-2xl">ℹ️</div>
+              <div>
+                <p className="text-blue-800 font-medium mb-1">Aucune option requise</p>
+                <p className="text-blue-600 text-sm">
+                  Cliquez sur "Générer le code" pour créer le code avec les paramètres par défaut.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-5">
           {featureOptions.map((opt) => (
-            <div key={opt.key}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div key={opt.key} className="animate-fade-in">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 {opt.label}
                 {opt.required && <span className="text-red-500 ml-1">*</span>}
               </label>
@@ -148,16 +159,18 @@ export function SnippetOptions() {
           ))}
         </div>
       )}
-      <div className="mt-6">
+      <div className="mt-8 flex justify-end">
         <button
           onClick={handleGenerate}
           disabled={!canGenerate}
-          className="btn-primary w-full md:w-auto"
+          className="btn-primary flex items-center gap-2 text-lg px-8 py-3"
         >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
           Générer le code
         </button>
       </div>
     </div>
   );
 }
-
