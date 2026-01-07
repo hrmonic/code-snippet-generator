@@ -1,0 +1,14 @@
+{
+  "id": "css3-grid",
+  "name": "CSS Grid Layout",
+  "description": "Layouts avec CSS Grid avancé",
+  "language": "css3",
+  "feature": "grid",
+  "code": "/* Grid Container de base */\n.grid-container {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    grid-template-rows: auto;\n    gap: 1.5rem;\n    padding: 1rem;\n}\n\n/* Grid avec zones nommées */\n.layout-grid {\n    display: grid;\n    grid-template-areas:\n        \"header header header\"\n        \"sidebar main main\"\n        \"footer footer footer\";\n    grid-template-columns: 250px 1fr 1fr;\n    grid-template-rows: auto 1fr auto;\n    gap: 1rem;\n    min-height: 100vh;\n}\n\n.header { grid-area: header; }\n.sidebar { grid-area: sidebar; }\n.main { grid-area: main; }\n.footer { grid-area: footer; }\n\n/* Grid responsive auto-fit */\n.auto-grid {\n    display: grid;\n    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));\n    gap: 1rem;\n}\n\n/* Grid avec auto-fill */\n.fill-grid {\n    display: grid;\n    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));\n    gap: 1rem;\n}\n\n/* Grid avec lignes implicites */\n.implicit-grid {\n    display: grid;\n    grid-auto-flow: row dense;\n    grid-template-columns: repeat(4, 1fr);\n    gap: 1rem;\n}\n\n.item-large {\n    grid-column: span 2;\n    grid-row: span 2;\n}\n\n/* Grid avec alignement */\n.aligned-grid {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    align-items: center;\n    justify-items: center;\n    gap: 1rem;\n}\n\n/* Grid responsive avec media queries */\n@media (max-width: 768px) {\n    .layout-grid {\n        grid-template-areas:\n            \"header\"\n            \"main\"\n            \"sidebar\"\n            \"footer\";\n        grid-template-columns: 1fr;\n    }\n    \n    .grid-container {\n        grid-template-columns: 1fr;\n    }\n}",
+  "variables": [],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

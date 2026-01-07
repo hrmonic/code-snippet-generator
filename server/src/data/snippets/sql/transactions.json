@@ -1,0 +1,27 @@
+{
+  "id": "sql-transactions",
+  "name": "Transactions SQL",
+  "description": "Gestion des transactions avec rollback et commit",
+  "language": "sql",
+  "feature": "transactions",
+  "code": "-- Début d'une transaction\nSTART TRANSACTION;\n\n-- Opérations SQL\nINSERT INTO {{tableName1}} (name, email) VALUES ('John Doe', 'john@example.com');\nUPDATE {{tableName2}} SET balance = balance - 100 WHERE id = 1;\nUPDATE {{tableName2}} SET balance = balance + 100 WHERE id = 2;\n\n-- Si tout est OK, commit\nCOMMIT;\n\n-- Si erreur, rollback\n-- ROLLBACK;\n\n-- Exemple avec gestion d'erreur (PDO PHP)\n-- try {\n--     $pdo->beginTransaction();\n--     \n--     $stmt1 = $pdo->prepare(\"INSERT INTO {{tableName1}} (name, email) VALUES (?, ?)\");\n--     $stmt1->execute(['John Doe', 'john@example.com']);\n--     \n--     $stmt2 = $pdo->prepare(\"UPDATE {{tableName2}} SET balance = balance - ? WHERE id = ?\");\n--     $stmt2->execute([100, 1]);\n--     \n--     $stmt3 = $pdo->prepare(\"UPDATE {{tableName2}} SET balance = balance + ? WHERE id = ?\");\n--     $stmt3->execute([100, 2]);\n--     \n--     $pdo->commit();\n--     echo \"Transaction réussie\";\n-- } catch (Exception $e) {\n--     $pdo->rollBack();\n--     echo \"Erreur: \" . $e->getMessage();\n-- }\n\n-- Transaction avec points de sauvegarde (Savepoints)\nSTART TRANSACTION;\n\nINSERT INTO {{tableName1}} (name) VALUES ('User 1');\nSAVEPOINT sp1;\n\nINSERT INTO {{tableName1}} (name) VALUES ('User 2');\nSAVEPOINT sp2;\n\n-- Rollback vers un point de sauvegarde spécifique\n-- ROLLBACK TO SAVEPOINT sp1;\n\n-- Commit final\nCOMMIT;\n\n-- Transaction avec isolation levels\nSET TRANSACTION ISOLATION LEVEL READ COMMITTED;\nSTART TRANSACTION;\n\n-- Vos opérations ici\nSELECT * FROM {{tableName1}} WHERE id = 1;\nUPDATE {{tableName1}} SET name = 'Updated' WHERE id = 1;\n\nCOMMIT;\n\n-- Niveaux d'isolation disponibles:\n-- READ UNCOMMITTED\n-- READ COMMITTED\n-- REPEATABLE READ\n-- SERIALIZABLE",
+  "variables": [
+    {
+      "name": "tableName1",
+      "type": "string",
+      "required": true,
+      "description": "Première table"
+    },
+    {
+      "name": "tableName2",
+      "type": "string",
+      "required": false,
+      "description": "Deuxième table"
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

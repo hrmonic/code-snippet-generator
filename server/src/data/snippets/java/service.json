@@ -1,0 +1,27 @@
+{
+  "id": "java-service",
+  "name": "Service Layer Java Spring",
+  "description": "Service avec logique métier et gestion des exceptions",
+  "language": "java",
+  "feature": "service",
+  "code": "package com.example.service;\n\nimport com.example.model.{{entityName}};\nimport com.example.repository.{{entityName}}Repository;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\nimport org.springframework.transaction.annotation.Transactional;\n\nimport java.util.List;\nimport java.util.Optional;\n\n@Service\n@Transactional\npublic class {{entityName}}Service {\n    \n    @Autowired\n    private {{entityName}}Repository {{tableName}}Repository;\n    \n    public List<{{entityName}}> findAll() {\n        return {{tableName}}Repository.findAll();\n    }\n    \n    public Optional<{{entityName}}> findById(Long id) {\n        if (id == null || id <= 0) {\n            throw new IllegalArgumentException(\"Invalid ID: \" + id);\n        }\n        return {{tableName}}Repository.findById(id);\n    }\n    \n    public {{entityName}} save({{entityName}} entity) {\n        if (entity == null) {\n            throw new IllegalArgumentException(\"Entity cannot be null\");\n        }\n        validateEntity(entity);\n        return {{tableName}}Repository.save(entity);\n    }\n    \n    public {{entityName}} update(Long id, {{entityName}} entity) {\n        if (id == null || id <= 0) {\n            throw new IllegalArgumentException(\"Invalid ID: \" + id);\n        }\n        if (entity == null) {\n            throw new IllegalArgumentException(\"Entity cannot be null\");\n        }\n        \n        return {{tableName}}Repository.findById(id)\n            .map(existing -> {\n                updateEntityFields(existing, entity);\n                validateEntity(existing);\n                return {{tableName}}Repository.save(existing);\n            })\n            .orElseThrow(() -> new RuntimeException(\"{{entityName}} not found with id: \" + id));\n    }\n    \n    public void delete(Long id) {\n        if (id == null || id <= 0) {\n            throw new IllegalArgumentException(\"Invalid ID: \" + id);\n        }\n        \n        if (!{{tableName}}Repository.existsById(id)) {\n            throw new RuntimeException(\"{{entityName}} not found with id: \" + id);\n        }\n        \n        {{tableName}}Repository.deleteById(id);\n    }\n    \n    public boolean exists(Long id) {\n        return id != null && id > 0 && {{tableName}}Repository.existsById(id);\n    }\n    \n    private void validateEntity({{entityName}} entity) {\n        // Ajouter vos règles de validation ici\n        if (entity.getName() == null || entity.getName().trim().isEmpty()) {\n            throw new IllegalArgumentException(\"Name is required\");\n        }\n    }\n    \n    private void updateEntityFields({{entityName}} existing, {{entityName}} updated) {\n        // Mettre à jour les champs modifiables\n        existing.setName(updated.getName());\n        existing.setEmail(updated.getEmail());\n        // Ajouter d'autres champs selon votre modèle\n    }\n}",
+  "variables": [
+    {
+      "name": "entityName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de l'entité (ex: User)"
+    },
+    {
+      "name": "tableName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de la table (ex: users)"
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

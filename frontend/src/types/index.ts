@@ -15,7 +15,16 @@ export type FeatureType =
   | 'flexbox'
   | 'fetch'
   | 'model'
-  | 'joins';
+  | 'joins'
+  | 'card'
+  | 'table'
+  | 'grid'
+  | 'buttons'
+  | 'storage'
+  | 'debounce'
+  | 'service'
+  | 'router'
+  | 'transactions';
 
 export interface SnippetVariable {
   name: string;

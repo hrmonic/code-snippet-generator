@@ -78,6 +78,12 @@ export function SnippetOptions() {
         { key: 'tableName2', label: 'Deuxième table', placeholder: 'posts', required: true },
       ];
     }
+    if (selectedFeature === 'transactions' && selectedLanguage === 'sql') {
+      return [
+        { key: 'tableName1', label: 'Première table', placeholder: 'users', required: true },
+        { key: 'tableName2', label: 'Deuxième table', placeholder: 'accounts', required: false },
+      ];
+    }
     if (selectedFeature === 'api' && selectedLanguage === 'javascript') {
       return [
         { key: 'baseURL', label: 'URL de base', placeholder: 'http://localhost:3000/api', required: false },
@@ -97,6 +103,12 @@ export function SnippetOptions() {
       ];
     }
     if (selectedFeature === 'model' && selectedLanguage === 'java') {
+      return [
+        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
+        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
+      ];
+    }
+    if (selectedFeature === 'service' && selectedLanguage === 'java') {
       return [
         { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
         { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
@@ -124,6 +136,21 @@ export function SnippetOptions() {
         { key: 'siteName', label: 'Nom du site', placeholder: 'Mon Site', required: true },
       ];
     }
+    if (selectedFeature === 'card' && selectedLanguage === 'html5') {
+      return [
+        { key: 'cardTitle', label: 'Titre de la card', placeholder: 'Titre', required: true },
+        { key: 'cardContent', label: 'Contenu de la card', placeholder: 'Contenu de la card', required: true },
+        { key: 'buttonText', label: 'Texte du bouton', placeholder: 'En savoir plus', required: false },
+      ];
+    }
+    if (selectedFeature === 'table' && selectedLanguage === 'html5') {
+      return [
+        { key: 'tableTitle', label: 'Titre du tableau', placeholder: 'Liste des utilisateurs', required: true },
+        { key: 'column1', label: 'Colonne 1', placeholder: 'Nom', required: true },
+        { key: 'column2', label: 'Colonne 2', placeholder: 'Email', required: true },
+        { key: 'column3', label: 'Colonne 3', placeholder: 'Rôle', required: true },
+      ];
+    }
     // Features sans options requises
     if (
       (selectedFeature === 'animation' && (selectedLanguage === 'css3' || selectedLanguage === 'javascript')) ||
@@ -131,7 +158,12 @@ export function SnippetOptions() {
       (selectedFeature === 'input' && selectedLanguage === 'html5') ||
       (selectedFeature === 'layout' && selectedLanguage === 'css3') ||
       (selectedFeature === 'responsive' && selectedLanguage === 'css3') ||
-      (selectedFeature === 'flexbox' && selectedLanguage === 'css3')
+      (selectedFeature === 'flexbox' && selectedLanguage === 'css3') ||
+      (selectedFeature === 'grid' && selectedLanguage === 'css3') ||
+      (selectedFeature === 'buttons' && selectedLanguage === 'css3') ||
+      (selectedFeature === 'storage' && selectedLanguage === 'javascript') ||
+      (selectedFeature === 'debounce' && selectedLanguage === 'javascript') ||
+      (selectedFeature === 'router' && selectedLanguage === 'php')
     ) {
       return [];
     }
