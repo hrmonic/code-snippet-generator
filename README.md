@@ -51,7 +51,7 @@
 ### 🛠️ Génération de code intelligente
 
 - ✅ **6 langages supportés** : HTML5, CSS3, JavaScript, Java, PHP, SQL
-- ✅ **40+ types de snippets** : Formulaires, API REST, CRUD, Animations, Requêtes DB, Validation, Layouts, et bien plus
+- ✅ **66+ types de snippets** : Formulaires, API REST, CRUD, Animations, Requêtes DB, Validation, Layouts, React Hooks, Redux, WebSocket, et bien plus
 - ✅ **Options dynamiques** : Chargement automatique des options configurables pour chaque snippet
 - ✅ **Personnalisation avancée** : Options groupées par catégories (Style, Comportement, Sécurité, etc.)
 - ✅ **Code production-ready** : Aucun placeholder, code 100% fonctionnel et exécutable
@@ -446,12 +446,14 @@ npm run test --workspace=frontend -- --watch
 - 📦 **Model** : Classes de modèle avec PDO
 - ✅ **Validation** : Validateurs de données
 
-### 🗄️ SQL (5 snippets)
+### 🗄️ SQL (7 snippets)
 - 📊 **Requêtes** : SELECT, INSERT, UPDATE, DELETE sécurisés
 - 🔗 **Joins** : INNER, LEFT, RIGHT JOIN avec exemples
 - 📈 **Indexes** : Création et optimisation d'index
 - 🔄 **Transactions** : Gestion des transactions ACID
 - 👁️ **Views** : Vues SQL pour abstraction de données
+- 📦 **Stored Procedures** : Procédures stockées avec paramètres et transactions
+- ⚡ **Triggers** : Triggers avec gestion d'événements et audit trail
 
 ---
 
