@@ -19,7 +19,7 @@
       "description": "Contenu de la modal"
     },
     {
-      "name": "modalSize",
+      "name": "modalWidth",
       "type": "select",
       "required": false,
       "description": "Taille de la modal",
