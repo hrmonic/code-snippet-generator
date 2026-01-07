@@ -1,139 +1,89 @@
-# 🚀 Code Snippet Generator - AI-Powered Code Snippet Generator
+# 🚀 Code Snippet Generator
 
 <div align="center">
 
-![Code Snippet Generator Logo](https://img.shields.io/badge/Code%20Snippet%20Generator-Code%20Generator-blue?style=for-the-badge&logo=code&logoColor=white)
-![Version](https://img.shields.io/badge/version-1.0.0-green?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
-![Node](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen?style=for-the-badge&logo=node.js)
-![React](https://img.shields.io/badge/react-18.2.0-blue?style=for-the-badge&logo=react)
+![Code Snippet Generator](https://img.shields.io/badge/Code%20Snippet%20Generator-v1.0.0-blue?style=for-the-badge&logo=code&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
+![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen?style=for-the-badge&logo=node.js&logoColor=white)
+![React](https://img.shields.io/badge/react-18.2.0-blue?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-5.3.3-blue?style=for-the-badge&logo=typescript&logoColor=white)
 
 **Générez du code structuré, sécurisé et testable en quelques clics pour HTML5, CSS3, JavaScript, Java, PHP et SQL**
 
-[✨ Fonctionnalités](#-fonctionnalités) • [🚀 Démarrage rapide](#-démarrage-rapide) • [📖 Documentation](#-documentation) • [🤝 Contribution](#-contribution) • [📄 Licence](#-licence)
+[![GitHub stars](https://img.shields.io/github/stars/hrmonic/code-snippet-generator?style=social&label=Star)](https://github.com/hrmonic/code-snippet-generator/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/hrmonic/code-snippet-generator?style=social&label=Fork)](https://github.com/hrmonic/code-snippet-generator/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/hrmonic/code-snippet-generator?color=blue)](https://github.com/hrmonic/code-snippet-generator/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/hrmonic/code-snippet-generator?color=green)](https://github.com/hrmonic/code-snippet-generator/pulls)
+[![GitHub last commit](https://img.shields.io/github/last-commit/hrmonic/code-snippet-generator?color=orange)](https://github.com/hrmonic/code-snippet-generator/commits/main)
 
-[![GitHub stars](https://img.shields.io/github/stars/hrmonic/code-snippet-generator?style=social)](https://github.com/hrmonic/code-snippet-generator/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/hrmonic/code-snippet-generator?style=social)](https://github.com/hrmonic/code-snippet-generator/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/hrmonic/code-snippet-generator)](https://github.com/hrmonic/code-snippet-generator/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/hrmonic/code-snippet-generator)](https://github.com/hrmonic/code-snippet-generator/pulls)
+[🚀 Démarrage rapide](#-démarrage-rapide) • [📖 Documentation](#-documentation-complète) • [💡 Exemples](#-exemples-dutilisation) • [🤝 Contribution](#-contribution) • [📄 Licence](#-licence)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/hrmonic/code-snippet-generator)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/hrmonic/code-snippet-generator)
 
 </div>
 
 ---
 
-## 📋 Table des matières
+## 📖 À propos
 
-- [À propos](#-à-propos)
-- [✨ Fonctionnalités](#-fonctionnalités)
-- [🛠️ Stack technique](#️-stack-technique)
-- [🚀 Démarrage rapide](#-démarrage-rapide)
-- [📖 Guide d'utilisation](#-guide-dutilisation)
-- [🏗️ Architecture](#️-architecture)
-- [🔒 Sécurité](#-sécurité)
-- [🧪 Tests](#-tests)
-- [📦 Structure du projet](#-structure-du-projet)
-- [🤝 Contribution](#-contribution)
-- [📄 Licence](#-licence)
-- [👤 Auteur](#-auteur)
+**Code Snippet Generator** est un outil web open-source et gratuit qui permet aux développeurs de générer rapidement du code de production prêt à l'emploi. Que vous développiez en **HTML5**, **CSS3**, **JavaScript**, **Java**, **PHP** ou **SQL**, cet outil génère du code propre, commenté, sécurisé et suivant les meilleures pratiques de l'industrie.
 
----
+### ✨ Pourquoi utiliser Code Snippet Generator ?
 
-## 🎯 À propos
-
-**Code Snippet Generator** est un outil web moderne et open-source qui permet aux développeurs de générer rapidement du code de production pour les langages les plus populaires. Que vous ayez besoin d'un formulaire HTML5, d'une API REST en PHP, d'un CRUD complet en Java, ou de requêtes SQL sécurisées, Code Snippet Generator génère du code propre, commenté, sécurisé et prêt à l'emploi.
-
-### 🎨 Pourquoi Code Snippet Generator ?
-
-- ⚡ **Rapidité** : Générez du code en secondes au lieu de minutes
-- 🔒 **Sécurité** : Code généré avec protection contre SQL injection, XSS, et autres vulnérabilités
-- 📝 **Qualité** : Code structuré, commenté et suivant les meilleures pratiques
-- 🧪 **Testable** : Inclut des exemples de tests pour chaque snippet
-- 🎯 **Multi-langages** : Support de 6 langages populaires
-- 📱 **Responsive** : Interface moderne et adaptée mobile/desktop
-- 🆓 **Open Source** : 100% gratuit et open-source
+| Fonctionnalité | Avantage |
+|---------------|----------|
+| ⚡ **Rapidité** | Générez du code en secondes au lieu de minutes |
+| 🔒 **Sécurité** | Protection intégrée contre SQL injection, XSS et autres vulnérabilités |
+| 📝 **Qualité** | Code structuré, commenté et suivant les standards OWASP |
+| 🧪 **Testable** | Exemples de tests inclus pour chaque snippet généré |
+| 🎯 **Multi-langages** | Support de 6 langages populaires avec 13+ types de snippets |
+| 📱 **Responsive** | Interface moderne adaptée desktop et mobile |
+| 🆓 **100% Gratuit** | Open-source sous licence MIT |
 
 ---
 
-## ✨ Fonctionnalités
+## 🎯 Fonctionnalités principales
 
-### 🎯 Génération de code intelligente
+### 🛠️ Génération de code intelligente
 
-- **6 langages supportés** : HTML5, CSS3, JavaScript, Java, PHP, SQL
-- **13+ types de snippets** : Formulaires, API REST, CRUD, Animations, Requêtes DB, Validation, Layouts
-- **Personnalisation avancée** : Options configurables selon le besoin
-- **Code prêt à l'emploi** : Aucun placeholder, code 100% fonctionnel
+- ✅ **6 langages supportés** : HTML5, CSS3, JavaScript, Java, PHP, SQL
+- ✅ **13+ types de snippets** : Formulaires, API REST, CRUD, Animations, Requêtes DB, Validation, Layouts
+- ✅ **Personnalisation avancée** : Options configurables selon vos besoins spécifiques
+- ✅ **Code production-ready** : Aucun placeholder, code 100% fonctionnel et exécutable
 
-### 📝 Éditeur en temps réel
+### 📝 Éditeur de code intégré
 
-- **Monaco Editor** : L'éditeur de code de VS Code dans votre navigateur
-- **Syntax highlighting** : Coloration syntaxique pour tous les langages
-- **Auto-complétion** : Suggestions intelligentes
-- **Copie/Téléchargement** : Exportez votre code en un clic
+- ✅ **Monaco Editor** : L'éditeur de VS Code directement dans votre navigateur
+- ✅ **Syntax highlighting** : Coloration syntaxique pour tous les langages supportés
+- ✅ **Auto-complétion** : Suggestions intelligentes en temps réel
+- ✅ **Export facile** : Copie en un clic ou téléchargement du fichier généré
 
-### 🔒 Sécurité intégrée
+### 🔒 Sécurité de niveau entreprise
 
-- ✅ Protection contre **SQL Injection** avec prepared statements
-- ✅ Protection contre **XSS** (Cross-Site Scripting)
-- ✅ Validation **Zod** côté backend
-- ✅ Sanitization des entrées utilisateur
-- ✅ Code généré suivant les **OWASP Top 10**
+- ✅ **Protection SQL Injection** : Prepared statements dans tous les snippets SQL/PHP
+- ✅ **Protection XSS** : Échappement automatique des caractères dangereux
+- ✅ **Validation Zod** : Validation stricte côté backend de toutes les entrées
+- ✅ **Conformité OWASP** : Code généré suivant les recommandations OWASP Top 10
 
-### 🧪 Code testable
+### 🧪 Qualité et tests
 
-- Exemples de tests inclus pour chaque snippet
-- Structure de tests prête à l'emploi
-- Couverture de code > 90% sur le projet
-
-### 📱 Design moderne
-
-- Interface **responsive** (mobile-first)
-- **TailwindCSS** pour un design moderne
-- **Dark mode ready** (à venir)
-- Expérience utilisateur optimisée
-
----
-
-## 🛠️ Stack technique
-
-### Frontend
-
-| Technologie | Version | Usage |
-|------------|---------|-------|
-| **React** | 18.2.0 | Framework UI |
-| **Vite** | 5.1.0 | Build tool ultra-rapide |
-| **TypeScript** | 5.3.3 | Typage statique |
-| **TailwindCSS** | 3.4.1 | Framework CSS |
-| **Zustand** | 4.5.0 | State management léger |
-| **Monaco Editor** | 0.45.0 | Éditeur de code |
-| **Vitest** | 1.2.1 | Framework de tests |
-
-### Backend
-
-| Technologie | Version | Usage |
-|------------|---------|-------|
-| **Node.js** | 20+ | Runtime JavaScript |
-| **Express** | 4.18.2 | Framework web |
-| **TypeScript** | 5.3.3 | Typage statique |
-| **Zod** | 3.22.4 | Validation de schémas |
-| **Jest** | 29.7.0 | Framework de tests |
-
-### DevOps
-
-- **GitHub Actions** : CI/CD automatique
-- **ESLint** : Linting du code
-- **Prettier** : Formatage automatique
-- **Monorepo** : Workspace npm pour frontend/backend
+- ✅ **Tests inclus** : Exemples de tests unitaires pour chaque snippet
+- ✅ **Couverture élevée** : Objectif de 90%+ de couverture de code
+- ✅ **CI/CD intégré** : GitHub Actions pour tests automatiques
 
 ---
 
 ## 🚀 Démarrage rapide
 
-### Prérequis
+### 📋 Prérequis
 
-- **Node.js** >= 20.0.0
-- **npm** >= 10.0.0 (ou yarn/pnpm)
+Avant de commencer, assurez-vous d'avoir installé :
 
-### Installation
+- **Node.js** >= 20.0.0 ([Télécharger](https://nodejs.org/))
+- **npm** >= 10.0.0 (inclus avec Node.js) ou **yarn** / **pnpm**
+
+### ⚡ Installation en 3 étapes
 
 ```bash
 # 1. Cloner le repository
@@ -143,15 +93,15 @@ cd code-snippet-generator
 # 2. Installer les dépendances
 npm install
 
-# 3. Lancer en mode développement
+# 3. Lancer l'application
 npm run dev
 ```
 
-L'application sera accessible sur :
+🎉 **C'est tout !** L'application sera accessible sur :
 - **Frontend** : http://localhost:5173
 - **Backend API** : http://localhost:3000
 
-### 🐳 Alternative avec Docker (à venir)
+### 🐳 Alternative avec Docker (bientôt disponible)
 
 ```bash
 docker-compose up
@@ -159,86 +109,156 @@ docker-compose up
 
 ---
 
-## 📖 Guide d'utilisation
+## 💡 Exemples d'utilisation
 
-### Exemple 1 : Générer un CRUD PHP
+### Exemple 1 : Générer un CRUD PHP complet
 
-1. **Sélectionnez le langage** : Cliquez sur **PHP** 🐘
-2. **Choisissez le besoin** : Sélectionnez **CRUD**
-3. **Configurez les options** :
+**Scénario** : Vous avez besoin d'un CRUD complet pour gérer des utilisateurs en PHP.
+
+**Étapes** :
+1. Sélectionnez **PHP** 🐘 comme langage
+2. Choisissez **CRUD** comme type de snippet
+3. Configurez les options :
    - Nom de la table : `users`
    - Nom de l'entité : `User`
    - Champs : `id,name,email,created_at`
-4. **Générez** : Cliquez sur "Générer le code"
-5. **Résultat** : Code complet avec `UserController.php` incluant :
-   - Méthodes CRUD (Create, Read, Update, Delete)
-   - Protection SQL injection avec PDO
-   - Code commenté et structuré
+4. Cliquez sur **"Générer le code"**
 
-### Exemple 2 : Créer un formulaire HTML5
+**Résultat** : Code complet avec `UserController.php` incluant :
+- ✅ Méthodes CRUD complètes (Create, Read, Update, Delete)
+- ✅ Protection SQL injection avec PDO
+- ✅ Code commenté et structuré
+- ✅ Gestion d'erreurs intégrée
 
-1. **Sélectionnez** : **HTML5** 🌐
-2. **Choisissez** : **Formulaire**
-3. **Configurez** :
+### Exemple 2 : Créer un formulaire HTML5 avec validation
+
+**Scénario** : Vous avez besoin d'un formulaire de contact avec validation native HTML5.
+
+**Étapes** :
+1. Sélectionnez **HTML5** 🌐
+2. Choisissez **Formulaire**
+3. Configurez :
    - Nom du formulaire : `contact`
-   - Action : `/submit`
+   - Action : `/api/contact`
    - Méthode : `POST`
-4. **Générez** : Code HTML5 avec validation native
+4. Générez le code
 
-### Exemple 3 : API REST JavaScript
+**Résultat** : Formulaire HTML5 complet avec :
+- ✅ Validation native HTML5
+- ✅ Champs sécurisés (email, tel, etc.)
+- ✅ Structure sémantique
+- ✅ Accessibilité intégrée
 
-1. **Sélectionnez** : **JavaScript** ⚡
-2. **Choisissez** : **API Client**
-3. **Configurez** :
-   - Endpoint : `/api/users`
-   - Méthode : `GET`
-4. **Générez** : Client HTTP avec fetch, gestion d'erreurs, etc.
+### Exemple 3 : Client API JavaScript moderne
+
+**Scénario** : Vous avez besoin d'un client HTTP pour interagir avec une API REST.
+
+**Étapes** :
+1. Sélectionnez **JavaScript** ⚡
+2. Choisissez **API Client**
+3. Configurez :
+   - URL de base : `http://localhost:3000/api`
+   - Endpoint : `/users`
+4. Générez le code
+
+**Résultat** : Classe `ApiClient` complète avec :
+- ✅ Méthodes GET, POST, PUT, DELETE
+- ✅ Gestion d'erreurs robuste
+- ✅ Support des headers personnalisés
+- ✅ Compatible avec async/await
 
 ---
 
-## 🏗️ Architecture
+## 🛠️ Stack technique
 
-### Structure monorepo
+### Frontend
+
+| Technologie | Version | Rôle |
+|------------|---------|------|
+| [React](https://react.dev/) | 18.2.0 | Framework UI moderne |
+| [Vite](https://vitejs.dev/) | 5.1.0 | Build tool ultra-rapide |
+| [TypeScript](https://www.typescriptlang.org/) | 5.3.3 | Typage statique |
+| [TailwindCSS](https://tailwindcss.com/) | 3.4.1 | Framework CSS utility-first |
+| [Zustand](https://zustand-demo.pmnd.rs/) | 4.5.0 | State management léger |
+| [Monaco Editor](https://microsoft.github.io/monaco-editor/) | 0.45.0 | Éditeur de code VS Code |
+| [Vitest](https://vitest.dev/) | 1.2.1 | Framework de tests |
+
+### Backend
+
+| Technologie | Version | Rôle |
+|------------|---------|------|
+| [Node.js](https://nodejs.org/) | 20+ | Runtime JavaScript |
+| [Express](https://expressjs.com/) | 4.18.2 | Framework web |
+| [TypeScript](https://www.typescriptlang.org/) | 5.3.3 | Typage statique |
+| [Zod](https://zod.dev/) | 3.22.4 | Validation de schémas |
+| [Jest](https://jestjs.io/) | 29.7.0 | Framework de tests |
+
+### DevOps & Outils
+
+- **GitHub Actions** : CI/CD automatique
+- **ESLint** : Linting du code
+- **Prettier** : Formatage automatique
+- **Monorepo** : Workspace npm pour frontend/backend
+
+---
+
+## 📖 Documentation complète
+
+### 🏗️ Architecture du projet
 
 ```
 code-snippet-generator/
-├── frontend/                 # Application React
+├── frontend/                    # Application React
 │   ├── src/
-│   │   ├── components/       # Composants UI réutilisables
-│   │   ├── editor/           # Intégration Monaco Editor
-│   │   ├── store/             # Zustand state management
-│   │   ├── lib/              # Utilitaires et API client
-│   │   └── types/            # Types TypeScript
+│   │   ├── components/          # Composants UI réutilisables
+│   │   │   ├── LanguageSelector.tsx
+│   │   │   ├── FeatureSelector.tsx
+│   │   │   ├── SnippetOptions.tsx
+│   │   │   └── CodeViewer.tsx
+│   │   ├── editor/              # Intégration Monaco Editor
+│   │   ├── store/               # Zustand state management
+│   │   ├── lib/                 # Utilitaires et API client
+│   │   └── types/               # Types TypeScript
 │   └── package.json
 │
-├── server/                    # API Express
+├── server/                      # API Express
 │   ├── src/
-│   │   ├── routes/           # Routes API REST
-│   │   ├── lib/              # Logique métier
-│   │   │   ├── codeGenerator.ts  # Factory/Strategy patterns
-│   │   │   └── security/     # Fonctions de sécurisation
+│   │   ├── routes/              # Routes API REST
+│   │   │   ├── generate.ts      # POST /api/generate
+│   │   │   └── snippets.ts     # GET /api/snippets
+│   │   ├── lib/
+│   │   │   ├── codeGenerator.ts # Factory/Strategy patterns
+│   │   │   ├── snippetLoader.ts # Chargement des snippets
+│   │   │   └── security/        # Fonctions de sécurisation
 │   │   └── data/
-│   │       └── snippets/     # Snippets JSON par langage
+│   │       └── snippets/        # Snippets JSON par langage
+│   │           ├── html5/
+│   │           ├── css3/
+│   │           ├── javascript/
+│   │           ├── java/
+│   │           ├── php/
+│   │           └── sql/
 │   └── package.json
 │
-└── package.json              # Workspace root
+└── package.json                 # Workspace root
 ```
 
-### Flux de données
+### 🔄 Flux de données
 
 ```mermaid
-graph LR
-    A[User Interface] --> B[Zustand Store]
-    B --> C[API Client]
-    C --> D[Express Backend]
-    D --> E[Code Generator]
-    E --> F[Snippet Loader]
-    F --> G[Security Validator]
-    G --> H[Generated Code]
-    H --> I[Monaco Editor]
+graph TD
+    A[Interface Utilisateur] -->|Sélection| B[Zustand Store]
+    B -->|Requête| C[API Client]
+    C -->|POST /api/generate| D[Express Backend]
+    D -->|Validation| E[Zod Schema]
+    E -->|Génération| F[Code Generator]
+    F -->|Chargement| G[Snippet Loader]
+    G -->|Sécurisation| H[Security Validator]
+    H -->|Code généré| I[Monaco Editor]
+    I -->|Affichage| A
 ```
 
-### Patterns de design
+### 🎨 Patterns de design utilisés
 
 - **Factory Pattern** : Génération de code selon langage/feature
 - **Strategy Pattern** : Stratégies différentes par langage
@@ -249,43 +269,43 @@ graph LR
 
 ## 🔒 Sécurité
 
-Code Snippet Generator prend la sécurité très au sérieux. Tous les snippets générés incluent :
+Code Snippet Generator prend la sécurité très au sérieux. Tous les snippets générés incluent des protections contre les vulnérabilités courantes.
 
 ### ✅ Protection SQL Injection
 
 ```php
-// ✅ Code généré (sécurisé)
+// ✅ Code généré (sécurisé avec PDO)
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
 
-// ❌ Jamais de code vulnérable
+// ❌ Code vulnérable (jamais généré)
 $query = "SELECT * FROM users WHERE id = " . $_GET['id'];
 ```
 
-### ✅ Protection XSS
+### ✅ Protection XSS (Cross-Site Scripting)
 
 ```javascript
 // ✅ Code généré (sécurisé)
 const sanitized = security.escapeHtml(userInput);
+element.textContent = sanitized;
 
-// ❌ Jamais de code vulnérable
+// ❌ Code vulnérable (jamais généré)
 element.innerHTML = userInput;
 ```
 
 ### ✅ Validation des entrées
 
-- Validation **Zod** côté backend
-- Sanitization des noms de tables/colonnes
-- Vérification des types de données
-- Rate limiting (à venir)
+- **Zod** : Validation stricte côté backend
+- **Sanitization** : Nettoyage des noms de tables/colonnes
+- **Type checking** : Vérification des types de données
+- **Rate limiting** : (à venir)
 
 ---
 
 ## 🧪 Tests
 
-### Couverture de code
-
-Objectif : **90%+ de couverture**
+### Objectif de couverture : 90%+
 
 ```bash
 # Tests frontend (Vitest)
@@ -296,50 +316,51 @@ npm run test --workspace=server
 
 # Tous les tests avec couverture
 npm test
+
+# Tests en mode watch
+npm run test --workspace=frontend -- --watch
 ```
 
 ### Structure des tests
 
-- ✅ Tests unitaires pour chaque composant
-- ✅ Tests d'intégration pour les routes API
-- ✅ Tests de sécurité pour les fonctions de validation
-- ✅ Tests E2E (à venir)
+- ✅ **Tests unitaires** : Chaque composant et fonction
+- ✅ **Tests d'intégration** : Routes API et flux complets
+- ✅ **Tests de sécurité** : Validation des fonctions de sécurisation
+- ✅ **Tests E2E** : (à venir)
 
 ---
 
-## 📦 Structure du projet
+## 📦 Snippets disponibles
 
-### Snippets disponibles
+### 🌐 HTML5
+- 📝 **Formulaires** : Validation native, champs sécurisés
+- 🎨 **Inputs** : Types HTML5 modernes (email, date, color, range)
+- 📐 **Layouts** : Structure sémantique responsive
 
-#### HTML5
-- 📝 Formulaires avec validation native
-- 🎨 Inputs HTML5 (email, date, color, etc.)
-- 📐 Layouts responsive sémantiques
+### 🎨 CSS3
+- 🎬 **Animations** : Keyframes (fadeIn, slideIn, pulse)
+- 📐 **Layouts** : Grid et Flexbox responsive
+- 📱 **Media queries** : Breakpoints optimisés
 
-#### CSS3
-- 🎨 Animations avec keyframes
-- 📐 Layouts Grid et Flexbox
-- 📱 Media queries responsive
+### ⚡ JavaScript
+- 🌐 **API Client** : Client HTTP avec fetch, gestion d'erreurs
+- ✅ **Validation** : Validation de formulaires côté client
+- 🎬 **Animations** : requestAnimationFrame pour performance
 
-#### JavaScript
-- 🌐 Client API avec fetch
-- ✅ Validation de formulaires
-- 🎬 Animations avec requestAnimationFrame
+### ☕ Java
+- 🏗️ **CRUD** : Controller + Model + Service avec Spring
+- 🌐 **API REST** : Endpoints complets avec annotations
+- 📦 **Architecture** : Structure MVC professionnelle
 
-#### Java
-- 🏗️ CRUD complet avec Spring
-- 🌐 API REST avec endpoints
-- 📦 Structure Controller/Service/Model
+### 🐘 PHP
+- 🏗️ **CRUD** : PDO sécurisé, protection SQL injection
+- 🌐 **API REST** : Validation, réponses JSON
+- 🔒 **Sécurité** : Prepared statements obligatoires
 
-#### PHP
-- 🏗️ CRUD avec PDO (sécurisé)
-- 🌐 API REST avec validation
-- 🔒 Protection SQL injection
-
-#### SQL
-- 📊 Requêtes SELECT/INSERT/UPDATE/DELETE
-- 🔒 Prepared statements
-- 📈 Requêtes avec JOIN et agrégation
+### 🗄️ SQL
+- 📊 **Requêtes** : SELECT, INSERT, UPDATE, DELETE
+- 🔒 **Sécurité** : Prepared statements uniquement
+- 📈 **Avancé** : JOIN, agrégation, sous-requêtes
 
 ---
 
@@ -347,7 +368,7 @@ npm test
 
 Les contributions sont les bienvenues ! Code Snippet Generator est un projet open-source et nous adorons recevoir des contributions de la communauté.
 
-### Comment contribuer ?
+### 🚀 Comment contribuer ?
 
 1. **Fork** le projet
 2. **Créez** une branche (`git checkout -b feature/AmazingFeature`)
@@ -355,45 +376,63 @@ Les contributions sont les bienvenues ! Code Snippet Generator est un projet ope
 4. **Push** vers la branche (`git push origin feature/AmazingFeature`)
 5. **Ouvrez** une Pull Request
 
-### Standards de code
+### 📝 Standards de code
 
 - ✅ TypeScript strict mode
-- ✅ ESLint rules
+- ✅ ESLint rules respectées
 - ✅ Tests pour nouvelles fonctionnalités
 - ✅ Documentation JSDoc
 - ✅ Couverture > 90%
 
-### Ajouter un nouveau snippet
+### ➕ Ajouter un nouveau snippet
 
-Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour le guide complet.
+Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour le guide complet sur l'ajout de nouveaux snippets.
 
 ---
 
 ## 📊 Statistiques du projet
 
-![GitHub repo size](https://img.shields.io/github/repo-size/hrmonic/code-snippet-generator)
-![GitHub language count](https://img.shields.io/github/languages/count/hrmonic/code-snippet-generator)
-![GitHub top language](https://img.shields.io/github/languages/top/hrmonic/code-snippet-generator)
-![GitHub last commit](https://img.shields.io/github/last-commit/hrmonic/code-snippet-generator)
+<div align="center">
+
+![GitHub repo size](https://img.shields.io/github/repo-size/hrmonic/code-snippet-generator?label=Repository%20Size)
+![GitHub language count](https://img.shields.io/github/languages/count/hrmonic/code-snippet-generator?label=Languages)
+![GitHub top language](https://img.shields.io/github/languages/top/hrmonic/code-snippet-generator?label=Top%20Language)
+![GitHub code size](https://img.shields.io/github/languages/code-size/hrmonic/code-snippet-generator?label=Code%20Size)
+
+</div>
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] Support de plus de langages (Python, Go, Rust)
-- [ ] Mode sombre (Dark mode)
-- [ ] Export en plusieurs formats (ZIP, Git repo)
-- [ ] Intégration avec IDE (VS Code extension)
-- [ ] API publique pour intégration
-- [ ] Templates personnalisables
-- [ ] Historique des générations
-- [ ] Partage de snippets entre utilisateurs
+- [ ] 🌙 Mode sombre (Dark mode)
+- [ ] 🐍 Support Python
+- [ ] 🦀 Support Rust
+- [ ] 🐹 Support Go
+- [ ] 📦 Export ZIP pour plusieurs fichiers
+- [ ] 🔌 Extension VS Code
+- [ ] 🌐 API publique pour intégration
+- [ ] 📝 Templates personnalisables
+- [ ] 📚 Historique des générations
+- [ ] 👥 Partage de snippets entre utilisateurs
+- [ ] 🔍 Recherche de snippets
+- [ ] ⭐ Système de favoris
 
 ---
 
 ## 📄 Licence
 
 Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+```
+MIT License
+
+Copyright (c) 2026 Réda Touzani
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction...
+```
 
 ---
 
@@ -409,10 +448,25 @@ Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus
 
 ## 🙏 Remerciements
 
+Un grand merci à tous ceux qui contribuent à ce projet :
+
 - [Monaco Editor](https://microsoft.github.io/monaco-editor/) - Éditeur de code incroyable
-- [React](https://react.dev/) - Framework UI
-- [TailwindCSS](https://tailwindcss.com/) - Framework CSS
+- [React](https://react.dev/) - Framework UI révolutionnaire
+- [TailwindCSS](https://tailwindcss.com/) - Framework CSS utility-first
+- [Vite](https://vitejs.dev/) - Build tool ultra-rapide
 - Tous les [contributeurs](https://github.com/hrmonic/code-snippet-generator/graphs/contributors) qui rendent ce projet meilleur
+
+---
+
+## ⭐ Supportez le projet
+
+Si ce projet vous a aidé, n'hésitez pas à :
+
+- ⭐ **Donner une étoile** sur GitHub
+- 🍴 **Forker** le projet
+- 🐛 **Signaler un bug** via [Issues](https://github.com/hrmonic/code-snippet-generator/issues)
+- 💡 **Suggérer une fonctionnalité** via [Issues](https://github.com/hrmonic/code-snippet-generator/issues)
+- 🤝 **Contribuer** au projet
 
 ---
 
@@ -420,8 +474,10 @@ Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus
 
 **⭐ Si ce projet vous a aidé, n'hésitez pas à lui donner une étoile ! ⭐**
 
-[⬆ Retour en haut](#-code-snippet-generator---ai-powered-code-generator)
+[⬆ Retour en haut](#-code-snippet-generator)
 
 Fait avec ❤️ pour la communauté des développeurs
+
+**Code Snippet Generator** - Générez du code de qualité en quelques clics
 
 </div>
