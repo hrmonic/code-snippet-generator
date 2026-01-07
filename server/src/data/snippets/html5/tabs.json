@@ -1,0 +1,107 @@
+{
+  "id": "html5-tabs",
+  "name": "Tabs Component",
+  "description": "Composant onglets accessible avec navigation clavier, animations et support ARIA",
+  "language": "html5",
+  "feature": "tabs",
+  "code": "<!DOCTYPE html>\n<html lang=\"{{language}}\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{title}}</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        \n        body {\n            font-family: {{fontFamily}};\n            padding: 2rem;\n        }\n        \n        .tabs {\n            border: 1px solid {{borderColor}};\n            border-radius: {{borderRadius}};\n            overflow: hidden;\n        }\n        \n        .tabs-list {\n            display: flex;\n            list-style: none;\n            background: {{tabListBackground}};\n            border-bottom: 2px solid {{borderColor}};\n            {{#if includeScroll}}\n            overflow-x: auto;\n            scrollbar-width: thin;\n            {{/if}}\n        }\n        \n        .tabs-tab {\n            flex: 1;\n            min-width: {{minTabWidth}};\n        }\n        \n        .tabs-button {\n            width: 100%;\n            padding: {{tabPadding}};\n            background: transparent;\n            border: none;\n            border-bottom: 3px solid transparent;\n            cursor: pointer;\n            font-size: {{fontSize}};\n            color: {{tabColor}};\n            transition: all 0.3s ease;\n            text-align: center;\n        }\n        \n        .tabs-button:hover {\n            background: {{tabHoverBackground}};\n            color: {{tabHoverColor}};\n        }\n        \n        .tabs-button:focus {\n            outline: 2px solid {{focusColor}};\n            outline-offset: -2px;\n        }\n        \n        .tabs-button[aria-selected=\"true\"] {\n            background: {{activeTabBackground}};\n            color: {{activeTabColor}};\n            border-bottom-color: {{activeBorderColor}};\n            font-weight: bold;\n        }\n        \n        .tabs-panels {\n            background: {{panelBackground}};\n        }\n        \n        .tabs-panel {\n            padding: {{panelPadding}};\n            display: none;\n            {{#if includeAnimation}}\n            animation: fadeIn 0.3s ease;\n            {{/if}}\n        }\n        \n        .tabs-panel[aria-hidden=\"false\"] {\n            display: block;\n        }\n        \n        {{#if includeAnimation}}\n        @keyframes fadeIn {\n            from {\n                opacity: 0;\n                transform: translateY(10px);\n            }\n            to {\n                opacity: 1;\n                transform: translateY(0);\n            }\n        }\n        {{/if}}\n        \n        {{#if includeVertical}}\n        .tabs-vertical {\n            display: flex;\n        }\n        \n        .tabs-vertical .tabs-list {\n            flex-direction: column;\n            border-bottom: none;\n            border-right: 2px solid {{borderColor}};\n        }\n        \n        .tabs-vertical .tabs-button {\n            border-bottom: none;\n            border-right: 3px solid transparent;\n            text-align: left;\n        }\n        \n        .tabs-vertical .tabs-button[aria-selected=\"true\"] {\n            border-right-color: {{activeBorderColor}};\n            border-bottom-color: transparent;\n        }\n        {{/if}}\n        \n        @media (max-width: 768px) {\n            .tabs-list {\n                flex-direction: column;\n            }\n            \n            .tabs-tab {\n                flex: none;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"tabs{{#if includeVertical}} tabs-vertical{{/if}}\" id=\"tabs\">\n        <ul class=\"tabs-list\" role=\"tablist\">\n            <li class=\"tabs-tab\" role=\"presentation\">\n                <button\n                    class=\"tabs-button\"\n                    role=\"tab\"\n                    aria-selected=\"true\"\n                    aria-controls=\"panel-1\"\n                    id=\"tab-1\"\n                    tabindex=\"0\">\n                    {{tab1Label}}\n                </button>\n            </li>\n            <li class=\"tabs-tab\" role=\"presentation\">\n                <button\n                    class=\"tabs-button\"\n                    role=\"tab\"\n                    aria-selected=\"false\"\n                    aria-controls=\"panel-2\"\n                    id=\"tab-2\"\n                    tabindex=\"-1\">\n                    {{tab2Label}}\n                </button>\n            </li>\n            <li class=\"tabs-tab\" role=\"presentation\">\n                <button\n                    class=\"tabs-button\"\n                    role=\"tab\"\n                    aria-selected=\"false\"\n                    aria-controls=\"panel-3\"\n                    id=\"tab-3\"\n                    tabindex=\"-1\">\n                    {{tab3Label}}\n                </button>\n            </li>\n        </ul>\n        \n        <div class=\"tabs-panels\">\n            <div\n                class=\"tabs-panel\"\n                role=\"tabpanel\"\n                id=\"panel-1\"\n                aria-labelledby=\"tab-1\"\n                aria-hidden=\"false\">\n                {{tab1Content}}\n            </div>\n            <div\n                class=\"tabs-panel\"\n                role=\"tabpanel\"\n                id=\"panel-2\"\n                aria-labelledby=\"tab-2\"\n                aria-hidden=\"true\">\n                {{tab2Content}}\n            </div>\n            <div\n                class=\"tabs-panel\"\n                role=\"tabpanel\"\n                id=\"panel-3\"\n                aria-labelledby=\"tab-3\"\n                aria-hidden=\"true\">\n                {{tab3Content}}\n            </div>\n        </div>\n    </div>\n    \n    <script>\n        class TabsManager {\n            constructor(container) {\n                this.container = container;\n                this.tabs = Array.from(container.querySelectorAll('[role=\"tab\"]'));\n                this.panels = Array.from(container.querySelectorAll('[role=\"tabpanel\"]'));\n                this.activeIndex = 0;\n                \n                this.init();\n            }\n            \n            init() {\n                this.tabs.forEach((tab, index) => {\n                    tab.addEventListener('click', () => this.activateTab(index));\n                    tab.addEventListener('keydown', (e) => this.handleKeyDown(e, index));\n                });\n            }\n            \n            activateTab(index) {\n                // Désactiver l'onglet actif\n                this.tabs[this.activeIndex].setAttribute('aria-selected', 'false');\n                this.tabs[this.activeIndex].setAttribute('tabindex', '-1');\n                this.panels[this.activeIndex].setAttribute('aria-hidden', 'true');\n                \n                // Activer le nouvel onglet\n                this.activeIndex = index;\n                this.tabs[this.activeIndex].setAttribute('aria-selected', 'true');\n                this.tabs[this.activeIndex].setAttribute('tabindex', '0');\n                this.tabs[this.activeIndex].focus();\n                this.panels[this.activeIndex].setAttribute('aria-hidden', 'false');\n            }\n            \n            handleKeyDown(e, index) {\n                let targetIndex = index;\n                \n                switch (e.key) {\n                    case 'ArrowLeft':\n                    case 'ArrowUp':\n                        e.preventDefault();\n                        targetIndex = index > 0 ? index - 1 : this.tabs.length - 1;\n                        break;\n                    case 'ArrowRight':\n                    case 'ArrowDown':\n                        e.preventDefault();\n                        targetIndex = index < this.tabs.length - 1 ? index + 1 : 0;\n                        break;\n                    case 'Home':\n                        e.preventDefault();\n                        targetIndex = 0;\n                        break;\n                    case 'End':\n                        e.preventDefault();\n                        targetIndex = this.tabs.length - 1;\n                        break;\n                }\n                \n                if (targetIndex !== index) {\n                    this.activateTab(targetIndex);\n                }\n            }\n        }\n        \n        // Initialisation\n        const tabsContainer = document.getElementById('tabs');\n        const tabsManager = new TabsManager(tabsContainer);\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "title",
+      "type": "text",
+      "label": "Titre de la page",
+      "required": false,
+      "description": "Titre de la page",
+      "defaultValue": "Tabs Component"
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "label": "Langue",
+      "required": false,
+      "description": "Langue de la page",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" }
+      ]
+    },
+    {
+      "name": "tab1Label",
+      "type": "text",
+      "label": "Label Onglet 1",
+      "required": true,
+      "description": "Label du premier onglet",
+      "defaultValue": "Onglet 1"
+    },
+    {
+      "name": "tab1Content",
+      "type": "textarea",
+      "label": "Contenu Onglet 1",
+      "required": true,
+      "description": "Contenu du premier onglet",
+      "defaultValue": "<h2>Contenu de l'onglet 1</h2><p>Ceci est le contenu du premier onglet.</p>"
+    },
+    {
+      "name": "tab2Label",
+      "type": "text",
+      "label": "Label Onglet 2",
+      "required": true,
+      "description": "Label du deuxième onglet",
+      "defaultValue": "Onglet 2"
+    },
+    {
+      "name": "tab2Content",
+      "type": "textarea",
+      "label": "Contenu Onglet 2",
+      "required": true,
+      "description": "Contenu du deuxième onglet",
+      "defaultValue": "<h2>Contenu de l'onglet 2</h2><p>Ceci est le contenu du deuxième onglet.</p>"
+    },
+    {
+      "name": "tab3Label",
+      "type": "text",
+      "label": "Label Onglet 3",
+      "required": true,
+      "description": "Label du troisième onglet",
+      "defaultValue": "Onglet 3"
+    },
+    {
+      "name": "tab3Content",
+      "type": "textarea",
+      "label": "Contenu Onglet 3",
+      "required": true,
+      "description": "Contenu du troisième onglet",
+      "defaultValue": "<h2>Contenu de l'onglet 3</h2><p>Ceci est le contenu du troisième onglet.</p>"
+    },
+    {
+      "name": "activeTabBackground",
+      "type": "color",
+      "label": "Couleur de fond active",
+      "required": false,
+      "description": "Couleur de fond de l'onglet actif",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "name": "includeVertical",
+      "type": "checkbox",
+      "label": "Mode vertical",
+      "required": false,
+      "description": "Afficher les onglets verticalement",
+      "defaultValue": false
+    },
+    {
+      "name": "includeAnimation",
+      "type": "checkbox",
+      "label": "Animation",
+      "required": false,
+      "description": "Ajouter une animation lors du changement d'onglet",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

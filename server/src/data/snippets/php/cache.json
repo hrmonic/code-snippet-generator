@@ -1,0 +1,50 @@
+{
+  "id": "php-cache",
+  "name": "Cache System",
+  "description": "Système de cache avec support fichiers, Redis, et invalidation automatique",
+  "language": "php",
+  "feature": "cache",
+  "code": "<?php\n\n{{#if includeFileCache}}\n// Cache basé sur fichiers\nclass FileCache {\n    private $cacheDir;\n    private $defaultTtl;\n    \n    public function __construct($cacheDir = 'cache/', $defaultTtl = 3600) {\n        $this->cacheDir = rtrim($cacheDir, '/') . '/';\n        $this->defaultTtl = $defaultTtl;\n        \n        if (!is_dir($this->cacheDir)) {\n            mkdir($this->cacheDir, 0755, true);\n        }\n    }\n    \n    public function get($key) {\n        $file = $this->getFilePath($key);\n        \n        if (!file_exists($file)) {\n            return null;\n        }\n        \n        $data = unserialize(file_get_contents($file));\n        \n        // Vérifier l'expiration\n        if (isset($data['expires']) && $data['expires'] < time()) {\n            $this->delete($key);\n            return null;\n        }\n        \n        return $data['value'] ?? null;\n    }\n    \n    public function set($key, $value, $ttl = null) {\n        $file = $this->getFilePath($key);\n        $ttl = $ttl ?? $this->defaultTtl;\n        \n        $data = [\n            'value' => $value,\n            'expires' => time() + $ttl,\n            'created' => time(),\n        ];\n        \n        return file_put_contents($file, serialize($data)) !== false;\n    }\n    \n    public function delete($key) {\n        $file = $this->getFilePath($key);\n        if (file_exists($file)) {\n            return unlink($file);\n        }\n        return false;\n    }\n    \n    public function clear() {\n        $files = glob($this->cacheDir . '*');\n        foreach ($files as $file) {\n            if (is_file($file)) {\n                unlink($file);\n            }\n        }\n        return true;\n    }\n    \n    public function has($key) {\n        return $this->get($key) !== null;\n    }\n    \n    private function getFilePath($key) {\n        $safeKey = md5($key);\n        return $this->cacheDir . $safeKey . '.cache';\n    }\n}\n{{/if}}\n\n{{#if includeRedisCache}}\n// Cache Redis\nclass RedisCache {\n    private $redis;\n    private $defaultTtl;\n    \n    public function __construct($host = '127.0.0.1', $port = 6379, $defaultTtl = 3600) {\n        $this->redis = new Redis();\n        $this->redis->connect($host, $port);\n        $this->defaultTtl = $defaultTtl;\n    }\n    \n    public function get($key) {\n        $value = $this->redis->get($key);\n        return $value !== false ? unserialize($value) : null;\n    }\n    \n    public function set($key, $value, $ttl = null) {\n        $ttl = $ttl ?? $this->defaultTtl;\n        $serialized = serialize($value);\n        return $this->redis->setex($key, $ttl, $serialized);\n    }\n    \n    public function delete($key) {\n        return $this->redis->del($key) > 0;\n    }\n    \n    public function clear() {\n        return $this->redis->flushDB();\n    }\n    \n    public function has($key) {\n        return $this->redis->exists($key) > 0;\n    }\n}\n{{/if}}\n\n{{#if includeCacheManager}}\n// Gestionnaire de cache avec fallback\nclass CacheManager {\n    private $cache;\n    private $fallbackCache;\n    \n    public function __construct($primaryCache, $fallbackCache = null) {\n        $this->cache = $primaryCache;\n        $this->fallbackCache = $fallbackCache;\n    }\n    \n    public function remember($key, $ttl, $callback) {\n        $value = $this->cache->get($key);\n        \n        if ($value !== null) {\n            return $value;\n        }\n        \n        // Essayer le fallback\n        if ($this->fallbackCache) {\n            $value = $this->fallbackCache->get($key);\n            if ($value !== null) {\n                $this->cache->set($key, $value, $ttl);\n                return $value;\n            }\n        }\n        \n        // Exécuter le callback et mettre en cache\n        $value = $callback();\n        $this->cache->set($key, $value, $ttl);\n        \n        if ($this->fallbackCache) {\n            $this->fallbackCache->set($key, $value, $ttl);\n        }\n        \n        return $value;\n    }\n    \n    public function get($key) {\n        $value = $this->cache->get($key);\n        \n        if ($value === null && $this->fallbackCache) {\n            $value = $this->fallbackCache->get($key);\n        }\n        \n        return $value;\n    }\n    \n    public function set($key, $value, $ttl = null) {\n        $result = $this->cache->set($key, $value, $ttl);\n        \n        if ($this->fallbackCache) {\n            $this->fallbackCache->set($key, $value, $ttl);\n        }\n        \n        return $result;\n    }\n    \n    public function delete($key) {\n        $this->cache->delete($key);\n        if ($this->fallbackCache) {\n            $this->fallbackCache->delete($key);\n        }\n    }\n    \n    public function clear() {\n        $this->cache->clear();\n        if ($this->fallbackCache) {\n            $this->fallbackCache->clear();\n        }\n    }\n}\n{{/if}}\n\n{{#if includeTaggedCache}}\n// Cache avec tags (invalidation par tag)\nclass TaggedCache {\n    private $cache;\n    private $tagsDir;\n    \n    public function __construct($cache, $tagsDir = 'cache/tags/') {\n        $this->cache = $cache;\n        $this->tagsDir = rtrim($tagsDir, '/') . '/';\n        \n        if (!is_dir($this->tagsDir)) {\n            mkdir($this->tagsDir, 0755, true);\n        }\n    }\n    \n    public function tag($key, $tags) {\n        if (!is_array($tags)) {\n            $tags = [$tags];\n        }\n        \n        foreach ($tags as $tag) {\n            $tagFile = $this->tagsDir . md5($tag) . '.tag';\n            $keys = [];\n            \n            if (file_exists($tagFile)) {\n                $keys = unserialize(file_get_contents($tagFile));\n            }\n            \n            if (!in_array($key, $keys)) {\n                $keys[] = $key;\n                file_put_contents($tagFile, serialize($keys));\n            }\n        }\n    }\n    \n    public function invalidateTag($tag) {\n        $tagFile = $this->tagsDir . md5($tag) . '.tag';\n        \n        if (file_exists($tagFile)) {\n            $keys = unserialize(file_get_contents($tagFile));\n            \n            foreach ($keys as $key) {\n                $this->cache->delete($key);\n            }\n            \n            unlink($tagFile);\n        }\n    }\n}\n{{/if}}\n\n// Utilisation\n{{#if includeFileCache}}\n$cache = new FileCache('cache/', {{defaultTtl}});\n\n// Mettre en cache\n$cache->set('user_123', ['name' => 'John', 'email' => 'john@example.com'], 3600);\n\n// Récupérer\n$user = $cache->get('user_123');\n\n// Vérifier l'existence\nif ($cache->has('user_123')) {\n    // Cache existe\n}\n\n// Supprimer\n$cache->delete('user_123');\n\n// Vider le cache\n$cache->clear();\n{{/if}}\n\n{{#if includeCacheManager}}\n$fileCache = new FileCache('cache/');\n$cacheManager = new CacheManager($fileCache);\n\n// Remember pattern\n$data = $cacheManager->remember('expensive_operation', 3600, function() {\n    // Opération coûteuse\n    return expensiveOperation();\n});\n{{/if}}",
+  "variables": [
+    {
+      "name": "cacheTypes",
+      "type": "multiselect",
+      "label": "Types de cache",
+      "required": true,
+      "description": "Sélectionnez les types de cache à inclure",
+      "defaultValue": ["fileCache"],
+      "options": [
+        { "value": "fileCache", "label": "File Cache" },
+        { "value": "redisCache", "label": "Redis Cache" },
+        { "value": "cacheManager", "label": "Cache Manager avec fallback" },
+        { "value": "taggedCache", "label": "Tagged Cache (invalidation par tag)" }
+      ]
+    },
+    {
+      "name": "defaultTtl",
+      "type": "number",
+      "label": "TTL par défaut (secondes)",
+      "required": false,
+      "description": "Durée de vie par défaut du cache en secondes",
+      "defaultValue": 3600,
+      "min": 60,
+      "max": 86400
+    },
+    {
+      "name": "cacheDir",
+      "type": "text",
+      "label": "Dossier de cache",
+      "required": false,
+      "description": "Chemin du dossier de cache",
+      "defaultValue": "cache/",
+      "dependsOn": {
+        "cacheTypes": ["fileCache"]
+      }
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

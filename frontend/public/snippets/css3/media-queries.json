@@ -1,0 +1,79 @@
+{
+  "id": "css3-media-queries",
+  "name": "Media Queries",
+  "description": "Collection de media queries responsive pour breakpoints, orientation, et préférences utilisateur",
+  "language": "css3",
+  "feature": "media-queries",
+  "code": "/* Mobile First Approach */\n\n/* Base styles (mobile) */\n.container {\n    width: 100%;\n    padding: {{mobilePadding}};\n}\n\n{{#if includeTablet}}\n/* Tablet (768px and up) */\n@media (min-width: 768px) {\n    .container {\n        max-width: {{tabletMaxWidth}};\n        padding: {{tabletPadding}};\n    }\n}\n{{/if}}\n\n{{#if includeDesktop}}\n/* Desktop (1024px and up) */\n@media (min-width: 1024px) {\n    .container {\n        max-width: {{desktopMaxWidth}};\n        padding: {{desktopPadding}};\n    }\n}\n{{/if}}\n\n{{#if includeLargeDesktop}}\n/* Large Desktop (1440px and up) */\n@media (min-width: 1440px) {\n    .container {\n        max-width: {{largeDesktopMaxWidth}};\n    }\n}\n{{/if}}\n\n{{#if includeOrientation}}\n/* Orientation */\n@media (orientation: landscape) {\n    .landscape-layout {\n        display: flex;\n        flex-direction: row;\n    }\n}\n\n@media (orientation: portrait) {\n    .portrait-layout {\n        display: flex;\n        flex-direction: column;\n    }\n}\n{{/if}}\n\n{{#if includePrint}}\n/* Print styles */\n@media print {\n    .no-print {\n        display: none;\n    }\n    \n    body {\n        font-size: 12pt;\n        line-height: 1.5;\n        color: #000;\n        background: #fff;\n    }\n    \n    a[href]:after {\n        content: \" (\" attr(href) \")\";\n    }\n}\n{{/if}}\n\n{{#if includeDarkMode}}\n/* Dark Mode */\n@media (prefers-color-scheme: dark) {\n    body {\n        background: {{darkBackground}};\n        color: {{darkColor}};\n    }\n    \n    .card {\n        background: {{darkCardBackground}};\n        border-color: {{darkBorderColor}};\n    }\n}\n{{/if}}\n\n{{#if includeReducedMotion}}\n/* Reduced Motion */\n@media (prefers-reduced-motion: reduce) {\n    *,\n    *::before,\n    *::after {\n        animation-duration: 0.01ms !important;\n        animation-iteration-count: 1 !important;\n        transition-duration: 0.01ms !important;\n    }\n}\n{{/if}}\n\n{{#if includeHighContrast}}\n/* High Contrast */\n@media (prefers-contrast: high) {\n    body {\n        background: #000;\n        color: #fff;\n    }\n    \n    a {\n        border-bottom: 2px solid #fff;\n    }\n}\n{{/if}}\n\n{{#if includeHover}}\n/* Hover support */\n@media (hover: hover) {\n    .hover-effect:hover {\n        transform: scale(1.05);\n    }\n}\n\n@media (hover: none) {\n    .hover-effect:active {\n        transform: scale(1.05);\n    }\n}\n{{/if}}\n\n{{#if includeTouch}}\n/* Touch devices */\n@media (pointer: coarse) {\n    .touch-target {\n        min-height: 44px;\n        min-width: 44px;\n    }\n}\n{{/if}}\n\n{{#if includeCustomBreakpoints}}\n/* Custom Breakpoints */\n@media (min-width: {{customBreakpoint1}}px) {\n    .custom-breakpoint-1 {\n        /* Styles */\n    }\n}\n\n@media (min-width: {{customBreakpoint2}}px) {\n    .custom-breakpoint-2 {\n        /* Styles */\n    }\n}\n{{/if}}\n\n{{#if includeMaxWidth}}\n/* Max Width Queries */\n@media (max-width: {{maxWidth}}px) {\n    .mobile-only {\n        display: block;\n    }\n    \n    .desktop-only {\n        display: none;\n    }\n}\n{{/if}}\n\n{{#if includeRange}}\n/* Range Queries */\n@media (min-width: {{minWidth}}px) and (max-width: {{maxWidth}}px) {\n    .range-styles {\n        /* Styles for specific range */\n    }\n}\n{{/if}}",
+  "variables": [
+    {
+      "name": "mediaQueryTypes",
+      "type": "multiselect",
+      "label": "Types de media queries",
+      "required": true,
+      "description": "Sélectionnez les types de media queries à inclure",
+      "defaultValue": ["tablet", "desktop"],
+      "options": [
+        { "value": "tablet", "label": "Tablet (768px+)" },
+        { "value": "desktop", "label": "Desktop (1024px+)" },
+        { "value": "largeDesktop", "label": "Large Desktop (1440px+)" },
+        { "value": "orientation", "label": "Orientation (landscape/portrait)" },
+        { "value": "print", "label": "Print styles" },
+        { "value": "darkMode", "label": "Dark Mode" },
+        { "value": "reducedMotion", "label": "Reduced Motion" },
+        { "value": "highContrast", "label": "High Contrast" },
+        { "value": "hover", "label": "Hover support" },
+        { "value": "touch", "label": "Touch devices" },
+        { "value": "customBreakpoints", "label": "Custom Breakpoints" },
+        { "value": "maxWidth", "label": "Max Width Queries" },
+        { "value": "range", "label": "Range Queries" }
+      ]
+    },
+    {
+      "name": "mobilePadding",
+      "type": "text",
+      "label": "Padding mobile",
+      "required": false,
+      "description": "Padding pour mobile",
+      "defaultValue": "1rem"
+    },
+    {
+      "name": "tabletMaxWidth",
+      "type": "text",
+      "label": "Largeur max tablette",
+      "required": false,
+      "description": "Largeur maximale pour tablette",
+      "defaultValue": "768px",
+      "dependsOn": {
+        "mediaQueryTypes": ["tablet"]
+      }
+    },
+    {
+      "name": "desktopMaxWidth",
+      "type": "text",
+      "label": "Largeur max desktop",
+      "required": false,
+      "description": "Largeur maximale pour desktop",
+      "defaultValue": "1200px",
+      "dependsOn": {
+        "mediaQueryTypes": ["desktop"]
+      }
+    },
+    {
+      "name": "darkBackground",
+      "type": "color",
+      "label": "Fond dark mode",
+      "required": false,
+      "description": "Couleur de fond en mode sombre",
+      "defaultValue": "#1a1a1a",
+      "dependsOn": {
+        "mediaQueryTypes": ["darkMode"]
+      }
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

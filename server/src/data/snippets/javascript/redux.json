@@ -1,0 +1,77 @@
+{
+  "id": "javascript-redux",
+  "name": "Redux Store",
+  "description": "Configuration Redux avec store, actions, reducers, et hooks React (useSelector, useDispatch)",
+  "language": "javascript",
+  "feature": "redux",
+  "code": "import { createStore, combineReducers, applyMiddleware } from 'redux';\nimport { useSelector, useDispatch, Provider } from 'react-redux';\n{{#if includeThunk}}\nimport thunk from 'redux-thunk';\n{{/if}}\n{{#if includeLogger}}\nimport logger from 'redux-logger';\n{{/if}}\n\n{{#if includeActions}}\n// Action Types\nconst {{actionTypePrefix}}_ACTION = '{{actionTypePrefix}}/ACTION';\nconst {{actionTypePrefix}}_SUCCESS = '{{actionTypePrefix}}/SUCCESS';\nconst {{actionTypePrefix}}_ERROR = '{{actionTypePrefix}}/ERROR';\n\n// Action Creators\nconst {{actionName}} = (payload) => ({\n  type: {{actionTypePrefix}}_ACTION,\n  payload,\n});\n\nconst {{actionName}}Success = (data) => ({\n  type: {{actionTypePrefix}}_SUCCESS,\n  payload: data,\n});\n\nconst {{actionName}}Error = (error) => ({\n  type: {{actionTypePrefix}}_ERROR,\n  payload: error,\n});\n\n{{#if includeThunk}}\n// Thunk Action Creator (async)\nconst {{asyncActionName}} = () => {\n  return async (dispatch) => {\n    dispatch({{actionName}}());\n    try {\n      const response = await fetch('{{apiEndpoint}}');\n      const data = await response.json();\n      dispatch({{actionName}}Success(data));\n    } catch (error) {\n      dispatch({{actionName}}Error(error.message));\n    }\n  };\n};\n{{/if}}\n{{/if}}\n\n{{#if includeReducer}}\n// Initial State\nconst initialState = {\n  {{stateProperty}}: {{initialValue}},\n  loading: false,\n  error: null,\n};\n\n// Reducer\nfunction {{reducerName}}(state = initialState, action) {\n  switch (action.type) {\n    case {{actionTypePrefix}}_ACTION:\n      return {\n        ...state,\n        loading: true,\n        error: null,\n      };\n    \n    case {{actionTypePrefix}}_SUCCESS:\n      return {\n        ...state,\n        loading: false,\n        {{stateProperty}}: action.payload,\n        error: null,\n      };\n    \n    case {{actionTypePrefix}}_ERROR:\n      return {\n        ...state,\n        loading: false,\n        error: action.payload,\n      };\n    \n    default:\n      return state;\n  }\n}\n{{/if}}\n\n{{#if includeRootReducer}}\n// Root Reducer\nconst rootReducer = combineReducers({\n  {{reducerName}}: {{reducerName}},\n  // Ajouter d'autres reducers ici\n});\n{{/if}}\n\n{{#if includeStore}}\n// Store Configuration\n{{#if includeThunk}}\nconst middleware = [thunk];\n{{#if includeLogger}}\nif (process.env.NODE_ENV === 'development') {\n  middleware.push(logger);\n}\n{{/if}}\n{{/if}}\n\nconst store = createStore(\n  {{#if includeRootReducer}}rootReducer{{else}}{{reducerName}}{{/if}},\n  {{#if includeThunk}}applyMiddleware(...middleware){{else}}undefined{{/if}}\n);\n{{/if}}\n\n{{#if includeHooks}}\n// Custom Hooks\nfunction use{{StateName}}() {\n  const dispatch = useDispatch();\n  const {{stateProperty}} = useSelector((state) => state.{{reducerName}}.{{stateProperty}});\n  const loading = useSelector((state) => state.{{reducerName}}.loading);\n  const error = useSelector((state) => state.{{reducerName}}.error);\n  \n  return {\n    {{stateProperty}},\n    loading,\n    error,\n    {{#if includeThunk}}\n    {{asyncActionName}}: () => dispatch({{asyncActionName}}()),\n    {{/if}}\n    {{actionName}}: (payload) => dispatch({{actionName}}(payload)),\n  };\n}\n{{/if}}\n\n{{#if includeComponent}}\n// Component Example\nfunction {{componentName}}() {\n  const { {{stateProperty}}, loading, error, {{#if includeThunk}}{{asyncActionName}}{{else}}{{actionName}}{{/if}} } = use{{StateName}}();\n  \n  useEffect(() => {\n    {{#if includeThunk}}\n    {{asyncActionName}}();\n    {{else}}\n    // Charger les données\n    {{/if}}\n  }, []);\n  \n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n  \n  return (\n    <div>\n      <h1>{{stateProperty}}</h1>\n      <button onClick={() => {{actionName}}('new value')}>\n        Update\n      </button>\n    </div>\n  );\n}\n\n// App with Provider\nfunction App() {\n  return (\n    <Provider store={store}>\n      <{{componentName}} />\n    </Provider>\n  );\n}\n{{/if}}\n\nexport { store{{#if includeActions}}, {{actionName}}{{#if includeThunk}}, {{asyncActionName}}{{/if}}{{/if}}{{#if includeHooks}}, use{{StateName}}{{/if}} };",
+  "variables": [
+    {
+      "name": "reduxFeatures",
+      "type": "multiselect",
+      "label": "Fonctionnalités Redux",
+      "required": true,
+      "description": "Sélectionnez les fonctionnalités à inclure",
+      "defaultValue": ["actions", "reducer", "store"],
+      "options": [
+        { "value": "actions", "label": "Actions et Action Creators" },
+        { "value": "reducer", "label": "Reducer" },
+        { "value": "rootReducer", "label": "Root Reducer" },
+        { "value": "store", "label": "Store Configuration" },
+        { "value": "thunk", "label": "Redux Thunk (async actions)" },
+        { "value": "logger", "label": "Redux Logger" },
+        { "value": "hooks", "label": "Custom Hooks" },
+        { "value": "component", "label": "Exemple de composant" }
+      ]
+    },
+    {
+      "name": "actionTypePrefix",
+      "type": "text",
+      "label": "Préfixe des types d'actions",
+      "required": false,
+      "description": "Préfixe pour les types d'actions (ex: USER, PRODUCT)",
+      "placeholder": "USER",
+      "defaultValue": "EXAMPLE"
+    },
+    {
+      "name": "reducerName",
+      "type": "text",
+      "label": "Nom du reducer",
+      "required": false,
+      "description": "Nom du reducer (camelCase)",
+      "placeholder": "userReducer",
+      "defaultValue": "exampleReducer"
+    },
+    {
+      "name": "stateProperty",
+      "type": "text",
+      "label": "Propriété d'état",
+      "required": false,
+      "description": "Nom de la propriété dans l'état",
+      "placeholder": "users",
+      "defaultValue": "data"
+    },
+    {
+      "name": "initialValue",
+      "type": "text",
+      "label": "Valeur initiale",
+      "required": false,
+      "description": "Valeur initiale de la propriété",
+      "placeholder": "null",
+      "defaultValue": "null"
+    },
+    {
+      "name": "includeThunk",
+      "type": "checkbox",
+      "label": "Redux Thunk",
+      "required": false,
+      "description": "Inclure Redux Thunk pour les actions asynchrones",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+
