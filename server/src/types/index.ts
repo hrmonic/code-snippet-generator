@@ -24,7 +24,14 @@ export type FeatureType =
   | 'debounce'
   | 'service'
   | 'router'
-  | 'transactions';
+  | 'transactions'
+  | 'slider'
+  | 'variables'
+  | 'promise'
+  | 'observer'
+  | 'repository'
+  | 'middleware'
+  | 'indexes';
 
 export interface SnippetVariable {
   name: string;

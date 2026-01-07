@@ -1,0 +1,27 @@
+{
+  "id": "java-repository",
+  "name": "Repository Pattern Java Spring",
+  "description": "Repository JPA avec requêtes personnalisées",
+  "language": "java",
+  "feature": "repository",
+  "code": "package com.example.repository;\n\nimport com.example.model.{{entityName}};\nimport org.springframework.data.jpa.repository.JpaRepository;\nimport org.springframework.data.jpa.repository.Query;\nimport org.springframework.data.repository.query.Param;\nimport org.springframework.stereotype.Repository;\n\nimport java.util.List;\nimport java.util.Optional;\n\n@Repository\npublic interface {{entityName}}Repository extends JpaRepository<{{entityName}}, Long> {\n    \n    // Requête par nom de méthode (Spring Data JPA)\n    Optional<{{entityName}}> findByName(String name);\n    \n    List<{{entityName}}> findByEmailContaining(String email);\n    \n    List<{{entityName}}> findByNameAndEmail(String name, String email);\n    \n    List<{{entityName}}> findByActiveTrue();\n    \n    long countByActiveTrue();\n    \n    // Requête JPQL\n    @Query(\"SELECT u FROM {{entityName}} u WHERE u.email = :email\")\n    Optional<{{entityName}}> findByEmail(@Param(\"email\") String email);\n    \n    @Query(\"SELECT u FROM {{entityName}} u WHERE u.name LIKE %:keyword%\")\n    List<{{entityName}}> searchByName(@Param(\"keyword\") String keyword);\n    \n    // Requête native SQL\n    @Query(value = \"SELECT * FROM {{tableName}} WHERE active = 1\", nativeQuery = true)\n    List<{{entityName}}> findAllActive();\n    \n    @Query(value = \"SELECT * FROM {{tableName}} WHERE created_at >= :date\", nativeQuery = true)\n    List<{{entityName}}> findCreatedAfter(@Param(\"date\") String date);\n    \n    // Requête avec jointure\n    @Query(\"SELECT u FROM {{entityName}} u JOIN u.posts p WHERE p.published = true\")\n    List<{{entityName}}> findWithPublishedPosts();\n    \n    // Requête avec agrégation\n    @Query(\"SELECT COUNT(u) FROM {{entityName}} u WHERE u.active = :active\")\n    long countByActive(@Param(\"active\") boolean active);\n    \n    // Requête avec projection (DTO)\n    @Query(\"SELECT new com.example.dto.{{entityName}}DTO(u.id, u.name, u.email) FROM {{entityName}} u\")\n    List<{{entityName}}DTO> findAllAsDTO();\n    \n    // Requête avec pagination (utiliser Pageable)\n    @Query(\"SELECT u FROM {{entityName}} u WHERE u.active = true\")\n    Page<{{entityName}}> findActiveUsers(Pageable pageable);\n    \n    // Requête avec tri\n    List<{{entityName}}> findAllByOrderByNameAsc();\n    \n    List<{{entityName}}> findAllByOrderByCreatedAtDesc();\n    \n    // Suppression personnalisée\n    @Modifying\n    @Query(\"DELETE FROM {{entityName}} u WHERE u.active = false\")\n    void deleteInactive();\n    \n    @Modifying\n    @Query(\"UPDATE {{entityName}} u SET u.active = :active WHERE u.id = :id\")\n    void updateActiveStatus(@Param(\"id\") Long id, @Param(\"active\") boolean active);\n}",
+  "variables": [
+    {
+      "name": "entityName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de l'entité (ex: User)"
+    },
+    {
+      "name": "tableName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de la table (ex: users)"
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

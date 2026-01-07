@@ -10,6 +10,7 @@ const features: Record<string, Array<{ value: FeatureType; label: string; descri
     { value: 'navbar', label: 'Navbar', description: 'Barre de navigation responsive', icon: '🧭' },
     { value: 'card', label: 'Card', description: 'Composant card avec hover', icon: '🃏' },
     { value: 'table', label: 'Table', description: 'Tableau responsive avec tri', icon: '📊' },
+    { value: 'slider', label: 'Slider', description: 'Carousel d\'images responsive', icon: '🎠' },
   ],
   css3: [
     { value: 'layout', label: 'Layout', description: 'Grid, Flexbox, responsive', icon: '📐' },
@@ -18,6 +19,7 @@ const features: Record<string, Array<{ value: FeatureType; label: string; descri
     { value: 'flexbox', label: 'Flexbox', description: 'Layouts avec Flexbox', icon: '📦' },
     { value: 'grid', label: 'Grid', description: 'CSS Grid Layout avancé', icon: '🔲' },
     { value: 'buttons', label: 'Boutons', description: 'Boutons stylisés avec effets', icon: '🔘' },
+    { value: 'variables', label: 'Variables CSS', description: 'Custom properties pour thèmes', icon: '🎨' },
   ],
   javascript: [
     { value: 'api', label: 'API Client', description: 'Client HTTP avec fetch/axios', icon: '🌐' },
@@ -26,23 +28,28 @@ const features: Record<string, Array<{ value: FeatureType; label: string; descri
     { value: 'fetch', label: 'Fetch API', description: 'Fetch avec gestion d\'erreurs et retry', icon: '🔄' },
     { value: 'storage', label: 'Storage', description: 'LocalStorage & SessionStorage', icon: '💾' },
     { value: 'debounce', label: 'Debounce/Throttle', description: 'Optimisation des performances', icon: '⚡' },
+    { value: 'promise', label: 'Promises', description: 'Async/Await et utilitaires', icon: '🔮' },
+    { value: 'observer', label: 'Observer', description: 'Pattern Observer et APIs', icon: '👁️' },
   ],
   java: [
     { value: 'crud', label: 'CRUD', description: 'Controller + Model + Service', icon: '🏗️' },
     { value: 'api', label: 'API REST', description: 'Endpoints REST avec Spring', icon: '🌐' },
     { value: 'model', label: 'Model JPA', description: 'Entité JPA avec annotations', icon: '📋' },
     { value: 'service', label: 'Service', description: 'Service layer avec logique métier', icon: '⚙️' },
+    { value: 'repository', label: 'Repository', description: 'Repository JPA avec requêtes', icon: '🗄️' },
   ],
   php: [
     { value: 'crud', label: 'CRUD', description: 'CRUD complet avec PDO', icon: '🏗️' },
     { value: 'api', label: 'API REST', description: 'API REST avec validation', icon: '🌐' },
     { value: 'validation', label: 'Validation', description: 'Classe de validation PHP', icon: '✅' },
     { value: 'router', label: 'Router', description: 'Routeur PHP avec paramètres', icon: '🛣️' },
+    { value: 'middleware', label: 'Middleware', description: 'Système de middleware PHP', icon: '🔒' },
   ],
   sql: [
     { value: 'query', label: 'Requêtes', description: 'SELECT, INSERT, UPDATE, DELETE', icon: '📊' },
     { value: 'joins', label: 'JOIN', description: 'Requêtes avec JOIN (INNER, LEFT, etc.)', icon: '🔗' },
     { value: 'transactions', label: 'Transactions', description: 'Gestion des transactions SQL', icon: '🔄' },
+    { value: 'indexes', label: 'Indexes', description: 'Création et optimisation d\'indexes', icon: '📈' },
   ],
 };
 

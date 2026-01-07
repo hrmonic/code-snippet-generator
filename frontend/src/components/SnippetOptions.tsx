@@ -84,6 +84,12 @@ export function SnippetOptions() {
         { key: 'tableName2', label: 'Deuxième table', placeholder: 'accounts', required: false },
       ];
     }
+    if (selectedFeature === 'indexes' && selectedLanguage === 'sql') {
+      return [
+        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
+        { key: 'columnName', label: 'Nom de la colonne', placeholder: 'email', required: true },
+      ];
+    }
     if (selectedFeature === 'api' && selectedLanguage === 'javascript') {
       return [
         { key: 'baseURL', label: 'URL de base', placeholder: 'http://localhost:3000/api', required: false },
@@ -109,6 +115,12 @@ export function SnippetOptions() {
       ];
     }
     if (selectedFeature === 'service' && selectedLanguage === 'java') {
+      return [
+        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
+        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
+      ];
+    }
+    if (selectedFeature === 'repository' && selectedLanguage === 'java') {
       return [
         { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
         { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
@@ -151,6 +163,11 @@ export function SnippetOptions() {
         { key: 'column3', label: 'Colonne 3', placeholder: 'Rôle', required: true },
       ];
     }
+    if (selectedFeature === 'slider' && selectedLanguage === 'html5') {
+      return [
+        { key: 'sliderTitle', label: 'Titre du slider', placeholder: 'Carousel', required: true },
+      ];
+    }
     // Features sans options requises
     if (
       (selectedFeature === 'animation' && (selectedLanguage === 'css3' || selectedLanguage === 'javascript')) ||
@@ -161,9 +178,13 @@ export function SnippetOptions() {
       (selectedFeature === 'flexbox' && selectedLanguage === 'css3') ||
       (selectedFeature === 'grid' && selectedLanguage === 'css3') ||
       (selectedFeature === 'buttons' && selectedLanguage === 'css3') ||
+      (selectedFeature === 'variables' && selectedLanguage === 'css3') ||
       (selectedFeature === 'storage' && selectedLanguage === 'javascript') ||
       (selectedFeature === 'debounce' && selectedLanguage === 'javascript') ||
-      (selectedFeature === 'router' && selectedLanguage === 'php')
+      (selectedFeature === 'promise' && selectedLanguage === 'javascript') ||
+      (selectedFeature === 'observer' && selectedLanguage === 'javascript') ||
+      (selectedFeature === 'router' && selectedLanguage === 'php') ||
+      (selectedFeature === 'middleware' && selectedLanguage === 'php')
     ) {
       return [];
     }
