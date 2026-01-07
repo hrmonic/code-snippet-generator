@@ -1,0 +1,48 @@
+{
+  "id": "javascript-websocket",
+  "name": "WebSocket Client",
+  "description": "Client WebSocket avec reconnexion automatique, gestion d'erreurs et hooks React",
+  "language": "javascript",
+  "feature": "websocket",
+  "code": "import { useState, useEffect, useRef, useCallback } from 'react';\n\n{{#if includeHook}}\n// Hook personnalisé pour WebSocket\nfunction useWebSocket(url, options = {}) {\n  const [socket, setSocket] = useState(null);\n  const [message, setMessage] = useState(null);\n  const [readyState, setReadyState] = useState(WebSocket.CONNECTING);\n  const [error, setError] = useState(null);\n  const reconnectTimeoutRef = useRef(null);\n  const reconnectAttemptsRef = useRef(0);\n  const shouldReconnectRef = useRef(true);\n  const wsRef = useRef(null);\n\n  const maxReconnectAttempts = options.maxReconnectAttempts || {{maxReconnectAttempts}};\n  const reconnectInterval = options.reconnectInterval || {{reconnectInterval}};\n\n  const connect = useCallback(() => {\n    try {\n      const ws = new WebSocket(url);\n      wsRef.current = ws;\n\n      ws.onopen = () => {\n        console.log('WebSocket connected');\n        setReadyState(WebSocket.OPEN);\n        setError(null);\n        reconnectAttemptsRef.current = 0;\n      };\n\n      ws.onmessage = (event) => {\n        try {\n          const data = JSON.parse(event.data);\n          setMessage(data);\n          if (options.onMessage) {\n            options.onMessage(data);\n          }\n        } catch (err) {\n          setMessage(event.data);\n        }\n      };\n\n      ws.onerror = (error) => {\n        console.error('WebSocket error:', error);\n        setError('WebSocket error occurred');\n      };\n\n      ws.onclose = (event) => {\n        setReadyState(WebSocket.CLOSED);\n        \n        if (shouldReconnectRef.current && reconnectAttemptsRef.current < maxReconnectAttempts) {\n          reconnectAttemptsRef.current += 1;\n          const delay = reconnectInterval * reconnectAttemptsRef.current;\n          \n          reconnectTimeoutRef.current = setTimeout(() => {\n            console.log(`Reconnecting... (attempt ${reconnectAttemptsRef.current})`);\n            connect();\n          }, delay);\n        } else if (reconnectAttemptsRef.current >= maxReconnectAttempts) {\n          setError('Max reconnection attempts reached');\n        }\n      };\n\n      setSocket(ws);\n    } catch (err) {\n      setError(err.message);\n    }\n  }, [url, options]);\n\n  const sendMessage = useCallback((data) => {\n    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {\n      const message = typeof data === 'string' ? data : JSON.stringify(data);\n      wsRef.current.send(message);\n      return true;\n    }\n    console.warn('WebSocket is not connected');\n    return false;\n  }, []);\n\n  const disconnect = useCallback(() => {\n    shouldReconnectRef.current = false;\n    if (reconnectTimeoutRef.current) {\n      clearTimeout(reconnectTimeoutRef.current);\n    }\n    if (wsRef.current) {\n      wsRef.current.close();\n    }\n  }, []);\n\n  useEffect(() => {\n    connect();\n    return () => {\n      disconnect();\n    };\n  }, [connect, disconnect]);\n\n  return {\n    socket,\n    message,\n    readyState,\n    error,\n    sendMessage,\n    disconnect,\n    connect,\n    isConnected: readyState === WebSocket.OPEN,\n  };\n}\n{{/if}}\n\n{{#if includeClass}}\n// Classe WebSocket Manager\nclass WebSocketManager {\n  constructor(url, options = {}) {\n    this.url = url;\n    this.options = options;\n    this.ws = null;\n    this.reconnectAttempts = 0;\n    this.maxReconnectAttempts = options.maxReconnectAttempts || {{maxReconnectAttempts}};\n    this.reconnectInterval = options.reconnectInterval || {{reconnectInterval}};\n    this.listeners = new Map();\n    this.shouldReconnect = true;\n  }\n\n  connect() {\n    try {\n      this.ws = new WebSocket(this.url);\n\n      this.ws.onopen = () => {\n        console.log('WebSocket connected');\n        this.reconnectAttempts = 0;\n        this.emit('open');\n      };\n\n      this.ws.onmessage = (event) => {\n        try {\n          const data = JSON.parse(event.data);\n          this.emit('message', data);\n        } catch (err) {\n          this.emit('message', event.data);\n        }\n      };\n\n      this.ws.onerror = (error) => {\n        console.error('WebSocket error:', error);\n        this.emit('error', error);\n      };\n\n      this.ws.onclose = () => {\n        this.emit('close');\n        \n        if (this.shouldReconnect && this.reconnectAttempts < this.maxReconnectAttempts) {\n          this.reconnectAttempts += 1;\n          const delay = this.reconnectInterval * this.reconnectAttempts;\n          \n          setTimeout(() => {\n            console.log(`Reconnecting... (attempt ${this.reconnectAttempts})`);\n            this.connect();\n          }, delay);\n        }\n      };\n    } catch (err) {\n      this.emit('error', err);\n    }\n  }\n\n  send(data) {\n    if (this.ws && this.ws.readyState === WebSocket.OPEN) {\n      const message = typeof data === 'string' ? data : JSON.stringify(data);\n      this.ws.send(message);\n      return true;\n    }\n    return false;\n  }\n\n  on(event, callback) {\n    if (!this.listeners.has(event)) {\n      this.listeners.set(event, []);\n    }\n    this.listeners.get(event).push(callback);\n  }\n\n  off(event, callback) {\n    if (this.listeners.has(event)) {\n      const callbacks = this.listeners.get(event);\n      const index = callbacks.indexOf(callback);\n      if (index > -1) {\n        callbacks.splice(index, 1);\n      }\n    }\n  }\n\n  emit(event, data) {\n    if (this.listeners.has(event)) {\n      this.listeners.get(event).forEach((callback) => callback(data));\n    }\n  }\n\n  disconnect() {\n    this.shouldReconnect = false;\n    if (this.ws) {\n      this.ws.close();\n    }\n  }\n}\n{{/if}}\n\n{{#if includeExample}}\n// Exemple d'utilisation\nfunction ChatComponent() {\n  const { message, sendMessage, isConnected, error } = useWebSocket('ws://localhost:8080', {\n    maxReconnectAttempts: 5,\n    reconnectInterval: 1000,\n  });\n\n  const [messages, setMessages] = useState([]);\n  const [input, setInput] = useState('');\n\n  useEffect(() => {\n    if (message) {\n      setMessages((prev) => [...prev, message]);\n    }\n  }, [message]);\n\n  const handleSend = () => {\n    if (input.trim() && sendMessage({ type: 'message', text: input })) {\n      setInput('');\n    }\n  };\n\n  return (\n    <div>\n      <div>Status: {isConnected ? 'Connected' : 'Disconnected'}</div>\n      {error && <div>Error: {error}</div>}\n      <div>\n        {messages.map((msg, idx) => (\n          <div key={idx}>{msg.text}</div>\n        ))}\n      </div>\n      <input value={input} onChange={(e) => setInput(e.target.value)} />\n      <button onClick={handleSend} disabled={!isConnected}>\n        Send\n      </button>\n    </div>\n  );\n}\n{{/if}}\n\nexport {{#if includeHook}}{ useWebSocket }{{/if}}{{#if includeClass}}{ WebSocketManager }{{/if}};",
+  "variables": [
+    {
+      "name": "websocketTypes",
+      "type": "multiselect",
+      "label": "Types d'implémentation",
+      "required": true,
+      "description": "Sélectionnez les types d'implémentation à inclure",
+      "defaultValue": ["hook"],
+      "options": [
+        { "value": "hook", "label": "React Hook (useWebSocket)" },
+        { "value": "class", "label": "Classe WebSocketManager" },
+        { "value": "example", "label": "Exemple d'utilisation (Chat)" }
+      ]
+    },
+    {
+      "name": "maxReconnectAttempts",
+      "type": "number",
+      "label": "Tentatives de reconnexion max",
+      "required": false,
+      "description": "Nombre maximum de tentatives de reconnexion",
+      "defaultValue": 5,
+      "min": 1,
+      "max": 20
+    },
+    {
+      "name": "reconnectInterval",
+      "type": "number",
+      "label": "Intervalle de reconnexion (ms)",
+      "required": false,
+      "description": "Délai entre les tentatives de reconnexion en millisecondes",
+      "defaultValue": 1000,
+      "min": 100,
+      "max": 10000
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

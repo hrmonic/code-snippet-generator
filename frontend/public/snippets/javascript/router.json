@@ -1,0 +1,48 @@
+{
+  "id": "javascript-router",
+  "name": "React Router",
+  "description": "Configuration de React Router avec routes, navigation, et protection d'accès",
+  "language": "javascript",
+  "feature": "router",
+  "code": "import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate, useParams, useLocation } from 'react-router-dom';\n\n{{#if includeProtectedRoute}}\n// Composant de route protégée\nfunction ProtectedRoute({ children, isAuthenticated }) {\n  if (!isAuthenticated) {\n    return <Navigate to=\"/login\" replace />;\n  }\n  return children;\n}\n{{/if}}\n\n{{#if includeLayout}}\n// Layout component\nfunction Layout({ children }) {\n  return (\n    <div className=\"layout\">\n      <nav>\n        <Link to=\"/\">Home</Link>\n        <Link to=\"/about\">About</Link>\n        <Link to=\"/contact\">Contact</Link>\n      </nav>\n      <main>{children}</main>\n    </div>\n  );\n}\n{{/if}}\n\n// Page components\nfunction Home() {\n  return (\n    <div>\n      <h1>Home Page</h1>\n      <p>Welcome to the home page</p>\n    </div>\n  );\n}\n\nfunction About() {\n  return (\n    <div>\n      <h1>About Page</h1>\n      <p>This is the about page</p>\n    </div>\n  );\n}\n\n{{#if includeDynamicRoute}}\n// Page avec paramètres dynamiques\nfunction UserProfile() {\n  const { userId } = useParams();\n  const location = useLocation();\n  \n  return (\n    <div>\n      <h1>User Profile: {userId}</h1>\n      <p>Current path: {location.pathname}</p>\n    </div>\n  );\n}\n{{/if}}\n\n{{#if includeNotFound}}\n// Page 404\nfunction NotFound() {\n  return (\n    <div>\n      <h1>404 - Page Not Found</h1>\n      <Link to=\"/\">Go Home</Link>\n    </div>\n  );\n}\n{{/if}}\n\n{{#if includeLogin}}\n// Page de connexion\nfunction Login() {\n  const navigate = useNavigate();\n  \n  const handleLogin = () => {\n    // Logique de connexion\n    localStorage.setItem('isAuthenticated', 'true');\n    navigate('/dashboard', { replace: true });\n  };\n  \n  return (\n    <div>\n      <h1>Login</h1>\n      <button onClick={handleLogin}>Login</button>\n    </div>\n  );\n}\n{{/if}}\n\n{{#if includeLazyLoading}}\n// Lazy loading des composants\nimport { lazy, Suspense } from 'react';\n\nconst LazyComponent = lazy(() => import('./LazyComponent'));\n\nfunction LazyRoute() {\n  return (\n    <Suspense fallback={<div>Loading...</div>}>\n      <LazyComponent />\n    </Suspense>\n  );\n}\n{{/if}}\n\n// App component avec routes\nfunction App() {\n  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';\n  \n  return (\n    <BrowserRouter>\n      {{#if includeLayout}}\n      <Layout>\n      {{/if}}\n        <Routes>\n          <Route path=\"/\" element={<Home />} />\n          <Route path=\"/about\" element={<About />} />\n          \n          {{#if includeDynamicRoute}}\n          <Route path=\"/user/:userId\" element={<UserProfile />} />\n          {{/if}}\n          \n          {{#if includeLogin}}\n          <Route path=\"/login\" element={<Login />} />\n          <Route\n            path=\"/dashboard\"\n            element={\n              <ProtectedRoute isAuthenticated={isAuthenticated}>\n                <Dashboard />\n              </ProtectedRoute>\n            }\n          />\n          {{/if}}\n          \n          {{#if includeLazyLoading}}\n          <Route path=\"/lazy\" element={<LazyRoute />} />\n          {{/if}}\n          \n          {{#if includeNotFound}}\n          <Route path=\"*\" element={<NotFound />} />\n          {{/if}}\n        </Routes>\n      {{#if includeLayout}}\n      </Layout>\n      {{/if}}\n    </BrowserRouter>\n  );\n}\n\nexport default App;",
+  "variables": [
+    {
+      "name": "routerFeatures",
+      "type": "multiselect",
+      "label": "Fonctionnalités du routeur",
+      "required": true,
+      "description": "Sélectionnez les fonctionnalités à inclure",
+      "defaultValue": ["basic", "layout"],
+      "options": [
+        { "value": "basic", "label": "Routes basiques" },
+        { "value": "layout", "label": "Layout component" },
+        { "value": "dynamicRoute", "label": "Routes dynamiques (params)" },
+        { "value": "protectedRoute", "label": "Routes protégées" },
+        { "value": "login", "label": "Page de connexion" },
+        { "value": "notFound", "label": "Page 404" },
+        { "value": "lazyLoading", "label": "Lazy loading" }
+      ]
+    },
+    {
+      "name": "includeLayout",
+      "type": "checkbox",
+      "label": "Layout avec navigation",
+      "required": false,
+      "description": "Inclure un composant Layout avec navigation",
+      "defaultValue": true
+    },
+    {
+      "name": "includeProtectedRoute",
+      "type": "checkbox",
+      "label": "Routes protégées",
+      "required": false,
+      "description": "Inclure la protection d'accès aux routes",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

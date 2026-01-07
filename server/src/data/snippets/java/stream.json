@@ -1,0 +1,64 @@
+{
+  "id": "java-stream",
+  "name": "Java Streams API",
+  "description": "Opérations sur les Streams Java avec map, filter, reduce, collect et opérations terminales",
+  "language": "java",
+  "feature": "stream",
+  "code": "package {{packageName}};\n\nimport java.util.*;\nimport java.util.stream.*;\n\npublic class {{className}} {\n    \n    {{#if includeBasicOperations}}\n    // Opérations basiques\n    public void basicOperations() {\n        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);\n        \n        // Filter - Filtrer les nombres pairs\n        List<Integer> evenNumbers = numbers.stream()\n            .filter(n -> n % 2 == 0)\n            .collect(Collectors.toList());\n        \n        // Map - Transformer chaque élément\n        List<Integer> squared = numbers.stream()\n            .map(n -> n * n)\n            .collect(Collectors.toList());\n        \n        // ForEach - Parcourir les éléments\n        numbers.stream()\n            .forEach(System.out::println);\n    }\n    {{/if}}\n    \n    {{#if includeReduce}}\n    // Reduce - Réduire à une valeur unique\n    public void reduceOperations() {\n        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);\n        \n        // Somme\n        int sum = numbers.stream()\n            .reduce(0, Integer::sum);\n        \n        // Produit\n        int product = numbers.stream()\n            .reduce(1, (a, b) -> a * b);\n        \n        // Maximum\n        Optional<Integer> max = numbers.stream()\n            .reduce(Integer::max);\n    }\n    {{/if}}\n    \n    {{#if includeCollect}}\n    // Collect - Collecter dans différentes structures\n    public void collectOperations() {\n        List<String> names = Arrays.asList(\"Alice\", \"Bob\", \"Charlie\", \"David\");\n        \n        // Collecter dans une List\n        List<String> filtered = names.stream()\n            .filter(n -> n.length() > 4)\n            .collect(Collectors.toList());\n        \n        // Collecter dans un Set\n        Set<String> unique = names.stream()\n            .collect(Collectors.toSet());\n        \n        // Collecter dans une Map\n        Map<String, Integer> nameLengths = names.stream()\n            .collect(Collectors.toMap(\n                name -> name,\n                name -> name.length()\n            ));\n        \n        // Joindre les chaînes\n        String joined = names.stream()\n            .collect(Collectors.joining(\", \", \"[\", \"]\"));\n    }\n    {{/if}}\n    \n    {{#if includeGrouping}}\n    // Grouping - Grouper par critère\n    public void groupingOperations() {\n        List<{{entityName}}> items = Arrays.asList(/* ... */);\n        \n        // Grouper par catégorie\n        Map<String, List<{{entityName}}>> grouped = items.stream()\n            .collect(Collectors.groupingBy({{entityName}}::get{{categoryField}}));\n        \n        // Compter par groupe\n        Map<String, Long> counts = items.stream()\n            .collect(Collectors.groupingBy(\n                {{entityName}}::get{{categoryField}},\n                Collectors.counting()\n            ));\n    }\n    {{/if}}\n    \n    {{#if includeSorting}}\n    // Sorting - Trier les éléments\n    public void sortingOperations() {\n        List<String> names = Arrays.asList(\"Charlie\", \"Alice\", \"Bob\", \"David\");\n        \n        // Trier par ordre alphabétique\n        List<String> sorted = names.stream()\n            .sorted()\n            .collect(Collectors.toList());\n        \n        // Trier par longueur\n        List<String> sortedByLength = names.stream()\n            .sorted(Comparator.comparing(String::length))\n            .collect(Collectors.toList());\n        \n        // Trier en ordre décroissant\n        List<String> reversed = names.stream()\n            .sorted(Comparator.reverseOrder())\n            .collect(Collectors.toList());\n    }\n    {{/if}}\n    \n    {{#if includeFlatMap}}\n    // FlatMap - Aplatir les collections\n    public void flatMapOperations() {\n        List<List<Integer>> nested = Arrays.asList(\n            Arrays.asList(1, 2, 3),\n            Arrays.asList(4, 5, 6),\n            Arrays.asList(7, 8, 9)\n        );\n        \n        List<Integer> flattened = nested.stream()\n            .flatMap(List::stream)\n            .collect(Collectors.toList());\n    }\n    {{/if}}\n    \n    {{#if includeParallel}}\n    // Parallel Streams - Traitement parallèle\n    public void parallelOperations() {\n        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);\n        \n        int sum = numbers.parallelStream()\n            .filter(n -> n % 2 == 0)\n            .mapToInt(Integer::intValue)\n            .sum();\n    }\n    {{/if}}\n    \n    {{#if includeOptional}}\n    // Utilisation avec Optional\n    public void optionalOperations() {\n        List<String> names = Arrays.asList(\"Alice\", \"Bob\", \"Charlie\");\n        \n        Optional<String> first = names.stream()\n            .filter(n -> n.startsWith(\"A\"))\n            .findFirst();\n        \n        first.ifPresent(System.out::println);\n        \n        String result = names.stream()\n            .filter(n -> n.length() > 10)\n            .findFirst()\n            .orElse(\"Not found\");\n    }\n    {{/if}}\n    \n    {{#if includeStatistics}}\n    // Statistics - Statistiques\n    public void statisticsOperations() {\n        IntStream numbers = IntStream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);\n        \n        IntSummaryStatistics stats = numbers.summaryStatistics();\n        \n        System.out.println(\"Count: \" + stats.getCount());\n        System.out.println(\"Sum: \" + stats.getSum());\n        System.out.println(\"Min: \" + stats.getMin());\n        System.out.println(\"Max: \" + stats.getMax());\n        System.out.println(\"Average: \" + stats.getAverage());\n    }\n    {{/if}}\n}",
+  "variables": [
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": true,
+      "description": "Nom du package Java",
+      "placeholder": "com.example.streams",
+      "defaultValue": "com.example"
+    },
+    {
+      "name": "className",
+      "type": "text",
+      "label": "Nom de la classe",
+      "required": true,
+      "description": "Nom de la classe",
+      "placeholder": "StreamExamples",
+      "defaultValue": "StreamExamples"
+    },
+    {
+      "name": "streamOperations",
+      "type": "multiselect",
+      "label": "Opérations Stream",
+      "required": true,
+      "description": "Sélectionnez les opérations à inclure",
+      "defaultValue": ["basic", "reduce", "collect"],
+      "options": [
+        { "value": "basic", "label": "Opérations basiques (filter, map, forEach)" },
+        { "value": "reduce", "label": "Reduce" },
+        { "value": "collect", "label": "Collect" },
+        { "value": "grouping", "label": "Grouping" },
+        { "value": "sorting", "label": "Sorting" },
+        { "value": "flatMap", "label": "FlatMap" },
+        { "value": "parallel", "label": "Parallel Streams" },
+        { "value": "optional", "label": "Optional" },
+        { "value": "statistics", "label": "Statistics" }
+      ]
+    },
+    {
+      "name": "entityName",
+      "type": "text",
+      "label": "Nom de l'entité",
+      "required": false,
+      "description": "Nom de l'entité pour les exemples de grouping",
+      "placeholder": "Product",
+      "defaultValue": "Item",
+      "dependsOn": {
+        "streamOperations": ["grouping"]
+      }
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

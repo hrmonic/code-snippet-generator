@@ -1,0 +1,107 @@
+{
+  "id": "html5-tooltip",
+  "name": "Tooltip Component",
+  "description": "Composant tooltip accessible avec positionnement automatique et animations",
+  "language": "html5",
+  "feature": "tooltip",
+  "code": "<!DOCTYPE html>\n<html lang=\"{{language}}\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{title}}</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        \n        body {\n            font-family: {{fontFamily}};\n            padding: 4rem;\n        }\n        \n        .tooltip-container {\n            position: relative;\n            display: inline-block;\n        }\n        \n        .tooltip-trigger {\n            cursor: pointer;\n            border-bottom: 1px dotted {{triggerColor}};\n            color: {{triggerColor}};\n        }\n        \n        .tooltip {\n            position: absolute;\n            background: {{tooltipBackground}};\n            color: {{tooltipColor}};\n            padding: {{tooltipPadding}};\n            border-radius: {{tooltipRadius}};\n            font-size: {{fontSize}};\n            white-space: nowrap;\n            z-index: 1000;\n            opacity: 0;\n            visibility: hidden;\n            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;\n            pointer-events: none;\n            {{#if shadow}}\n            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);\n            {{/if}}\n            {{#if arrow}}\n            /* Flèche */\n            {{#if positionTop}}\n            transform: translateX(-50%) translateY(10px);\n            left: 50%;\n            bottom: 100%;\n            margin-bottom: 8px;\n            {{/if}}\n            {{#if positionBottom}}\n            transform: translateX(-50%) translateY(-10px);\n            left: 50%;\n            top: 100%;\n            margin-top: 8px;\n            {{/if}}\n            {{#if positionLeft}}\n            transform: translateY(-50%) translateX(10px);\n            right: 100%;\n            top: 50%;\n            margin-right: 8px;\n            {{/if}}\n            {{#if positionRight}}\n            transform: translateY(-50%) translateX(-10px);\n            left: 100%;\n            top: 50%;\n            margin-left: 8px;\n            {{/if}}\n            {{/if}}\n        }\n        \n        .tooltip::before {\n            content: '';\n            position: absolute;\n            border: {{arrowSize}}px solid transparent;\n            {{#if positionTop}}\n            top: 100%;\n            left: 50%;\n            transform: translateX(-50%);\n            border-top-color: {{tooltipBackground}};\n            {{/if}}\n            {{#if positionBottom}}\n            bottom: 100%;\n            left: 50%;\n            transform: translateX(-50%);\n            border-bottom-color: {{tooltipBackground}};\n            {{/if}}\n            {{#if positionLeft}}\n            left: 100%;\n            top: 50%;\n            transform: translateY(-50%);\n            border-left-color: {{tooltipBackground}};\n            {{/if}}\n            {{#if positionRight}}\n            right: 100%;\n            top: 50%;\n            transform: translateY(-50%);\n            border-right-color: {{tooltipBackground}};\n            {{/if}}\n        }\n        \n        .tooltip-container:hover .tooltip,\n        .tooltip-container:focus-within .tooltip {\n            opacity: 1;\n            visibility: visible;\n            transform: {{#if positionTop}}translateX(-50%) translateY(0){{/if}}{{#if positionBottom}}translateX(-50%) translateY(0){{/if}}{{#if positionLeft}}translateY(-50%) translateX(0){{/if}}{{#if positionRight}}translateY(-50%) translateX(0){{/if}};\n        }\n        \n        {{#if includeDelay}}\n        .tooltip-container:hover .tooltip {\n            transition-delay: {{delay}}ms;\n        }\n        {{/if}}\n    </style>\n</head>\n<body>\n    <div class=\"tooltip-container\">\n        <span class=\"tooltip-trigger\" tabindex=\"0\" aria-describedby=\"tooltip-1\">\n            {{triggerText}}\n        </span>\n        <div class=\"tooltip\" id=\"tooltip-1\" role=\"tooltip\">\n            {{tooltipText}}\n        </div>\n    </div>\n    \n    <script>\n        // Gestion du clavier pour l'accessibilité\n        document.querySelectorAll('.tooltip-trigger').forEach((trigger) => {\n            trigger.addEventListener('keydown', (e) => {\n                if (e.key === 'Escape') {\n                    trigger.blur();\n                }\n            });\n        });\n        \n        {{#if includeAutoPosition}}\n        // Positionnement automatique si le tooltip sort de l'écran\n        function adjustTooltipPosition(tooltip, trigger) {\n            const tooltipRect = tooltip.getBoundingClientRect();\n            const triggerRect = trigger.getBoundingClientRect();\n            const viewportWidth = window.innerWidth;\n            const viewportHeight = window.innerHeight;\n            \n            // Vérifier si le tooltip sort à droite\n            if (tooltipRect.right > viewportWidth) {\n                tooltip.style.left = 'auto';\n                tooltip.style.right = '0';\n            }\n            \n            // Vérifier si le tooltip sort en bas\n            if (tooltipRect.bottom > viewportHeight) {\n                tooltip.style.top = 'auto';\n                tooltip.style.bottom = '100%';\n            }\n        }\n        \n        document.querySelectorAll('.tooltip-container').forEach((container) => {\n            const tooltip = container.querySelector('.tooltip');\n            const trigger = container.querySelector('.tooltip-trigger');\n            \n            container.addEventListener('mouseenter', () => {\n                setTimeout(() => adjustTooltipPosition(tooltip, trigger), 0);\n            });\n        });\n        {{/if}}\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "title",
+      "type": "text",
+      "label": "Titre de la page",
+      "required": false,
+      "description": "Titre de la page",
+      "defaultValue": "Tooltip Component"
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "label": "Langue",
+      "required": false,
+      "description": "Langue de la page",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" }
+      ]
+    },
+    {
+      "name": "triggerText",
+      "type": "text",
+      "label": "Texte du déclencheur",
+      "required": true,
+      "description": "Texte qui déclenche le tooltip",
+      "placeholder": "Survolez-moi",
+      "defaultValue": "Survolez-moi"
+    },
+    {
+      "name": "tooltipText",
+      "type": "text",
+      "label": "Texte du tooltip",
+      "required": true,
+      "description": "Texte affiché dans le tooltip",
+      "placeholder": "Ceci est un tooltip",
+      "defaultValue": "Ceci est un tooltip"
+    },
+    {
+      "name": "position",
+      "type": "select",
+      "label": "Position",
+      "required": false,
+      "description": "Position du tooltip par rapport au déclencheur",
+      "defaultValue": "top",
+      "options": [
+        { "value": "top", "label": "En haut" },
+        { "value": "bottom", "label": "En bas" },
+        { "value": "left", "label": "À gauche" },
+        { "value": "right", "label": "À droite" }
+      ]
+    },
+    {
+      "name": "tooltipBackground",
+      "type": "color",
+      "label": "Couleur de fond",
+      "required": false,
+      "description": "Couleur de fond du tooltip",
+      "defaultValue": "#333333"
+    },
+    {
+      "name": "tooltipColor",
+      "type": "color",
+      "label": "Couleur du texte",
+      "required": false,
+      "description": "Couleur du texte du tooltip",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "name": "arrow",
+      "type": "checkbox",
+      "label": "Flèche",
+      "required": false,
+      "description": "Afficher une flèche pointant vers le déclencheur",
+      "defaultValue": true
+    },
+    {
+      "name": "shadow",
+      "type": "checkbox",
+      "label": "Ombre",
+      "required": false,
+      "description": "Ajouter une ombre au tooltip",
+      "defaultValue": true
+    },
+    {
+      "name": "includeAutoPosition",
+      "type": "checkbox",
+      "label": "Positionnement automatique",
+      "required": false,
+      "description": "Ajuster automatiquement la position si le tooltip sort de l'écran",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

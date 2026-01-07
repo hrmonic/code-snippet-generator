@@ -1,0 +1,82 @@
+{
+  "id": "php-email",
+  "name": "Email Sender",
+  "description": "Envoi d'emails sécurisé avec PHPMailer, templates HTML, et gestion d'erreurs",
+  "language": "php",
+  "feature": "email",
+  "code": "<?php\n\n{{#if includePHPMailer}}\n// Utilisation de PHPMailer (recommandé)\nuse PHPMailer\\PHPMailer\\PHPMailer;\nuse PHPMailer\\PHPMailer\\Exception;\nuse PHPMailer\\PHPMailer\\SMTP;\n\nclass EmailSender {\n    private $mailer;\n    \n    public function __construct($config = []) {\n        $this->mailer = new PHPMailer(true);\n        \n        // Configuration SMTP\n        $this->mailer->isSMTP();\n        $this->mailer->Host = $config['host'] ?? '{{smtpHost}}';\n        $this->mailer->SMTPAuth = true;\n        $this->mailer->Username = $config['username'] ?? '{{smtpUsername}}';\n        $this->mailer->Password = $config['password'] ?? '{{smtpPassword}}';\n        $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;\n        $this->mailer->Port = $config['port'] ?? {{smtpPort}};\n        \n        // Configuration de l'expéditeur\n        $this->mailer->setFrom($config['fromEmail'] ?? '{{fromEmail}}', $config['fromName'] ?? '{{fromName}}');\n        \n        {{#if includeReplyTo}}\n        $this->mailer->addReplyTo($config['replyTo'] ?? '{{replyTo}}', $config['replyToName'] ?? '{{replyToName}}');\n        {{/if}}\n    }\n    \n    public function send($to, $subject, $body, $isHTML = true) {\n        try {\n            $this->mailer->clearAddresses();\n            $this->mailer->addAddress($to);\n            $this->mailer->isHTML($isHTML);\n            $this->mailer->Subject = $subject;\n            $this->mailer->Body = $body;\n            \n            {{#if includeAltBody}}\n            $this->mailer->AltBody = strip_tags($body);\n            {{/if}}\n            \n            return $this->mailer->send();\n        } catch (Exception $e) {\n            error_log('Erreur envoi email: ' . $this->mailer->ErrorInfo);\n            return false;\n        }\n    }\n    \n    {{#if includeAttachments}}\n    public function addAttachment($path, $name = '') {\n        $this->mailer->addAttachment($path, $name);\n    }\n    {{/if}}\n    \n    {{#if includeCC}}\n    public function addCC($email, $name = '') {\n        $this->mailer->addCC($email, $name);\n    }\n    {{/if}}\n}\n{{/if}}\n\n{{#if includeNative}}\n// Envoi d'email natif PHP (simple)\nfunction sendEmailNative($to, $subject, $message, $headers = []) {\n    $defaultHeaders = [\n        'From' => '{{fromEmail}}',\n        'Reply-To' => '{{replyTo}}',\n        'X-Mailer' => 'PHP/' . phpversion(),\n        'MIME-Version' => '1.0',\n        'Content-Type' => 'text/html; charset=UTF-8'\n    ];\n    \n    $headers = array_merge($defaultHeaders, $headers);\n    $headerString = '';\n    foreach ($headers as $key => $value) {\n        $headerString .= $key . ': ' . $value . \"\\r\\n\";\n    }\n    \n    return mail($to, $subject, $message, $headerString);\n}\n{{/if}}\n\n{{#if includeTemplate}}\n// Système de templates d'email\nclass EmailTemplate {\n    public static function render($template, $variables = []) {\n        $templatePath = __DIR__ . '/templates/' . $template . '.php';\n        \n        if (!file_exists($templatePath)) {\n            throw new Exception('Template not found: ' . $template);\n        }\n        \n        extract($variables);\n        ob_start();\n        include $templatePath;\n        return ob_get_clean();\n    }\n}\n\n// Exemple de template email\n/*\n<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <style>\n        body { font-family: Arial, sans-serif; }\n        .container { max-width: 600px; margin: 0 auto; padding: 20px; }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <h1><?= htmlspecialchars($title) ?></h1>\n        <p><?= nl2br(htmlspecialchars($message)) ?></p>\n    </div>\n</body>\n</html>\n*/\n{{/if}}\n\n{{#if includeValidation}}\n// Validation d'email\nfunction validateEmail($email) {\n    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;\n}\n{{/if}}\n\n// Utilisation\n{{#if includePHPMailer}}\n$emailSender = new EmailSender([\n    'host' => '{{smtpHost}}',\n    'username' => '{{smtpUsername}}',\n    'password' => '{{smtpPassword}}',\n    'fromEmail' => '{{fromEmail}}',\n    'fromName' => '{{fromName}}'\n]);\n\n$subject = '{{emailSubject}}';\n$body = '<h1>Bonjour</h1><p>Ceci est un email de test.</p>';\n\nif ($emailSender->send('{{toEmail}}', $subject, $body)) {\n    echo 'Email envoyé avec succès';\n} else {\n    echo 'Erreur lors de l\\'envoi';\n}\n{{/if}}",
+  "variables": [
+    {
+      "name": "emailTypes",
+      "type": "multiselect",
+      "label": "Types d'implémentation",
+      "required": true,
+      "description": "Sélectionnez les types d'implémentation à inclure",
+      "defaultValue": ["phpmailer"],
+      "options": [
+        { "value": "phpmailer", "label": "PHPMailer (recommandé)" },
+        { "value": "native", "label": "Mail natif PHP" },
+        { "value": "template", "label": "Système de templates" },
+        { "value": "validation", "label": "Validation d'email" }
+      ]
+    },
+    {
+      "name": "smtpHost",
+      "type": "text",
+      "label": "Serveur SMTP",
+      "required": false,
+      "description": "Adresse du serveur SMTP",
+      "placeholder": "smtp.gmail.com",
+      "defaultValue": "smtp.gmail.com"
+    },
+    {
+      "name": "smtpPort",
+      "type": "number",
+      "label": "Port SMTP",
+      "required": false,
+      "description": "Port du serveur SMTP",
+      "defaultValue": 587,
+      "min": 1,
+      "max": 65535
+    },
+    {
+      "name": "fromEmail",
+      "type": "text",
+      "label": "Email expéditeur",
+      "required": false,
+      "description": "Adresse email de l'expéditeur",
+      "placeholder": "noreply@example.com",
+      "defaultValue": "noreply@example.com"
+    },
+    {
+      "name": "fromName",
+      "type": "text",
+      "label": "Nom expéditeur",
+      "required": false,
+      "description": "Nom de l'expéditeur",
+      "placeholder": "Mon Site",
+      "defaultValue": "Mon Site"
+    },
+    {
+      "name": "includeAttachments",
+      "type": "checkbox",
+      "label": "Support des pièces jointes",
+      "required": false,
+      "description": "Inclure la fonctionnalité d'ajout de pièces jointes",
+      "defaultValue": false
+    },
+    {
+      "name": "includeCC",
+      "type": "checkbox",
+      "label": "Support CC/BCC",
+      "required": false,
+      "description": "Inclure le support des copies (CC/BCC)",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

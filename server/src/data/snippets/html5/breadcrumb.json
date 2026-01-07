@@ -1,0 +1,108 @@
+{
+  "id": "html5-breadcrumb",
+  "name": "Breadcrumb Navigation",
+  "description": "Navigation fil d'Ariane accessible avec séparateurs personnalisables et support ARIA",
+  "language": "html5",
+  "feature": "breadcrumb",
+  "code": "<!DOCTYPE html>\n<html lang=\"{{language}}\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{title}}</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        \n        body {\n            font-family: {{fontFamily}};\n            padding: 2rem;\n        }\n        \n        .breadcrumb {\n            display: flex;\n            flex-wrap: wrap;\n            list-style: none;\n            align-items: center;\n            gap: {{gap}};\n        }\n        \n        .breadcrumb-item {\n            display: flex;\n            align-items: center;\n        }\n        \n        .breadcrumb-item:not(:last-child)::after {\n            content: '{{separator}}';\n            margin-left: {{gap}};\n            color: {{separatorColor}};\n        }\n        \n        .breadcrumb-link {\n            color: {{linkColor}};\n            text-decoration: none;\n            transition: color 0.3s ease;\n        }\n        \n        .breadcrumb-link:hover {\n            color: {{linkHoverColor}};\n            text-decoration: underline;\n        }\n        \n        .breadcrumb-link:focus {\n            outline: 2px solid {{focusColor}};\n            outline-offset: 2px;\n            border-radius: 2px;\n        }\n        \n        .breadcrumb-item.active .breadcrumb-link {\n            color: {{activeColor}};\n            cursor: default;\n            pointer-events: none;\n        }\n        \n        .breadcrumb-item.active .breadcrumb-link:hover {\n            text-decoration: none;\n        }\n        \n        {{#if includeIcons}}\n        .breadcrumb-icon {\n            margin-right: 0.5rem;\n            width: {{iconSize}};\n            height: {{iconSize}};\n        }\n        {{/if}}\n    </style>\n</head>\n<body>\n    <nav aria-label=\"{{ariaLabel}}\">\n        <ol class=\"breadcrumb\">\n            <li class=\"breadcrumb-item\">\n                <a href=\"{{homeUrl}}\" class=\"breadcrumb-link\">\n                    {{#if includeIcons}}\n                    <svg class=\"breadcrumb-icon\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n                        <path d=\"M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z\"/>\n                    </svg>\n                    {{/if}}\n                    {{homeText}}\n                </a>\n            </li>\n            {{breadcrumbItems}}\n            <li class=\"breadcrumb-item active\" aria-current=\"page\">\n                <span class=\"breadcrumb-link\">{{currentPage}}</span>\n            </li>\n        </ol>\n    </nav>\n    \n    <script>\n        // Navigation clavier améliorée\n        document.querySelectorAll('.breadcrumb-link').forEach((link) => {\n            link.addEventListener('keydown', (e) => {\n                if (e.key === 'Enter' || e.key === ' ') {\n                    e.preventDefault();\n                    link.click();\n                }\n            });\n        });\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "title",
+      "type": "text",
+      "label": "Titre de la page",
+      "required": false,
+      "description": "Titre de la page",
+      "defaultValue": "Breadcrumb Navigation"
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "label": "Langue",
+      "required": false,
+      "description": "Langue de la page",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" }
+      ]
+    },
+    {
+      "name": "homeText",
+      "type": "text",
+      "label": "Texte Accueil",
+      "required": false,
+      "description": "Texte du lien Accueil",
+      "defaultValue": "Accueil"
+    },
+    {
+      "name": "homeUrl",
+      "type": "text",
+      "label": "URL Accueil",
+      "required": false,
+      "description": "URL du lien Accueil",
+      "defaultValue": "/"
+    },
+    {
+      "name": "currentPage",
+      "type": "text",
+      "label": "Page actuelle",
+      "required": true,
+      "description": "Nom de la page actuelle",
+      "placeholder": "Page actuelle",
+      "defaultValue": "Page actuelle"
+    },
+    {
+      "name": "breadcrumbItems",
+      "type": "textarea",
+      "label": "Éléments du breadcrumb",
+      "required": false,
+      "description": "Éléments intermédiaires (format HTML)",
+      "placeholder": "<li class=\"breadcrumb-item\"><a href=\"/category\" class=\"breadcrumb-link\">Category</a></li>",
+      "defaultValue": ""
+    },
+    {
+      "name": "separator",
+      "type": "select",
+      "label": "Séparateur",
+      "required": false,
+      "description": "Caractère séparateur entre les éléments",
+      "defaultValue": "/",
+      "options": [
+        { "value": "/", "label": "/ (slash)" },
+        { "value": ">", "label": "> (chevron)" },
+        { "value": "»", "label": "» (double chevron)" },
+        { "value": "•", "label": "• (point)" },
+        { "value": "→", "label": "→ (flèche)" }
+      ]
+    },
+    {
+      "name": "linkColor",
+      "type": "color",
+      "label": "Couleur des liens",
+      "required": false,
+      "description": "Couleur des liens du breadcrumb",
+      "defaultValue": "#007bff"
+    },
+    {
+      "name": "activeColor",
+      "type": "color",
+      "label": "Couleur active",
+      "required": false,
+      "description": "Couleur de l'élément actif",
+      "defaultValue": "#6c757d"
+    },
+    {
+      "name": "includeIcons",
+      "type": "checkbox",
+      "label": "Icônes",
+      "required": false,
+      "description": "Inclure des icônes SVG",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

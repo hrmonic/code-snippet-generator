@@ -1,0 +1,91 @@
+{
+  "id": "css3-transitions",
+  "name": "CSS Transitions",
+  "description": "Collection de transitions CSS avec timing functions et propriétés animables",
+  "language": "css3",
+  "feature": "transitions",
+  "code": "/* Transition basique */\n.basic-transition {\n    transition: {{property}} {{duration}}s {{timingFunction}};\n}\n\n{{#if includeHover}}\n/* Transition au survol */\n.hover-transition {\n    background: {{initialColor}};\n    color: {{initialTextColor}};\n    transition: all {{duration}}s {{timingFunction}};\n}\n\n.hover-transition:hover {\n    background: {{hoverColor}};\n    color: {{hoverTextColor}};\n    transform: {{transform}};\n}\n{{/if}}\n\n{{#if includeFocus}}\n/* Transition au focus */\n.focus-transition:focus {\n    outline: none;\n    border-color: {{focusColor}};\n    box-shadow: 0 0 0 3px {{focusShadowColor}};\n    transition: border-color {{duration}}s, box-shadow {{duration}}s;\n}\n{{/if}}\n\n{{#if includeMultiple}}\n/* Transitions multiples */\n.multiple-transitions {\n    transition:\n        background {{duration}}s {{timingFunction}},\n        color {{duration}}s {{timingFunction}},\n        transform {{duration}}s {{timingFunction}},\n        opacity {{duration}}s {{timingFunction}};\n}\n{{/if}}\n\n{{#if includeDelay}}\n/* Transition avec délai */\n.delayed-transition {\n    transition: {{property}} {{duration}}s {{timingFunction}} {{delay}}s;\n}\n{{/if}}\n\n{{#if includeTransform}}\n/* Transitions de transformation */\n.transform-transition {\n    transition: transform {{duration}}s {{timingFunction}};\n}\n\n.transform-transition:hover {\n    transform: {{transformValue}};\n}\n{{/if}}\n\n{{#if includeOpacity}}\n/* Transition d'opacité (fade) */\n.fade-transition {\n    opacity: {{initialOpacity}};\n    transition: opacity {{duration}}s {{timingFunction}};\n}\n\n.fade-transition:hover {\n    opacity: {{finalOpacity}};\n}\n{{/if}}\n\n{{#if includeHeight}}\n/* Transition de hauteur (accordion) */\n.height-transition {\n    max-height: 0;\n    overflow: hidden;\n    transition: max-height {{duration}}s {{timingFunction}};\n}\n\n.height-transition.open {\n    max-height: {{maxHeight}}px;\n}\n{{/if}}\n\n{{#if includeWidth}}\n/* Transition de largeur */\n.width-transition {\n    width: {{initialWidth}};\n    transition: width {{duration}}s {{timingFunction}};\n}\n\n.width-transition.expanded {\n    width: {{finalWidth}};\n}\n{{/if}}\n\n{{#if includeColor}}\n/* Transition de couleur */\n.color-transition {\n    background: {{initialColor}};\n    transition: background {{duration}}s {{timingFunction}};\n}\n\n.color-transition:hover {\n    background: {{finalColor}};\n}\n{{/if}}\n\n{{#if includeCustomTiming}}\n/* Timing functions personnalisées (cubic-bezier) */\n.custom-timing {\n    transition: {{property}} {{duration}}s cubic-bezier({{bezierX1}}, {{bezierY1}}, {{bezierX2}}, {{bezierY2}});\n}\n{{/if}}",
+  "variables": [
+    {
+      "name": "transitionTypes",
+      "type": "multiselect",
+      "label": "Types de transitions",
+      "required": true,
+      "description": "Sélectionnez les types de transitions à inclure",
+      "defaultValue": ["basic", "hover"],
+      "options": [
+        { "value": "basic", "label": "Transition basique" },
+        { "value": "hover", "label": "Transition au survol" },
+        { "value": "focus", "label": "Transition au focus" },
+        { "value": "multiple", "label": "Transitions multiples" },
+        { "value": "delay", "label": "Transition avec délai" },
+        { "value": "transform", "label": "Transitions de transformation" },
+        { "value": "opacity", "label": "Transition d'opacité (fade)" },
+        { "value": "height", "label": "Transition de hauteur" },
+        { "value": "width", "label": "Transition de largeur" },
+        { "value": "color", "label": "Transition de couleur" },
+        { "value": "customTiming", "label": "Timing function personnalisée" }
+      ]
+    },
+    {
+      "name": "property",
+      "type": "select",
+      "label": "Propriété à animer",
+      "required": false,
+      "description": "Propriété CSS à animer",
+      "defaultValue": "all",
+      "options": [
+        { "value": "all", "label": "Toutes les propriétés" },
+        { "value": "background", "label": "Background" },
+        { "value": "color", "label": "Color" },
+        { "value": "transform", "label": "Transform" },
+        { "value": "opacity", "label": "Opacity" },
+        { "value": "width", "label": "Width" },
+        { "value": "height", "label": "Height" }
+      ]
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "label": "Durée (secondes)",
+      "required": false,
+      "description": "Durée de la transition en secondes",
+      "defaultValue": 0.3,
+      "min": 0.1,
+      "max": 5,
+      "step": 0.1
+    },
+    {
+      "name": "timingFunction",
+      "type": "select",
+      "label": "Fonction de timing",
+      "required": false,
+      "description": "Fonction de timing de la transition",
+      "defaultValue": "ease",
+      "options": [
+        { "value": "ease", "label": "ease" },
+        { "value": "ease-in", "label": "ease-in" },
+        { "value": "ease-out", "label": "ease-out" },
+        { "value": "ease-in-out", "label": "ease-in-out" },
+        { "value": "linear", "label": "linear" },
+        { "value": "cubic-bezier(0.68, -0.55, 0.265, 1.55)", "label": "Bounce" }
+      ]
+    },
+    {
+      "name": "delay",
+      "type": "number",
+      "label": "Délai (secondes)",
+      "required": false,
+      "description": "Délai avant le début de la transition",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 2,
+      "step": 0.1
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

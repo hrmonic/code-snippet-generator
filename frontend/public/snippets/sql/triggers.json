@@ -1,0 +1,84 @@
+{
+  "id": "sql-triggers",
+  "name": "SQL Triggers",
+  "description": "Triggers SQL avec gestion d'événements BEFORE/AFTER, INSERT/UPDATE/DELETE et gestion d'erreurs",
+  "language": "sql",
+  "feature": "triggers",
+  "code": "-- Trigger BEFORE INSERT\n{{#if includeBeforeInsert}}\nDELIMITER //\n\nCREATE TRIGGER {{triggerName}}_before_insert\nBEFORE INSERT ON {{tableName}}\nFOR EACH ROW\nBEGIN\n    {{#if includeValidation}}\n    -- Validation\n    IF NEW.{{fieldName}} IS NULL OR NEW.{{fieldName}} = '' THEN\n        SIGNAL SQLSTATE '45000'\n        SET MESSAGE_TEXT = '{{fieldName}} cannot be empty';\n    END IF;\n    {{/if}}\n    \n    {{#if includeAutoTimestamp}}\n    -- Timestamp automatique\n    IF NEW.{{createdAtField}} IS NULL THEN\n        SET NEW.{{createdAtField}} = NOW();\n    END IF;\n    {{/if}}\n    \n    {{#if includeAutoUpdate}}\n    -- Mise à jour automatique\n    SET NEW.{{updatedAtField}} = NOW();\n    {{/if}}\nEND //\n\nDELIMITER ;\n{{/if}}\n\n-- Trigger AFTER INSERT\n{{#if includeAfterInsert}}\nDELIMITER //\n\nCREATE TRIGGER {{triggerName}}_after_insert\nAFTER INSERT ON {{tableName}}\nFOR EACH ROW\nBEGIN\n    {{#if includeLogging}}\n    -- Logging\n    INSERT INTO {{logTable}} (action, table_name, record_id, created_at)\n    VALUES ('INSERT', '{{tableName}}', NEW.id, NOW());\n    {{/if}}\n    \n    {{#if includeAudit}}\n    -- Audit trail\n    INSERT INTO {{auditTable}} (table_name, record_id, action, old_values, new_values, user_id, created_at)\n    VALUES (\n        '{{tableName}}',\n        NEW.id,\n        'INSERT',\n        NULL,\n        JSON_OBJECT(\n            {{#each fields}}\n            '{{this}}', NEW.{{this}}{{#unless @last}},{{/unless}}\n            {{/each}}\n        ),\n        USER(),\n        NOW()\n    );\n    {{/if}}\nEND //\n\nDELIMITER ;\n{{/if}}\n\n-- Trigger BEFORE UPDATE\n{{#if includeBeforeUpdate}}\nDELIMITER //\n\nCREATE TRIGGER {{triggerName}}_before_update\nBEFORE UPDATE ON {{tableName}}\nFOR EACH ROW\nBEGIN\n    {{#if includePreventUpdate}}\n    -- Empêcher la mise à jour de certains champs\n    IF OLD.{{protectedField}} != NEW.{{protectedField}} THEN\n        SIGNAL SQLSTATE '45000'\n        SET MESSAGE_TEXT = '{{protectedField}} cannot be modified';\n    END IF;\n    {{/if}}\n    \n    {{#if includeAutoUpdate}}\n    -- Mise à jour automatique du timestamp\n    SET NEW.{{updatedAtField}} = NOW();\n    {{/if}}\nEND //\n\nDELIMITER ;\n{{/if}}\n\n-- Trigger AFTER UPDATE\n{{#if includeAfterUpdate}}\nDELIMITER //\n\nCREATE TRIGGER {{triggerName}}_after_update\nAFTER UPDATE ON {{tableName}}\nFOR EACH ROW\nBEGIN\n    {{#if includeAudit}}\n    -- Audit trail\n    INSERT INTO {{auditTable}} (table_name, record_id, action, old_values, new_values, user_id, created_at)\n    VALUES (\n        '{{tableName}}',\n        NEW.id,\n        'UPDATE',\n        JSON_OBJECT(\n            {{#each fields}}\n            '{{this}}', OLD.{{this}}{{#unless @last}},{{/unless}}\n            {{/each}}\n        ),\n        JSON_OBJECT(\n            {{#each fields}}\n            '{{this}}', NEW.{{this}}{{#unless @last}},{{/unless}}\n            {{/each}}\n        ),\n        USER(),\n        NOW()\n    );\n    {{/if}}\nEND //\n\nDELIMITER ;\n{{/if}}\n\n-- Trigger BEFORE DELETE\n{{#if includeBeforeDelete}}\nDELIMITER //\n\nCREATE TRIGGER {{triggerName}}_before_delete\nBEFORE DELETE ON {{tableName}}\nFOR EACH ROW\nBEGIN\n    {{#if includeSoftDelete}}\n    -- Soft delete (marquer comme supprimé au lieu de supprimer)\n    UPDATE {{tableName}}\n    SET deleted_at = NOW(), is_deleted = 1\n    WHERE id = OLD.id;\n    \n    -- Annuler la suppression\n    SIGNAL SQLSTATE '45000'\n    SET MESSAGE_TEXT = 'Soft delete performed';\n    {{/if}}\n    \n    {{#if includeCascadeCheck}}\n    -- Vérifier les dépendances\n    IF EXISTS (SELECT 1 FROM {{relatedTable}} WHERE {{foreignKey}} = OLD.id) THEN\n        SIGNAL SQLSTATE '45000'\n        SET MESSAGE_TEXT = 'Cannot delete: related records exist';\n    END IF;\n    {{/if}}\nEND //\n\nDELIMITER ;\n{{/if}}\n\n-- Trigger AFTER DELETE\n{{#if includeAfterDelete}}\nDELIMITER //\n\nCREATE TRIGGER {{triggerName}}_after_delete\nAFTER DELETE ON {{tableName}}\nFOR EACH ROW\nBEGIN\n    {{#if includeLogging}}\n    -- Logging\n    INSERT INTO {{logTable}} (action, table_name, record_id, created_at)\n    VALUES ('DELETE', '{{tableName}}', OLD.id, NOW());\n    {{/if}}\n    \n    {{#if includeArchive}}\n    -- Archiver\n    INSERT INTO {{archiveTable}} SELECT * FROM {{tableName}} WHERE id = OLD.id;\n    {{/if}}\nEND //\n\nDELIMITER ;\n{{/if}}\n\n{{#if includeDropExample}}\n-- Supprimer un trigger\nDROP TRIGGER IF EXISTS {{triggerName}}_before_insert;\n{{/if}}",
+  "variables": [
+    {
+      "name": "triggerName",
+      "type": "text",
+      "label": "Nom du trigger",
+      "required": true,
+      "description": "Nom du trigger (sans préfixe before/after)",
+      "placeholder": "user_trigger",
+      "defaultValue": "example_trigger"
+    },
+    {
+      "name": "tableName",
+      "type": "text",
+      "label": "Nom de la table",
+      "required": true,
+      "description": "Nom de la table sur laquelle créer le trigger",
+      "placeholder": "users",
+      "defaultValue": "users"
+    },
+    {
+      "name": "triggerTypes",
+      "type": "multiselect",
+      "label": "Types de triggers",
+      "required": true,
+      "description": "Sélectionnez les types de triggers à inclure",
+      "defaultValue": ["beforeInsert"],
+      "options": [
+        { "value": "beforeInsert", "label": "BEFORE INSERT" },
+        { "value": "afterInsert", "label": "AFTER INSERT" },
+        { "value": "beforeUpdate", "label": "BEFORE UPDATE" },
+        { "value": "afterUpdate", "label": "AFTER UPDATE" },
+        { "value": "beforeDelete", "label": "BEFORE DELETE" },
+        { "value": "afterDelete", "label": "AFTER DELETE" }
+      ]
+    },
+    {
+      "name": "includeAutoTimestamp",
+      "type": "checkbox",
+      "label": "Timestamp automatique",
+      "required": false,
+      "description": "Ajouter automatiquement un timestamp à la création",
+      "defaultValue": false
+    },
+    {
+      "name": "createdAtField",
+      "type": "text",
+      "label": "Champ created_at",
+      "required": false,
+      "description": "Nom du champ pour la date de création",
+      "defaultValue": "created_at",
+      "dependsOn": {
+        "includeAutoTimestamp": [true]
+      }
+    },
+    {
+      "name": "includeAudit",
+      "type": "checkbox",
+      "label": "Audit trail",
+      "required": false,
+      "description": "Inclure un système d'audit trail",
+      "defaultValue": false
+    },
+    {
+      "name": "includeDropExample",
+      "type": "checkbox",
+      "label": "Exemple de suppression",
+      "required": false,
+      "description": "Inclure la commande DROP",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+
