@@ -32,19 +32,11 @@ function SnippetOptionsComponent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [featureOptions.length, applyDefaults, setOptions]);
 
-
-  if (!selectedLanguage || !selectedFeature) {
-    return null;
-  }
-
-  const handleOptionChange = (key: string, value: any) => {
-    const newOptions = { ...localOptions, [key]: value };
-    setLocalOptions(newOptions);
-    setOptions(newOptions);
-  };
-
-  // Filtrer les options selon les dépendances
+  // Filtrer les options selon les dépendances (DOIT être avant le return conditionnel)
   const visibleOptions = useMemo(() => {
+    if (!selectedLanguage || !selectedFeature) {
+      return [];
+    }
     return featureOptions.filter((option) => {
       if (!option.dependsOn) {
         return true;
@@ -60,12 +52,22 @@ function SnippetOptionsComponent() {
 
       return true;
     });
-  }, [featureOptions, localOptions]);
+  }, [featureOptions, localOptions, selectedLanguage, selectedFeature]);
 
-  // Grouper les options par catégorie
+  // Grouper les options par catégorie (DOIT être avant le return conditionnel)
   const groupedOptions = useMemo(() => {
     return groupOptionsByCategory(visibleOptions);
   }, [visibleOptions]);
+
+  if (!selectedLanguage || !selectedFeature) {
+    return null;
+  }
+
+  const handleOptionChange = (key: string, value: any) => {
+    const newOptions = { ...localOptions, [key]: value };
+    setLocalOptions(newOptions);
+    setOptions(newOptions);
+  };
 
   const handleGenerate = async () => {
     if (!selectedLanguage || !selectedFeature) return;
