@@ -75,11 +75,15 @@ export function usePreview(
         setPreviewCode(result.code || null);
         setError(null);
       } catch (fallbackErr) {
-        const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la prévisualisation';
-        setError(errorMessage);
-        setPreviewCode(null);
-        console.error('Erreur lors de la génération de la prévisualisation:', err);
-        console.warn('Fallback côté client a également échoué:', fallbackErr);
+        // Ne pas afficher d'erreur si c'est juste que le snippet n'existe pas
+        if (fallbackErr instanceof Error && fallbackErr.message.includes('non disponible')) {
+          setPreviewCode(null);
+          setError(null);
+        } else {
+          const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la prévisualisation';
+          setError(errorMessage);
+          setPreviewCode(null);
+        }
       }
     } finally {
       setIsGenerating(false);

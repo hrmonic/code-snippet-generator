@@ -112,7 +112,10 @@ export async function generateCodeFromSnippet(
   const snippetResponse = await fetch(snippetPath);
   
   if (!snippetResponse.ok) {
-    throw new Error(`Snippet non trouvé: ${request.language}/${request.feature}`);
+    if (snippetResponse.status === 404) {
+      throw new Error(`Snippet non disponible: ${request.language}/${request.feature}`);
+    }
+    throw new Error(`Erreur lors du chargement du snippet: ${snippetResponse.status}`);
   }
 
   const snippet = await snippetResponse.json();

@@ -433,12 +433,12 @@ export async function generateCode(
   } catch (error) {
     // Si l'API n'est pas disponible, utiliser la génération côté client
     if (axios.isAxiosError(error) && (!error.response || error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK' || error.code === 'ERR_ABORTED')) {
-      console.warn('API non disponible, utilisation de la génération côté client');
+      // Mode production : utiliser la génération côté client silencieusement
       try {
         const { generateCodeFromSnippet } = await import('./clientCodeGenerator');
         return generateCodeFromSnippet(request);
       } catch (fallbackError) {
-        console.warn('Génération côté client échouée, utilisation du mode démo');
+        // Si même le fallback échoue, utiliser le mode démo
         return generateCodeDemo(request);
       }
     }
