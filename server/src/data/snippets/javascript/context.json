@@ -1,0 +1,84 @@
+{
+  "id": "javascript-context",
+  "name": "React Context API",
+  "description": "Configuration de Context API avec Provider et Consumer, gestion d'état global",
+  "language": "javascript",
+  "feature": "context",
+  "code": "import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';\n\n// 1. Créer le contexte\nconst {{contextName}}Context = createContext(undefined);\n\n// 2. Hook personnalisé pour utiliser le contexte\nfunction use{{contextName}}() {\n  const context = useContext({{contextName}}Context);\n  if (context === undefined) {\n    throw new Error(`use{{contextName}} must be used within a {{contextName}}Provider`);\n  }\n  return context;\n}\n\n// 3. Provider component\nfunction {{contextName}}Provider({ children }) {\n  const [{{stateVariable}}, set{{StateVariable}}] = useState({{initialValue}});\n\n  {{#if includeActions}}\n  // Actions\n  const {{actionName}} = useCallback(({{actionParam}}) => {\n    set{{StateVariable}}((prev) => {\n      // Logique de mise à jour\n      return {{updateLogic}};\n    });\n  }, []);\n  {{/if}}\n\n  {{#if includeAsyncActions}}\n  // Async Actions\n  const {{asyncActionName}} = useCallback(async ({{asyncActionParam}}) => {\n    try {\n      setLoading(true);\n      setError(null);\n      \n      const response = await fetch('{{apiEndpoint}}', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({{asyncActionParam}}),\n      });\n      \n      if (!response.ok) {\n        throw new Error('Request failed');\n      }\n      \n      const data = await response.json();\n      set{{StateVariable}}(data);\n    } catch (err) {\n      setError(err.message);\n    } finally {\n      setLoading(false);\n    }\n  }, []);\n  {{/if}}\n\n  {{#if includeLoadingState}}\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState(null);\n  {{/if}}\n\n  // Valeur du contexte (mémorisée)\n  const value = useMemo(() => ({\n    {{stateVariable}},\n    {{#if includeActions}}\n    {{actionName}},\n    {{/if}}\n    {{#if includeAsyncActions}}\n    {{asyncActionName}},\n    {{/if}}\n    {{#if includeLoadingState}}\n    loading,\n    error,\n    {{/if}}\n  }), [\n    {{stateVariable}},\n    {{#if includeActions}}\n    {{actionName}},\n    {{/if}}\n    {{#if includeAsyncActions}}\n    {{asyncActionName}},\n    {{/if}}\n    {{#if includeLoadingState}}\n    loading,\n    error,\n    {{/if}}\n  ]);\n\n  return (\n    <{{contextName}}Context.Provider value={value}>\n      {children}\n    </{{contextName}}Context.Provider>\n  );\n}\n\n// 4. Exemple d'utilisation dans un composant\nfunction {{componentName}}() {\n  const { {{stateVariable}}, {{#if includeActions}}{{actionName}}{{/if}} } = use{{contextName}}();\n\n  return (\n    <div>\n      <p>{{stateVariable}}</p>\n      {{#if includeActions}}\n      <button onClick={() => {{actionName}}('new value')}>\n        Update\n      </button>\n      {{/if}}\n    </div>\n  );\n}\n\n// 5. App component avec Provider\nfunction App() {\n  return (\n    <{{contextName}}Provider>\n      <{{componentName}} />\n    </{{contextName}}Provider>\n  );\n}\n\nexport { {{contextName}}Provider, use{{contextName}} };",
+  "variables": [
+    {
+      "name": "contextName",
+      "type": "text",
+      "label": "Nom du contexte",
+      "required": true,
+      "description": "Nom du contexte (ex: Theme, Auth, User)",
+      "placeholder": "Theme"
+    },
+    {
+      "name": "stateVariable",
+      "type": "text",
+      "label": "Variable d'état",
+      "required": true,
+      "description": "Nom de la variable d'état (camelCase)",
+      "placeholder": "theme"
+    },
+    {
+      "name": "initialValue",
+      "type": "text",
+      "label": "Valeur initiale",
+      "required": false,
+      "description": "Valeur initiale de l'état",
+      "placeholder": "'light'",
+      "defaultValue": "null"
+    },
+    {
+      "name": "includeActions",
+      "type": "checkbox",
+      "label": "Actions synchrones",
+      "required": false,
+      "description": "Inclure des actions synchrones",
+      "defaultValue": true
+    },
+    {
+      "name": "actionName",
+      "type": "text",
+      "label": "Nom de l'action",
+      "required": false,
+      "description": "Nom de la fonction d'action",
+      "placeholder": "setTheme",
+      "dependsOn": {
+        "includeActions": [true]
+      }
+    },
+    {
+      "name": "includeAsyncActions",
+      "type": "checkbox",
+      "label": "Actions asynchrones",
+      "required": false,
+      "description": "Inclure des actions asynchrones (API calls)",
+      "defaultValue": false
+    },
+    {
+      "name": "includeLoadingState",
+      "type": "checkbox",
+      "label": "États de chargement",
+      "required": false,
+      "description": "Inclure les états loading et error",
+      "defaultValue": false
+    },
+    {
+      "name": "componentName",
+      "type": "text",
+      "label": "Nom du composant exemple",
+      "required": false,
+      "description": "Nom du composant d'exemple",
+      "placeholder": "ThemeSwitcher",
+      "defaultValue": "ExampleComponent"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

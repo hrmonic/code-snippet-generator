@@ -1,0 +1,68 @@
+{
+  "id": "php-upload",
+  "name": "File Upload Handler",
+  "description": "Gestion sécurisée de l'upload de fichiers avec validation, types MIME, et protection contre les vulnérabilités",
+  "language": "php",
+  "feature": "upload",
+  "code": "<?php\n\nclass FileUploadHandler {\n    private $uploadDir;\n    private $allowedTypes;\n    private $maxFileSize;\n    private $errors = [];\n    \n    public function __construct($uploadDir = 'uploads/', $maxFileSize = 5242880) {\n        $this->uploadDir = rtrim($uploadDir, '/') . '/';\n        $this->maxFileSize = $maxFileSize;\n        $this->allowedTypes = [\n            'image/jpeg',\n            'image/png',\n            'image/gif',\n            'image/webp',\n            'application/pdf',\n            'text/plain',\n            'application/msword',\n            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'\n        ];\n        \n        // Créer le dossier s'il n'existe pas\n        if (!is_dir($this->uploadDir)) {\n            mkdir($this->uploadDir, 0755, true);\n        }\n    }\n    \n    public function upload($file, $customName = null) {\n        $this->errors = [];\n        \n        // Vérifier les erreurs PHP\n        if ($file['error'] !== UPLOAD_ERR_OK) {\n            $this->errors[] = $this->getUploadErrorMessage($file['error']);\n            return false;\n        }\n        \n        // Vérifier la taille\n        if ($file['size'] > $this->maxFileSize) {\n            $this->errors[] = 'Le fichier est trop volumineux. Taille maximale: ' . $this->formatFileSize($this->maxFileSize);\n            return false;\n        }\n        \n        // Vérifier le type MIME\n        $finfo = finfo_open(FILEINFO_MIME_TYPE);\n        $mimeType = finfo_file($finfo, $file['tmp_name']);\n        finfo_close($finfo);\n        \n        if (!in_array($mimeType, $this->allowedTypes)) {\n            $this->errors[] = 'Type de fichier non autorisé: ' . $mimeType;\n            return false;\n        }\n        \n        // Vérifier l'extension\n        $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));\n        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'txt', 'doc', 'docx'];\n        \n        if (!in_array($extension, $allowedExtensions)) {\n            $this->errors[] = 'Extension non autorisée: ' . $extension;\n            return false;\n        }\n        \n        // Générer un nom de fichier sécurisé\n        $fileName = $customName ?: $this->generateSecureFileName($file['name'], $extension);\n        $filePath = $this->uploadDir . $fileName;\n        \n        // Vérifier si le fichier existe déjà\n        if (file_exists($filePath)) {\n            $fileName = $this->generateUniqueFileName($fileName, $extension);\n            $filePath = $this->uploadDir . $fileName;\n        }\n        \n        // Déplacer le fichier\n        if (!move_uploaded_file($file['tmp_name'], $filePath)) {\n            $this->errors[] = 'Erreur lors du déplacement du fichier';\n            return false;\n        }\n        \n        // Changer les permissions\n        chmod($filePath, 0644);\n        \n        return [\n            'success' => true,\n            'filename' => $fileName,\n            'path' => $filePath,\n            'url' => $this->uploadDir . $fileName,\n            'size' => $file['size'],\n            'type' => $mimeType\n        ];\n    }\n    \n    public function uploadMultiple($files) {\n        $results = [];\n        \n        foreach ($files['name'] as $key => $name) {\n            $file = [\n                'name' => $files['name'][$key],\n                'type' => $files['type'][$key],\n                'tmp_name' => $files['tmp_name'][$key],\n                'error' => $files['error'][$key],\n                'size' => $files['size'][$key]\n            ];\n            \n            $result = $this->upload($file);\n            $results[] = $result;\n        }\n        \n        return $results;\n    }\n    \n    private function generateSecureFileName($originalName, $extension) {\n        // Supprimer les caractères dangereux\n        $name = preg_replace('/[^a-zA-Z0-9._-]/', '', pathinfo($originalName, PATHINFO_FILENAME));\n        \n        // Limiter la longueur\n        $name = substr($name, 0, 50);\n        \n        // Ajouter un timestamp\n        $name .= '_' . time();\n        \n        return $name . '.' . $extension;\n    }\n    \n    private function generateUniqueFileName($fileName, $extension) {\n        $baseName = pathinfo($fileName, PATHINFO_FILENAME);\n        $counter = 1;\n        \n        while (file_exists($this->uploadDir . $baseName . '_' . $counter . '.' . $extension)) {\n            $counter++;\n        }\n        \n        return $baseName . '_' . $counter . '.' . $extension;\n    }\n    \n    private function getUploadErrorMessage($errorCode) {\n        switch ($errorCode) {\n            case UPLOAD_ERR_INI_SIZE:\n            case UPLOAD_ERR_FORM_SIZE:\n                return 'Le fichier dépasse la taille maximale autorisée';\n            case UPLOAD_ERR_PARTIAL:\n                return 'Le fichier n\\'a été que partiellement téléchargé';\n            case UPLOAD_ERR_NO_FILE:\n                return 'Aucun fichier n\\'a été téléchargé';\n            case UPLOAD_ERR_NO_TMP_DIR:\n                return 'Dossier temporaire manquant';\n            case UPLOAD_ERR_CANT_WRITE:\n                return 'Échec de l\\'écriture du fichier sur le disque';\n            case UPLOAD_ERR_EXTENSION:\n                return 'Une extension PHP a arrêté le téléchargement';\n            default:\n                return 'Erreur inconnue lors du téléchargement';\n        }\n    }\n    \n    private function formatFileSize($bytes) {\n        $units = ['B', 'KB', 'MB', 'GB'];\n        $bytes = max($bytes, 0);\n        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));\n        $pow = min($pow, count($units) - 1);\n        $bytes /= pow(1024, $pow);\n        return round($bytes, 2) . ' ' . $units[$pow];\n    }\n    \n    public function getErrors() {\n        return $this->errors;\n    }\n    \n    public function hasErrors() {\n        return !empty($this->errors);\n    }\n    \n    public function delete($fileName) {\n        $filePath = $this->uploadDir . basename($fileName);\n        \n        if (file_exists($filePath)) {\n            return unlink($filePath);\n        }\n        \n        return false;\n    }\n}\n\n// Utilisation\n$uploadHandler = new FileUploadHandler('uploads/', {{maxFileSize}});\n\nif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {\n    $result = $uploadHandler->upload($_FILES['file']);\n    \n    if ($result) {\n        echo json_encode([\n            'success' => true,\n            'message' => 'Fichier téléchargé avec succès',\n            'data' => $result\n        ]);\n    } else {\n        echo json_encode([\n            'success' => false,\n            'errors' => $uploadHandler->getErrors()\n        ]);\n    }\n}\n\n// Formulaire HTML exemple\n/*\n<form method=\"POST\" enctype=\"multipart/form-data\">\n    <input type=\"file\" name=\"file\" accept=\"{{allowedExtensions}}\" required>\n    <button type=\"submit\">Télécharger</button>\n</form>\n*/",
+  "variables": [
+    {
+      "name": "uploadDir",
+      "type": "text",
+      "label": "Dossier d'upload",
+      "required": false,
+      "description": "Chemin du dossier où stocker les fichiers",
+      "defaultValue": "uploads/",
+      "placeholder": "uploads/"
+    },
+    {
+      "name": "maxFileSize",
+      "type": "number",
+      "label": "Taille maximale (octets)",
+      "required": false,
+      "description": "Taille maximale du fichier en octets (5242880 = 5MB)",
+      "defaultValue": 5242880,
+      "min": 1024,
+      "max": 104857600
+    },
+    {
+      "name": "allowedTypes",
+      "type": "multiselect",
+      "label": "Types de fichiers autorisés",
+      "required": true,
+      "description": "Types MIME autorisés",
+      "defaultValue": ["image/jpeg", "image/png", "image/gif"],
+      "options": [
+        { "value": "image/jpeg", "label": "JPEG" },
+        { "value": "image/png", "label": "PNG" },
+        { "value": "image/gif", "label": "GIF" },
+        { "value": "image/webp", "label": "WebP" },
+        { "value": "application/pdf", "label": "PDF" },
+        { "value": "text/plain", "label": "Texte" },
+        { "value": "application/msword", "label": "DOC" },
+        { "value": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "label": "DOCX" }
+      ]
+    },
+    {
+      "name": "includeMultipleUpload",
+      "type": "checkbox",
+      "label": "Upload multiple",
+      "required": false,
+      "description": "Inclure la fonctionnalité d'upload multiple",
+      "defaultValue": true
+    },
+    {
+      "name": "includeDelete",
+      "type": "checkbox",
+      "label": "Fonction de suppression",
+      "required": false,
+      "description": "Inclure la fonction de suppression de fichiers",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

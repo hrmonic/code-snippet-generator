@@ -1,0 +1,87 @@
+{
+  "id": "html5-pagination",
+  "name": "Pagination Component",
+  "description": "Composant de pagination accessible avec navigation clavier et styles personnalisables",
+  "language": "html5",
+  "feature": "pagination",
+  "code": "<!DOCTYPE html>\n<html lang=\"{{language}}\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{title}}</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        \n        body {\n            font-family: {{fontFamily}};\n            padding: 2rem;\n        }\n        \n        .pagination {\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            gap: 0.5rem;\n            list-style: none;\n            flex-wrap: wrap;\n        }\n        \n        .pagination-item {\n            display: flex;\n        }\n        \n        .pagination-link {\n            padding: {{buttonPadding}};\n            min-width: {{buttonSize}};\n            height: {{buttonSize}};\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            text-decoration: none;\n            color: {{textColor}};\n            background: {{buttonColor}};\n            border: {{buttonBorder}};\n            border-radius: {{buttonRadius}};\n            transition: all 0.3s ease;\n            cursor: pointer;\n            font-size: {{fontSize}};\n        }\n        \n        .pagination-link:hover:not(.disabled):not(.active) {\n            background: {{buttonHoverColor}};\n            {{#if shadow}}\n            box-shadow: 0 2px 8px rgba(0,0,0,0.15);\n            {{/if}}\n            transform: translateY(-2px);\n        }\n        \n        .pagination-link.active {\n            background: {{activeColor}};\n            color: {{activeTextColor}};\n            font-weight: bold;\n            {{#if shadow}}\n            box-shadow: 0 2px 8px rgba(0,0,0,0.2);\n            {{/if}}\n        }\n        \n        .pagination-link.disabled {\n            opacity: 0.5;\n            cursor: not-allowed;\n            pointer-events: none;\n        }\n        \n        .pagination-link:focus {\n            outline: 2px solid {{focusColor}};\n            outline-offset: 2px;\n        }\n        \n        .pagination-ellipsis {\n            padding: {{buttonPadding}};\n            color: {{textColor}};\n            pointer-events: none;\n        }\n        \n        @media (max-width: 768px) {\n            .pagination {\n                gap: 0.25rem;\n            }\n            \n            .pagination-link {\n                min-width: {{mobileButtonSize}};\n                height: {{mobileButtonSize}};\n                font-size: {{mobileFontSize}};\n            }\n        }\n    </style>\n</head>\n<body>\n    <nav aria-label=\"{{ariaLabel}}\">\n        <ul class=\"pagination\" id=\"pagination\">\n            <!-- Généré dynamiquement par JavaScript -->\n        </ul>\n    </nav>\n    \n    <script>\n        class Pagination {\n            constructor(containerId, options = {}) {\n                this.container = document.getElementById(containerId);\n                this.currentPage = options.currentPage || 1;\n                this.totalPages = options.totalPages || {{totalPages}};\n                this.maxVisible = options.maxVisible || {{maxVisible}};\n                this.onPageChange = options.onPageChange || (() => {});\n                \n                this.render();\n            }\n            \n            render() {\n                this.container.innerHTML = '';\n                \n                // Bouton Précédent\n                const prev = this.createLink('«', this.currentPage - 1, 'prev');\n                prev.disabled = this.currentPage === 1;\n                this.container.appendChild(prev);\n                \n                // Calcul des pages à afficher\n                const { start, end } = this.calculateRange();\n                \n                // Première page\n                if (start > 1) {\n                    this.container.appendChild(this.createLink('1', 1));\n                    if (start > 2) {\n                        this.container.appendChild(this.createEllipsis());\n                    }\n                }\n                \n                // Pages visibles\n                for (let i = start; i <= end; i++) {\n                    const link = this.createLink(i.toString(), i);\n                    if (i === this.currentPage) {\n                        link.classList.add('active');\n                    }\n                    this.container.appendChild(link);\n                }\n                \n                // Dernière page\n                if (end < this.totalPages) {\n                    if (end < this.totalPages - 1) {\n                        this.container.appendChild(this.createEllipsis());\n                    }\n                    this.container.appendChild(this.createLink(this.totalPages.toString(), this.totalPages));\n                }\n                \n                // Bouton Suivant\n                const next = this.createLink('»', this.currentPage + 1, 'next');\n                next.disabled = this.currentPage === this.totalPages;\n                this.container.appendChild(next);\n            }\n            \n            calculateRange() {\n                let start = Math.max(1, this.currentPage - Math.floor(this.maxVisible / 2));\n                let end = Math.min(this.totalPages, start + this.maxVisible - 1);\n                \n                if (end - start < this.maxVisible - 1) {\n                    start = Math.max(1, end - this.maxVisible + 1);\n                }\n                \n                return { start, end };\n            }\n            \n            createLink(text, page, type = 'number') {\n                const li = document.createElement('li');\n                li.className = 'pagination-item';\n                \n                const link = document.createElement('a');\n                link.className = 'pagination-link';\n                link.href = '#';\n                link.textContent = text;\n                link.setAttribute('aria-label', type === 'prev' ? 'Page précédente' : type === 'next' ? 'Page suivante' : `Page ${page}`);\n                link.setAttribute('aria-current', page === this.currentPage ? 'page' : null);\n                \n                if (page < 1 || page > this.totalPages) {\n                    link.classList.add('disabled');\n                } else {\n                    link.addEventListener('click', (e) => {\n                        e.preventDefault();\n                        if (page !== this.currentPage && page >= 1 && page <= this.totalPages) {\n                            this.goToPage(page);\n                        }\n                    });\n                }\n                \n                li.appendChild(link);\n                return li;\n            }\n            \n            createEllipsis() {\n                const li = document.createElement('li');\n                li.className = 'pagination-item';\n                const span = document.createElement('span');\n                span.className = 'pagination-ellipsis';\n                span.textContent = '...';\n                li.appendChild(span);\n                return li;\n            }\n            \n            goToPage(page) {\n                this.currentPage = page;\n                this.render();\n                this.onPageChange(page);\n            }\n        }\n        \n        // Initialisation\n        const pagination = new Pagination('pagination', {\n            currentPage: 1,\n            totalPages: {{totalPages}},\n            maxVisible: {{maxVisible}},\n            onPageChange: (page) => {\n                console.log('Page changée:', page);\n                // Ici, vous pouvez charger les données de la page\n            }\n        });\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "title",
+      "type": "text",
+      "label": "Titre de la page",
+      "required": false,
+      "description": "Titre de la page",
+      "defaultValue": "Pagination"
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "label": "Langue",
+      "required": false,
+      "description": "Langue de la page",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" }
+      ]
+    },
+    {
+      "name": "totalPages",
+      "type": "number",
+      "label": "Nombre total de pages",
+      "required": true,
+      "description": "Nombre total de pages",
+      "defaultValue": 10,
+      "min": 1,
+      "max": 1000
+    },
+    {
+      "name": "maxVisible",
+      "type": "number",
+      "label": "Pages visibles maximum",
+      "required": false,
+      "description": "Nombre maximum de pages visibles à la fois",
+      "defaultValue": 5,
+      "min": 3,
+      "max": 10
+    },
+    {
+      "name": "ariaLabel",
+      "type": "text",
+      "label": "Label ARIA",
+      "required": false,
+      "description": "Label d'accessibilité pour la navigation",
+      "defaultValue": "Navigation de pagination"
+    },
+    {
+      "name": "buttonColor",
+      "type": "color",
+      "label": "Couleur des boutons",
+      "required": false,
+      "description": "Couleur de fond des boutons",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "name": "activeColor",
+      "type": "color",
+      "label": "Couleur active",
+      "required": false,
+      "description": "Couleur de fond de la page active",
+      "defaultValue": "#007bff"
+    },
+    {
+      "name": "shadow",
+      "type": "checkbox",
+      "label": "Ombres",
+      "required": false,
+      "description": "Ajouter des ombres aux boutons",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

@@ -1,0 +1,48 @@
+{
+  "id": "javascript-hooks",
+  "name": "React Hooks",
+  "description": "Collection de hooks React personnalisés et utilitaires (useState, useEffect, useCallback, useMemo, custom hooks)",
+  "language": "javascript",
+  "feature": "hooks",
+  "code": "import { useState, useEffect, useCallback, useMemo, useRef } from 'react';\n\n// Hook personnalisé: useLocalStorage\nfunction useLocalStorage(key, initialValue) {\n  const [storedValue, setStoredValue] = useState(() => {\n    try {\n      const item = window.localStorage.getItem(key);\n      return item ? JSON.parse(item) : initialValue;\n    } catch (error) {\n      console.error(error);\n      return initialValue;\n    }\n  });\n\n  const setValue = useCallback((value) => {\n    try {\n      setStoredValue(value);\n      window.localStorage.setItem(key, JSON.stringify(value));\n    } catch (error) {\n      console.error(error);\n    }\n  }, [key]);\n\n  return [storedValue, setValue];\n}\n\n// Hook personnalisé: useFetch\nfunction useFetch(url, options = {}) {\n  const [data, setData] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    let cancelled = false;\n\n    const fetchData = async () => {\n      try {\n        setLoading(true);\n        setError(null);\n        \n        const response = await fetch(url, options);\n        if (!response.ok) {\n          throw new Error(`HTTP error! status: ${response.status}`);\n        }\n        \n        const json = await response.json();\n        if (!cancelled) {\n          setData(json);\n        }\n      } catch (err) {\n        if (!cancelled) {\n          setError(err.message);\n        }\n      } finally {\n        if (!cancelled) {\n          setLoading(false);\n        }\n      }\n    };\n\n    fetchData();\n\n    return () => {\n      cancelled = true;\n    };\n  }, [url]);\n\n  return { data, loading, error, refetch: () => fetchData() };\n}\n\n// Hook personnalisé: useDebounce\nfunction useDebounce(value, delay) {\n  const [debouncedValue, setDebouncedValue] = useState(value);\n\n  useEffect(() => {\n    const handler = setTimeout(() => {\n      setDebouncedValue(value);\n    }, delay);\n\n    return () => {\n      clearTimeout(handler);\n    };\n  }, [value, delay]);\n\n  return debouncedValue;\n}\n\n// Hook personnalisé: usePrevious\nfunction usePrevious(value) {\n  const ref = useRef();\n\n  useEffect(() => {\n    ref.current = value;\n  }, [value]);\n\n  return ref.current;\n}\n\n// Hook personnalisé: useToggle\nfunction useToggle(initialValue = false) {\n  const [value, setValue] = useState(initialValue);\n\n  const toggle = useCallback(() => {\n    setValue((prev) => !prev);\n  }, []);\n\n  return [value, toggle, setValue];\n}\n\n// Hook personnalisé: useClickOutside\nfunction useClickOutside(ref, handler) {\n  useEffect(() => {\n    const listener = (event) => {\n      if (!ref.current || ref.current.contains(event.target)) {\n        return;\n      }\n      handler(event);\n    };\n\n    document.addEventListener('mousedown', listener);\n    document.addEventListener('touchstart', listener);\n\n    return () => {\n      document.removeEventListener('mousedown', listener);\n      document.removeEventListener('touchstart', listener);\n    };\n  }, [ref, handler]);\n}\n\n// Hook personnalisé: useWindowSize\nfunction useWindowSize() {\n  const [windowSize, setWindowSize] = useState({\n    width: window.innerWidth,\n    height: window.innerHeight,\n  });\n\n  useEffect(() => {\n    const handleResize = () => {\n      setWindowSize({\n        width: window.innerWidth,\n        height: window.innerHeight,\n      });\n    };\n\n    window.addEventListener('resize', handleResize);\n    return () => window.removeEventListener('resize', handleResize);\n  }, []);\n\n  return windowSize;\n}\n\n// Exemple d'utilisation\nfunction MyComponent() {\n  const [count, setCount] = useState(0);\n  const [name, setName] = useLocalStorage('name', '');\n  const { data, loading, error } = useFetch('https://api.example.com/data');\n  const [isOpen, toggle] = useToggle(false);\n  const debouncedSearch = useDebounce(name, 500);\n  const prevCount = usePrevious(count);\n  const { width, height } = useWindowSize();\n\n  const expensiveValue = useMemo(() => {\n    return count * 2;\n  }, [count]);\n\n  const handleClick = useCallback(() => {\n    setCount((prev) => prev + 1);\n  }, []);\n\n  useEffect(() => {\n    console.log(`Count changed from ${prevCount} to ${count}`);\n  }, [count, prevCount]);\n\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <p>Expensive: {expensiveValue}</p>\n      <p>Window: {width}x{height}</p>\n      <button onClick={handleClick}>Increment</button>\n      <button onClick={toggle}>Toggle: {isOpen ? 'ON' : 'OFF'}</button>\n    </div>\n  );\n}\n\nexport {\n  useLocalStorage,\n  useFetch,\n  useDebounce,\n  usePrevious,\n  useToggle,\n  useClickOutside,\n  useWindowSize,\n};",
+  "variables": [
+    {
+      "name": "hookTypes",
+      "type": "multiselect",
+      "label": "Types de hooks",
+      "required": true,
+      "description": "Sélectionnez les hooks à inclure",
+      "defaultValue": ["useLocalStorage", "useFetch", "useDebounce"],
+      "options": [
+        { "value": "useLocalStorage", "label": "useLocalStorage" },
+        { "value": "useFetch", "label": "useFetch" },
+        { "value": "useDebounce", "label": "useDebounce" },
+        { "value": "usePrevious", "label": "usePrevious" },
+        { "value": "useToggle", "label": "useToggle" },
+        { "value": "useClickOutside", "label": "useClickOutside" },
+        { "value": "useWindowSize", "label": "useWindowSize" }
+      ]
+    },
+    {
+      "name": "includeExamples",
+      "type": "checkbox",
+      "label": "Exemples d'utilisation",
+      "required": false,
+      "description": "Inclure des exemples d'utilisation",
+      "defaultValue": true
+    },
+    {
+      "name": "includeTypeScript",
+      "type": "checkbox",
+      "label": "Types TypeScript",
+      "required": false,
+      "description": "Inclure les types TypeScript",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

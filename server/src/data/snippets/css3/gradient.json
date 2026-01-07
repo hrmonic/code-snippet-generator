@@ -1,0 +1,101 @@
+{
+  "id": "css3-gradient",
+  "name": "CSS Gradients",
+  "description": "Collection de dégradés CSS modernes (linear, radial, conic) avec animations",
+  "language": "css3",
+  "feature": "gradient",
+  "code": "/* Linear Gradient - Dégradé linéaire */\n.linear-gradient {\n    background: linear-gradient({{gradientDirection}}, {{color1}}, {{color2}}{{#if color3}}, {{color3}}{{/if}}{{#if color4}}, {{color4}}{{/if}});\n    {{#if includeAnimation}}\n    background-size: 200% 200%;\n    animation: gradientShift {{animationDuration}}s ease infinite;\n    {{/if}}\n}\n\n{{#if includeRadial}}\n/* Radial Gradient - Dégradé radial */\n.radial-gradient {\n    background: radial-gradient(circle at {{radialPosition}}, {{color1}}, {{color2}});\n}\n{{/if}}\n\n{{#if includeConic}}\n/* Conic Gradient - Dégradé conique */\n.conic-gradient {\n    background: conic-gradient(from {{conicAngle}}deg, {{color1}}, {{color2}}, {{color3}}, {{color1}});\n    {{#if includeAnimation}}\n    animation: rotate {{animationDuration}}s linear infinite;\n    {{/if}}\n}\n{{/if}}\n\n{{#if includeRepeating}}\n/* Repeating Gradient */\n.repeating-gradient {\n    background: repeating-linear-gradient(\n        {{gradientDirection}},\n        {{color1}} {{stop1}}%,\n        {{color2}} {{stop2}}%\n    );\n}\n{{/if}}\n\n{{#if includeTextGradient}}\n/* Text Gradient */\n.text-gradient {\n    background: linear-gradient({{gradientDirection}}, {{color1}}, {{color2}});\n    -webkit-background-clip: text;\n    background-clip: text;\n    -webkit-text-fill-color: transparent;\n    color: transparent;\n}\n{{/if}}\n\n{{#if includeAnimation}}\n/* Animations */\n@keyframes gradientShift {\n    0% {\n        background-position: 0% 50%;\n    }\n    50% {\n        background-position: 100% 50%;\n    }\n    100% {\n        background-position: 0% 50%;\n    }\n}\n\n@keyframes rotate {\n    from {\n        transform: rotate(0deg);\n    }\n    to {\n        transform: rotate(360deg);\n    }\n}\n{{/if}}\n\n/* Exemples de dégradés prédéfinis */\n{{#if includePresets}}\n.sunset-gradient {\n    background: linear-gradient(to right, #ff6b6b, #ffa500, #ffd700);\n}\n\n.ocean-gradient {\n    background: linear-gradient(to bottom, #667eea, #764ba2);\n}\n\n.forest-gradient {\n    background: linear-gradient(135deg, #134e5e, #71b280);\n}\n\n.fire-gradient {\n    background: linear-gradient(to right, #f12711, #f5af19);\n}\n{{/if}}",
+  "variables": [
+    {
+      "name": "gradientType",
+      "type": "multiselect",
+      "label": "Types de dégradés",
+      "required": true,
+      "description": "Sélectionnez les types de dégradés à inclure",
+      "defaultValue": ["linear"],
+      "options": [
+        { "value": "linear", "label": "Linear (linéaire)" },
+        { "value": "radial", "label": "Radial" },
+        { "value": "conic", "label": "Conic (conique)" },
+        { "value": "repeating", "label": "Repeating (répétitif)" },
+        { "value": "text", "label": "Text Gradient" }
+      ]
+    },
+    {
+      "name": "color1",
+      "type": "color",
+      "label": "Couleur 1",
+      "required": true,
+      "description": "Première couleur du dégradé",
+      "defaultValue": "#667eea"
+    },
+    {
+      "name": "color2",
+      "type": "color",
+      "label": "Couleur 2",
+      "required": true,
+      "description": "Deuxième couleur du dégradé",
+      "defaultValue": "#764ba2"
+    },
+    {
+      "name": "color3",
+      "type": "color",
+      "label": "Couleur 3",
+      "required": false,
+      "description": "Troisième couleur (optionnelle)",
+      "defaultValue": "#f093fb"
+    },
+    {
+      "name": "gradientDirection",
+      "type": "select",
+      "label": "Direction",
+      "required": false,
+      "description": "Direction du dégradé linéaire",
+      "defaultValue": "to right",
+      "options": [
+        { "value": "to right", "label": "Vers la droite" },
+        { "value": "to left", "label": "Vers la gauche" },
+        { "value": "to bottom", "label": "Vers le bas" },
+        { "value": "to top", "label": "Vers le haut" },
+        { "value": "to bottom right", "label": "Diagonale bas-droite" },
+        { "value": "to bottom left", "label": "Diagonale bas-gauche" },
+        { "value": "135deg", "label": "135 degrés" },
+        { "value": "45deg", "label": "45 degrés" }
+      ]
+    },
+    {
+      "name": "includeAnimation",
+      "type": "checkbox",
+      "label": "Animation",
+      "required": false,
+      "description": "Ajouter une animation au dégradé",
+      "defaultValue": false
+    },
+    {
+      "name": "animationDuration",
+      "type": "number",
+      "label": "Durée de l'animation (s)",
+      "required": false,
+      "description": "Durée de l'animation en secondes",
+      "defaultValue": 3,
+      "min": 1,
+      "max": 10,
+      "dependsOn": {
+        "includeAnimation": [true]
+      }
+    },
+    {
+      "name": "includePresets",
+      "type": "checkbox",
+      "label": "Dégradés prédéfinis",
+      "required": false,
+      "description": "Inclure des exemples de dégradés prédéfinis",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

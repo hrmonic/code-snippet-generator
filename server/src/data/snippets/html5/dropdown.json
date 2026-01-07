@@ -1,0 +1,93 @@
+{
+  "id": "html5-dropdown",
+  "name": "Dropdown Menu",
+  "description": "Menu déroulant accessible avec animations et support clavier",
+  "language": "html5",
+  "feature": "dropdown",
+  "code": "<!DOCTYPE html>\n<html lang=\"{{language}}\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{title}}</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        \n        body {\n            font-family: {{fontFamily}};\n            padding: 2rem;\n        }\n        \n        .dropdown {\n            position: relative;\n            display: inline-block;\n        }\n        \n        .dropdown-button {\n            background: {{buttonColor}};\n            color: {{buttonTextColor}};\n            padding: {{buttonPadding}};\n            border: {{buttonBorder}};\n            border-radius: {{buttonRadius}};\n            cursor: pointer;\n            font-size: {{fontSize}};\n            min-width: {{buttonWidth}};\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            gap: 0.5rem;\n            transition: all 0.3s ease;\n        }\n        \n        .dropdown-button:hover {\n            background: {{buttonHoverColor}};\n            {{#if shadow}}\n            box-shadow: 0 2px 8px rgba(0,0,0,0.15);\n            {{/if}}\n        }\n        \n        .dropdown-button:focus {\n            outline: 2px solid {{focusColor}};\n            outline-offset: 2px;\n        }\n        \n        .dropdown-arrow {\n            transition: transform 0.3s ease;\n        }\n        \n        .dropdown.open .dropdown-arrow {\n            transform: rotate(180deg);\n        }\n        \n        .dropdown-menu {\n            position: absolute;\n            top: 100%;\n            left: 0;\n            margin-top: 0.5rem;\n            background: {{menuBackground}};\n            border: {{menuBorder}};\n            border-radius: {{menuRadius}};\n            {{#if shadow}}\n            box-shadow: 0 4px 12px rgba(0,0,0,0.15);\n            {{/if}}\n            min-width: {{menuWidth}};\n            opacity: 0;\n            visibility: hidden;\n            transform: translateY(-10px);\n            transition: all 0.3s ease;\n            z-index: 1000;\n            {{#if maxHeight}}\n            max-height: {{maxHeight}};\n            overflow-y: auto;\n            {{/if}}\n        }\n        \n        .dropdown.open .dropdown-menu {\n            opacity: 1;\n            visibility: visible;\n            transform: translateY(0);\n        }\n        \n        .dropdown-item {\n            padding: {{itemPadding}};\n            cursor: pointer;\n            transition: background 0.2s ease;\n            border-bottom: 1px solid {{itemBorderColor}};\n        }\n        \n        .dropdown-item:last-child {\n            border-bottom: none;\n        }\n        \n        .dropdown-item:hover,\n        .dropdown-item:focus {\n            background: {{itemHoverColor}};\n            outline: none;\n        }\n        \n        .dropdown-item.disabled {\n            opacity: 0.5;\n            cursor: not-allowed;\n        }\n        \n        .dropdown-divider {\n            height: 1px;\n            background: {{dividerColor}};\n            margin: 0.5rem 0;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"dropdown\" id=\"dropdown\">\n        <button class=\"dropdown-button\" id=\"dropdownButton\" aria-haspopup=\"true\" aria-expanded=\"false\">\n            <span>{{buttonText}}</span>\n            <span class=\"dropdown-arrow\">▼</span>\n        </button>\n        <ul class=\"dropdown-menu\" role=\"menu\" id=\"dropdownMenu\">\n            {{menuItems}}\n        </ul>\n    </div>\n    \n    <script>\n        const dropdown = document.getElementById('dropdown');\n        const button = document.getElementById('dropdownButton');\n        const menu = document.getElementById('dropdownMenu');\n        \n        function toggleDropdown() {\n            const isOpen = dropdown.classList.contains('open');\n            dropdown.classList.toggle('open');\n            button.setAttribute('aria-expanded', !isOpen);\n        }\n        \n        button.addEventListener('click', toggleDropdown);\n        \n        // Fermer au clic extérieur\n        document.addEventListener('click', (e) => {\n            if (!dropdown.contains(e.target)) {\n                dropdown.classList.remove('open');\n                button.setAttribute('aria-expanded', 'false');\n            }\n        });\n        \n        // Navigation clavier\n        button.addEventListener('keydown', (e) => {\n            if (e.key === 'Enter' || e.key === ' ') {\n                e.preventDefault();\n                toggleDropdown();\n            } else if (e.key === 'ArrowDown') {\n                e.preventDefault();\n                if (!dropdown.classList.contains('open')) {\n                    toggleDropdown();\n                }\n                menu.querySelector('li:first-child')?.focus();\n            }\n        });\n        \n        // Navigation dans le menu\n        const items = menu.querySelectorAll('.dropdown-item');\n        items.forEach((item, index) => {\n            item.setAttribute('tabindex', '0');\n            item.addEventListener('keydown', (e) => {\n                if (e.key === 'ArrowDown') {\n                    e.preventDefault();\n                    items[index + 1]?.focus();\n                } else if (e.key === 'ArrowUp') {\n                    e.preventDefault();\n                    if (index === 0) {\n                        button.focus();\n                    } else {\n                        items[index - 1]?.focus();\n                    }\n                } else if (e.key === 'Escape') {\n                    dropdown.classList.remove('open');\n                    button.focus();\n                }\n            });\n            \n            item.addEventListener('click', () => {\n                if (!item.classList.contains('disabled')) {\n                    console.log('Selected:', item.textContent);\n                    dropdown.classList.remove('open');\n                    button.setAttribute('aria-expanded', 'false');\n                }\n            });\n        });\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "title",
+      "type": "text",
+      "label": "Titre de la page",
+      "required": false,
+      "description": "Titre de la page",
+      "defaultValue": "Dropdown Menu"
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "label": "Langue",
+      "required": false,
+      "description": "Langue de la page",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" }
+      ]
+    },
+    {
+      "name": "buttonText",
+      "type": "text",
+      "label": "Texte du bouton",
+      "required": true,
+      "description": "Texte affiché sur le bouton",
+      "placeholder": "Sélectionner",
+      "defaultValue": "Sélectionner"
+    },
+    {
+      "name": "menuItems",
+      "type": "textarea",
+      "label": "Éléments du menu",
+      "required": true,
+      "description": "Liste des éléments du menu (un par ligne ou format HTML)",
+      "placeholder": "<li class=\"dropdown-item\">Option 1</li>\n<li class=\"dropdown-item\">Option 2</li>\n<li class=\"dropdown-divider\"></li>\n<li class=\"dropdown-item\">Option 3</li>",
+      "defaultValue": "<li class=\"dropdown-item\" role=\"menuitem\">Option 1</li>\n<li class=\"dropdown-item\" role=\"menuitem\">Option 2</li>\n<li class=\"dropdown-divider\"></li>\n<li class=\"dropdown-item\" role=\"menuitem\">Option 3</li>"
+    },
+    {
+      "name": "buttonColor",
+      "type": "color",
+      "label": "Couleur du bouton",
+      "required": false,
+      "description": "Couleur de fond du bouton",
+      "defaultValue": "#007bff"
+    },
+    {
+      "name": "buttonTextColor",
+      "type": "color",
+      "label": "Couleur du texte",
+      "required": false,
+      "description": "Couleur du texte du bouton",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "name": "shadow",
+      "type": "checkbox",
+      "label": "Ombres",
+      "required": false,
+      "description": "Ajouter des ombres aux éléments",
+      "defaultValue": true
+    },
+    {
+      "name": "fontSize",
+      "type": "text",
+      "label": "Taille de police",
+      "required": false,
+      "description": "Taille de police (ex: 16px, 1rem)",
+      "defaultValue": "16px"
+    },
+    {
+      "name": "fontFamily",
+      "type": "text",
+      "label": "Police de caractères",
+      "required": false,
+      "description": "Famille de polices",
+      "defaultValue": "Arial, sans-serif"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

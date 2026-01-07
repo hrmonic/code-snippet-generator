@@ -1,0 +1,106 @@
+{
+  "id": "sql-stored-procedures",
+  "name": "Stored Procedures",
+  "description": "Procédures stockées SQL avec paramètres, transactions et gestion d'erreurs",
+  "language": "sql",
+  "feature": "stored-procedures",
+  "code": "-- Création d'une procédure stockée basique\nDELIMITER //\n\nCREATE PROCEDURE {{procedureName}}(\n    {{#if includeInputParams}}\n    IN {{paramName}} {{paramType}}{{#if paramDefault}} DEFAULT {{paramDefault}}{{/if}}\n    {{/if}}\n    {{#if includeOutputParams}}\n    OUT {{outputParamName}} {{outputParamType}}\n    {{/if}}\n)\nBEGIN\n    {{#if includeVariables}}\n    -- Déclaration de variables\n    DECLARE {{variableName}} {{variableType}} DEFAULT {{variableDefault}};\n    {{/if}}\n    \n    {{#if includeTransaction}}\n    -- Début de transaction\n    START TRANSACTION;\n    {{/if}}\n    \n    {{#if includeSelect}}\n    -- Requête SELECT\n    SELECT * FROM {{tableName}}\n    WHERE {{condition}};\n    {{/if}}\n    \n    {{#if includeInsert}}\n    -- Requête INSERT\n    INSERT INTO {{tableName}} ({{columns}})\n    VALUES ({{values}});\n    {{/if}}\n    \n    {{#if includeUpdate}}\n    -- Requête UPDATE\n    UPDATE {{tableName}}\n    SET {{setClause}}\n    WHERE {{whereClause}};\n    {{/if}}\n    \n    {{#if includeDelete}}\n    -- Requête DELETE\n    DELETE FROM {{tableName}}\n    WHERE {{whereClause}};\n    {{/if}}\n    \n    {{#if includeOutputParams}}\n    -- Assigner une valeur au paramètre OUT\n    SET {{outputParamName}} = {{outputValue}};\n    {{/if}}\n    \n    {{#if includeTransaction}}\n    -- Commit de la transaction\n    COMMIT;\n    {{/if}}\n    \n    {{#if includeErrorHandling}}\n    -- Gestion d'erreur\n    DECLARE EXIT HANDLER FOR SQLEXCEPTION\n    BEGIN\n        {{#if includeTransaction}}\n        ROLLBACK;\n        {{/if}}\n        GET DIAGNOSTICS CONDITION 1\n            @sqlstate = RETURNED_SQLSTATE,\n            @errno = MYSQL_ERRNO,\n            @text = MESSAGE_TEXT;\n        SELECT @sqlstate, @errno, @text AS error_message;\n    END;\n    {{/if}}\n    \nEND //\n\nDELIMITER ;\n\n{{#if includeCallExample}}\n-- Exemple d'appel de la procédure\n{{#if includeOutputParams}}\nCALL {{procedureName}}({{inputValue}}, @{{outputParamName}});\nSELECT @{{outputParamName}} AS result;\n{{else}}\nCALL {{procedureName}}({{inputValue}});\n{{/if}}\n{{/if}}\n\n{{#if includeDropExample}}\n-- Supprimer la procédure\nDROP PROCEDURE IF EXISTS {{procedureName}};\n{{/if}}",
+  "variables": [
+    {
+      "name": "procedureName",
+      "type": "text",
+      "label": "Nom de la procédure",
+      "required": true,
+      "description": "Nom de la procédure stockée",
+      "placeholder": "GetUserById",
+      "defaultValue": "sp_example"
+    },
+    {
+      "name": "tableName",
+      "type": "text",
+      "label": "Nom de la table",
+      "required": false,
+      "description": "Nom de la table principale",
+      "placeholder": "users",
+      "defaultValue": "users"
+    },
+    {
+      "name": "procedureFeatures",
+      "type": "multiselect",
+      "label": "Fonctionnalités",
+      "required": true,
+      "description": "Sélectionnez les fonctionnalités à inclure",
+      "defaultValue": ["select"],
+      "options": [
+        { "value": "select", "label": "SELECT" },
+        { "value": "insert", "label": "INSERT" },
+        { "value": "update", "label": "UPDATE" },
+        { "value": "delete", "label": "DELETE" },
+        { "value": "transaction", "label": "Transaction" },
+        { "value": "errorHandling", "label": "Gestion d'erreurs" },
+        { "value": "outputParams", "label": "Paramètres OUT" }
+      ]
+    },
+    {
+      "name": "includeInputParams",
+      "type": "checkbox",
+      "label": "Paramètres d'entrée",
+      "required": false,
+      "description": "Inclure des paramètres d'entrée (IN)",
+      "defaultValue": true
+    },
+    {
+      "name": "paramName",
+      "type": "text",
+      "label": "Nom du paramètre",
+      "required": false,
+      "description": "Nom du paramètre d'entrée",
+      "placeholder": "user_id",
+      "defaultValue": "id",
+      "dependsOn": {
+        "includeInputParams": [true]
+      }
+    },
+    {
+      "name": "paramType",
+      "type": "select",
+      "label": "Type du paramètre",
+      "required": false,
+      "description": "Type de données du paramètre",
+      "defaultValue": "INT",
+      "options": [
+        { "value": "INT", "label": "INT" },
+        { "value": "VARCHAR(255)", "label": "VARCHAR(255)" },
+        { "value": "TEXT", "label": "TEXT" },
+        { "value": "DECIMAL(10,2)", "label": "DECIMAL(10,2)" },
+        { "value": "DATE", "label": "DATE" },
+        { "value": "DATETIME", "label": "DATETIME" },
+        { "value": "BOOLEAN", "label": "BOOLEAN" }
+      ],
+      "dependsOn": {
+        "includeInputParams": [true]
+      }
+    },
+    {
+      "name": "includeCallExample",
+      "type": "checkbox",
+      "label": "Exemple d'appel",
+      "required": false,
+      "description": "Inclure un exemple d'appel de la procédure",
+      "defaultValue": true
+    },
+    {
+      "name": "includeDropExample",
+      "type": "checkbox",
+      "label": "Exemple de suppression",
+      "required": false,
+      "description": "Inclure la commande DROP",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

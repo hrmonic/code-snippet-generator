@@ -1,0 +1,83 @@
+{
+  "id": "css3-shadow",
+  "name": "Box Shadows",
+  "description": "Collection d'ombres CSS modernes (box-shadow, text-shadow) avec effets avancés",
+  "language": "css3",
+  "feature": "shadow",
+  "code": "/* Box Shadow basique */\n.basic-shadow {\n    box-shadow: {{offsetX}}px {{offsetY}}px {{blurRadius}}px {{spreadRadius}}px {{color}};\n}\n\n{{#if includeSoftShadow}}\n/* Ombre douce */\n.soft-shadow {\n    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);\n}\n{{/if}}\n\n{{#if includeHardShadow}}\n/* Ombre dure */\n.hard-shadow {\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n}\n{{/if}}\n\n{{#if includeMultipleShadows}}\n/* Ombres multiples */\n.multiple-shadows {\n    box-shadow:\n        0 2px 4px rgba(0, 0, 0, 0.1),\n        0 4px 8px rgba(0, 0, 0, 0.1),\n        0 8px 16px rgba(0, 0, 0, 0.1);\n}\n{{/if}}\n\n{{#if includeInsetShadow}}\n/* Ombre interne */\n.inset-shadow {\n    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);\n}\n{{/if}}\n\n{{#if includeGlowEffect}}\n/* Effet de lueur */\n.glow-effect {\n    box-shadow: 0 0 {{glowSize}}px {{glowColor}};\n}\n{{/if}}\n\n{{#if includeTextShadow}}\n/* Text Shadow */\n.text-shadow {\n    text-shadow: {{textOffsetX}}px {{textOffsetY}}px {{textBlur}}px {{textColor}};\n}\n\n/* Text Shadow multiple */\n.text-shadow-multiple {\n    text-shadow:\n        1px 1px 2px rgba(0, 0, 0, 0.5),\n        0 0 10px rgba(255, 255, 255, 0.3);\n}\n{{/if}}\n\n{{#if includeHoverEffect}}\n/* Effet au survol */\n.hover-shadow {\n    transition: box-shadow 0.3s ease;\n}\n\n.hover-shadow:hover {\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);\n    transform: translateY(-2px);\n}\n{{/if}}\n\n{{#if includeCardShadow}}\n/* Ombre de carte moderne */\n.card-shadow {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    transition: box-shadow 0.3s ease;\n}\n\n.card-shadow:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);\n}\n{{/if}}\n\n{{#if includeNeumorphism}}\n/* Neumorphism (Soft UI) */\n.neumorphism {\n    box-shadow:\n        {{neumorphismSize}}px {{neumorphismSize}}px {{neumorphismBlur}}px {{neumorphismDark}},\n        -{{neumorphismSize}}px -{{neumorphismSize}}px {{neumorphismBlur}}px {{neumorphismLight}};\n    background: {{backgroundColor}};\n}\n{{/if}}",
+  "variables": [
+    {
+      "name": "shadowTypes",
+      "type": "multiselect",
+      "label": "Types d'ombres",
+      "required": true,
+      "description": "Sélectionnez les types d'ombres à inclure",
+      "defaultValue": ["basic", "soft"],
+      "options": [
+        { "value": "basic", "label": "Ombre basique" },
+        { "value": "soft", "label": "Ombre douce" },
+        { "value": "hard", "label": "Ombre dure" },
+        { "value": "multiple", "label": "Ombres multiples" },
+        { "value": "inset", "label": "Ombre interne" },
+        { "value": "glow", "label": "Effet de lueur" },
+        { "value": "text", "label": "Text Shadow" },
+        { "value": "hover", "label": "Effet au survol" },
+        { "value": "card", "label": "Ombre de carte" },
+        { "value": "neumorphism", "label": "Neumorphism" }
+      ]
+    },
+    {
+      "name": "offsetX",
+      "type": "number",
+      "label": "Décalage X (px)",
+      "required": false,
+      "description": "Décalage horizontal de l'ombre",
+      "defaultValue": 0,
+      "min": -50,
+      "max": 50
+    },
+    {
+      "name": "offsetY",
+      "type": "number",
+      "label": "Décalage Y (px)",
+      "required": false,
+      "description": "Décalage vertical de l'ombre",
+      "defaultValue": 4,
+      "min": -50,
+      "max": 50
+    },
+    {
+      "name": "blurRadius",
+      "type": "number",
+      "label": "Rayon de flou (px)",
+      "required": false,
+      "description": "Rayon de flou de l'ombre",
+      "defaultValue": 8,
+      "min": 0,
+      "max": 100
+    },
+    {
+      "name": "spreadRadius",
+      "type": "number",
+      "label": "Rayon d'expansion (px)",
+      "required": false,
+      "description": "Rayon d'expansion de l'ombre",
+      "defaultValue": 0,
+      "min": -50,
+      "max": 50
+    },
+    {
+      "name": "color",
+      "type": "color",
+      "label": "Couleur de l'ombre",
+      "required": false,
+      "description": "Couleur de l'ombre (avec transparence)",
+      "defaultValue": "rgba(0, 0, 0, 0.1)"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

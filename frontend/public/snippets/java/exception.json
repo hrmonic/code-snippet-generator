@@ -1,0 +1,79 @@
+{
+  "id": "java-exception",
+  "name": "Exception Handling",
+  "description": "Gestion d'exceptions Java avec try-catch, custom exceptions, et best practices",
+  "language": "java",
+  "feature": "exception",
+  "code": "package {{packageName}};\n\n{{#if includeCustomExceptions}}\n// Exception personnalisée\nclass {{customExceptionName}} extends Exception {\n    private final String errorCode;\n    \n    public {{customExceptionName}}(String message) {\n        super(message);\n        this.errorCode = null;\n    }\n    \n    public {{customExceptionName}}(String message, String errorCode) {\n        super(message);\n        this.errorCode = errorCode;\n    }\n    \n    public {{customExceptionName}}(String message, Throwable cause) {\n        super(message, cause);\n        this.errorCode = null;\n    }\n    \n    public String getErrorCode() {\n        return errorCode;\n    }\n}\n{{/if}}\n\n{{#if includeRuntimeException}}\n// RuntimeException personnalisée\nclass {{runtimeExceptionName}} extends RuntimeException {\n    public {{runtimeExceptionName}}(String message) {\n        super(message);\n    }\n    \n    public {{runtimeExceptionName}}(String message, Throwable cause) {\n        super(message, cause);\n    }\n}\n{{/if}}\n\npublic class {{className}} {\n    \n    {{#if includeTryCatch}}\n    // Try-Catch basique\n    public void {{methodName}}() {\n        try {\n            // Code qui peut lever une exception\n            int result = 10 / 0;\n        } catch (ArithmeticException e) {\n            System.err.println(\"Erreur arithmétique: \" + e.getMessage());\n            e.printStackTrace();\n        } catch (Exception e) {\n            System.err.println(\"Erreur générale: \" + e.getMessage());\n        }\n    }\n    {{/if}}\n    \n    {{#if includeTryCatchFinally}}\n    // Try-Catch-Finally\n    public void {{methodWithFinally}}() {\n        FileInputStream file = null;\n        try {\n            file = new FileInputStream(\"{{fileName}}\");\n            // Traitement du fichier\n        } catch (FileNotFoundException e) {\n            System.err.println(\"Fichier non trouvé: \" + e.getMessage());\n        } finally {\n            if (file != null) {\n                try {\n                    file.close();\n                } catch (IOException e) {\n                    System.err.println(\"Erreur lors de la fermeture: \" + e.getMessage());\n                }\n            }\n        }\n    }\n    {{/if}}\n    \n    {{#if includeTryWithResources}}\n    // Try-with-resources (Java 7+)\n    public void {{methodWithResources}}() {\n        try (FileInputStream file = new FileInputStream(\"{{fileName}}\");\n             BufferedReader reader = new BufferedReader(new InputStreamReader(file))) {\n            \n            String line;\n            while ((line = reader.readLine()) != null) {\n                System.out.println(line);\n            }\n            \n        } catch (IOException e) {\n            System.err.println(\"Erreur IO: \" + e.getMessage());\n        }\n        // Les ressources sont automatiquement fermées\n    }\n    {{/if}}\n    \n    {{#if includeThrows}}\n    // Méthode avec throws\n    public void {{methodWithThrows}}() throws {{customExceptionName}}, IOException {\n        if ({{condition}}) {\n            throw new {{customExceptionName}}(\"{{errorMessage}}\");\n        }\n        \n        // Autre code qui peut lever IOException\n    }\n    {{/if}}\n    \n    {{#if includeMultiCatch}}\n    // Multi-catch (Java 7+)\n    public void {{multiCatchMethod}}() {\n        try {\n            // Code\n        } catch ({{exceptionType1}} | {{exceptionType2}} e) {\n            System.err.println(\"Erreur: \" + e.getMessage());\n        }\n    }\n    {{/if}}\n    \n    {{#if includeExceptionChaining}}\n    // Exception chaining\n    public void {{chainingMethod}}() {\n        try {\n            // Code\n        } catch ({{originalException}} e) {\n            throw new {{customExceptionName}}(\"{{contextMessage}}\", e);\n        }\n    }\n    {{/if}}\n    \n    {{#if includeValidation}}\n    // Validation avec exception\n    public void validate{{entityName}}({{entityName}} {{entityVariable}}) throws {{validationException}} {\n        if ({{entityVariable}} == null) {\n            throw new {{validationException}}(\"{{entityName}} ne peut pas être null\");\n        }\n        \n        if ({{entityVariable}}.get{{fieldName}}() == null || {{entityVariable}}.get{{fieldName}}().isEmpty()) {\n            throw new {{validationException}}(\"Le champ {{fieldName}} est requis\");\n        }\n    }\n    {{/if}}\n    \n    {{#if includeGlobalHandler}}\n    // Global Exception Handler (pour applications Spring)\n    @ExceptionHandler({{exceptionType}}.class)\n    public ResponseEntity<ErrorResponse> handle{{exceptionType}}({{exceptionType}} ex) {\n        ErrorResponse error = new ErrorResponse(\n            ex.getMessage(),\n            HttpStatus.{{httpStatus}},\n            LocalDateTime.now()\n        );\n        return new ResponseEntity<>(error, HttpStatus.{{httpStatus}});\n    }\n    {{/if}}\n}\n\n{{#if includeErrorResponse}}\n// Classe ErrorResponse (pour API REST)\nclass ErrorResponse {\n    private String message;\n    private HttpStatus status;\n    private LocalDateTime timestamp;\n    \n    public ErrorResponse(String message, HttpStatus status, LocalDateTime timestamp) {\n        this.message = message;\n        this.status = status;\n        this.timestamp = timestamp;\n    }\n    \n    // Getters et setters\n    public String getMessage() { return message; }\n    public HttpStatus getStatus() { return status; }\n    public LocalDateTime getTimestamp() { return timestamp; }\n}\n{{/if}}",
+  "variables": [
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": true,
+      "description": "Nom du package Java",
+      "placeholder": "com.example.exceptions",
+      "defaultValue": "com.example"
+    },
+    {
+      "name": "className",
+      "type": "text",
+      "label": "Nom de la classe",
+      "required": true,
+      "description": "Nom de la classe principale",
+      "placeholder": "ExceptionHandler",
+      "defaultValue": "ExceptionExample"
+    },
+    {
+      "name": "exceptionTypes",
+      "type": "multiselect",
+      "label": "Types d'exceptions",
+      "required": true,
+      "description": "Sélectionnez les patterns de gestion d'exceptions à inclure",
+      "defaultValue": ["tryCatch", "tryCatchFinally"],
+      "options": [
+        { "value": "tryCatch", "label": "Try-Catch basique" },
+        { "value": "tryCatchFinally", "label": "Try-Catch-Finally" },
+        { "value": "tryWithResources", "label": "Try-with-resources" },
+        { "value": "throws", "label": "Méthode avec throws" },
+        { "value": "multiCatch", "label": "Multi-catch" },
+        { "value": "exceptionChaining", "label": "Exception chaining" },
+        { "value": "validation", "label": "Validation avec exception" },
+        { "value": "globalHandler", "label": "Global Exception Handler (Spring)" }
+      ]
+    },
+    {
+      "name": "includeCustomExceptions",
+      "type": "checkbox",
+      "label": "Exceptions personnalisées",
+      "required": false,
+      "description": "Inclure des classes d'exceptions personnalisées",
+      "defaultValue": true
+    },
+    {
+      "name": "customExceptionName",
+      "type": "text",
+      "label": "Nom de l'exception personnalisée",
+      "required": false,
+      "description": "Nom de la classe d'exception personnalisée",
+      "placeholder": "CustomException",
+      "defaultValue": "CustomException",
+      "dependsOn": {
+        "includeCustomExceptions": [true]
+      }
+    },
+    {
+      "name": "includeErrorResponse",
+      "type": "checkbox",
+      "label": "Classe ErrorResponse",
+      "required": false,
+      "description": "Inclure une classe ErrorResponse pour les API REST",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+
