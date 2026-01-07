@@ -396,7 +396,7 @@ npm run test --workspace=frontend -- --watch
 
 ## 📦 Snippets disponibles
 
-### 🌐 HTML5 (10 snippets)
+### 🌐 HTML5 (14 snippets)
 - 📝 **Formulaires** : Validation native, champs sécurisés, options avancées
 - 🎨 **Inputs** : Types HTML5 modernes (email, date, color, range)
 - 📐 **Layouts** : Structure sémantique responsive
@@ -406,8 +406,13 @@ npm run test --workspace=frontend -- --watch
 - 🎚️ **Sliders** : Carrousels et sliders interactifs
 - 🪗 **Accordion** : Sections repliables
 - 🪟 **Modal** : Fenêtres modales accessibles
+- 📑 **Dropdown** : Menu déroulant accessible avec navigation clavier
+- 🍞 **Breadcrumb** : Navigation fil d'Ariane avec support ARIA
+- 📑 **Tabs** : Composant onglets accessible avec animations
+- 💬 **Tooltip** : Tooltips avec positionnement automatique
+- 📄 **Pagination** : Composant de pagination avec navigation complète
 
-### 🎨 CSS3 (8 snippets)
+### 🎨 CSS3 (11 snippets)
 - 🎬 **Animations** : Keyframes (fadeIn, slideIn, pulse)
 - 📐 **Layouts** : Grid et Flexbox responsive
 - 📱 **Media queries** : Breakpoints optimisés
@@ -416,8 +421,12 @@ npm run test --workspace=frontend -- --watch
 - 🔄 **Transforms** : Transformations CSS3 (rotate, scale, translate)
 - 🎨 **Variables** : CSS Custom Properties (variables CSS)
 - 📐 **Flexbox** : Layouts flexbox complets
+- 🌈 **Gradients** : Dégradés CSS (linear, radial, conic) avec animations
+- 🎭 **Shadows** : Box shadows avec effets avancés (neumorphism, glow)
+- 🔄 **Transitions** : Transitions CSS complètes avec timing functions
+- 📱 **Media Queries** : Media queries complètes (responsive, dark mode, print, accessibility)
 
-### ⚡ JavaScript (10 snippets)
+### ⚡ JavaScript (15 snippets)
 - 🌐 **API Client** : Client HTTP avec fetch, gestion d'erreurs
 - ✅ **Validation** : Validation de formulaires côté client
 - 🎬 **Animations** : requestAnimationFrame pour performance
@@ -428,16 +437,23 @@ npm run test --workspace=frontend -- --watch
 - ⏳ **Promises** : Gestion des promesses et async/await
 - 🏗️ **Classes** : Classes ES6+ avec héritage
 - 📡 **Fetch** : Client fetch avec retry et gestion d'erreurs
+- ⚛️ **React Hooks** : useLocalStorage, useFetch, useDebounce, usePrevious, useToggle, useClickOutside, useWindowSize
+- 🔄 **React Context** : Configuration Context API avec Provider et custom hooks
+- 🛣️ **React Router** : Routes protégées, lazy loading, navigation, layouts
+- 📡 **WebSocket** : Client WebSocket avec reconnexion automatique et hooks React
+- 🔄 **Redux** : Store Redux avec actions, reducers, thunk et hooks React
 
-### ☕ Java (6 snippets)
+### ☕ Java (8 snippets)
 - 🏗️ **CRUD** : Controller + Model + Service avec Spring (génère plusieurs fichiers)
 - 🌐 **API REST** : Endpoints complets avec annotations
 - 📦 **Model** : Classes d'entité JPA
 - 🔄 **Repository** : Interfaces Repository avec Spring Data
 - 🛠️ **Service** : Couche service avec logique métier
 - 📋 **DTO** : Data Transfer Objects pour les APIs
+- ⚠️ **Exception Handling** : Gestion d'exceptions avec try-catch, custom exceptions
+- 🔄 **Streams** : Streams API avec map, filter, reduce, collect, grouping
 
-### 🐘 PHP (7 snippets)
+### 🐘 PHP (10 snippets)
 - 🏗️ **CRUD** : PDO sécurisé, protection SQL injection
 - 🌐 **API REST** : Validation, réponses JSON
 - 🔒 **Auth** : Système d'authentification sécurisé
@@ -445,6 +461,9 @@ npm run test --workspace=frontend -- --watch
 - 🛣️ **Router** : Routeur simple et efficace
 - 📦 **Model** : Classes de modèle avec PDO
 - ✅ **Validation** : Validateurs de données
+- 📧 **Email** : Envoi d'emails avec PHPMailer et templates
+- 💾 **Cache** : Système de cache (File Cache, Redis, Tagged Cache)
+- 📤 **Upload** : Gestion sécurisée de l'upload de fichiers
 
 ### 🗄️ SQL (7 snippets)
 - 📊 **Requêtes** : SELECT, INSERT, UPDATE, DELETE sécurisés
