@@ -2,22 +2,21 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LanguageSelector } from '../LanguageSelector';
-import { useGeneratorStore } from '../../store/useGeneratorStore';
 
 // Mock the store
+const mockSetLanguage = vi.fn();
+
 vi.mock('../../store/useGeneratorStore', () => ({
-  useGeneratorStore: vi.fn(),
+  useGeneratorStore: vi.fn(() => ({
+    selectedLanguage: null,
+    setLanguage: mockSetLanguage,
+  })),
 }));
 
 describe('LanguageSelector', () => {
-  const mockSetLanguage = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
-    (useGeneratorStore as ReturnType<typeof vi.fn>).mockReturnValue({
-      selectedLanguage: null,
-      setLanguage: mockSetLanguage,
-    });
+    mockSetLanguage.mockReset();
   });
 
   it('should render all languages', () => {
