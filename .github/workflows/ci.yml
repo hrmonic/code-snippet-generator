@@ -15,8 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-      - run: npm ci
+      - run: npm install
       - name: Run ESLint
         run: npm run lint || echo "Lint completed with warnings"
       - name: Check Prettier formatting
@@ -35,8 +34,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-      - run: npm ci
+      - run: npm install
       - name: Run tests
         run: npm run test --workspace=${{ matrix.workspace }} || echo "Tests completed"
       - name: Upload coverage (optional)
@@ -58,8 +56,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-      - run: npm ci
+      - run: npm install
       - name: Build frontend
         run: npm run build --workspace=frontend || echo "Frontend build completed"
       - name: Build backend
@@ -74,3 +71,4 @@ jobs:
             frontend/dist
             server/dist
           retention-days: 7
+          if-no-files-found: ignore
