@@ -421,13 +421,26 @@ export async function generateCode(
   request: GenerateRequest
 ): Promise<GenerateResponse> {
   try {
-    const response = await api.post<GenerateResponse>('/api/generate', request);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+    const response = await api.post<GenerateResponse>('/api/generate', request, {
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
     return response.data;
   } catch (error) {
-    // Si l'API n'est pas disponible, utiliser le mode démo
-    if (axios.isAxiosError(error) && (!error.response || error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK')) {
-      console.warn('API non disponible, utilisation du mode démo');
-      return generateCodeDemo(request);
+    // Si l'API n'est pas disponible, utiliser la génération côté client
+    if (axios.isAxiosError(error) && (!error.response || error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK' || error.code === 'ERR_ABORTED')) {
+      console.warn('API non disponible, utilisation de la génération côté client');
+      try {
+        const { generateCodeFromSnippet } = await import('./clientCodeGenerator');
+        return generateCodeFromSnippet(request);
+      } catch (fallbackError) {
+        console.warn('Génération côté client échouée, utilisation du mode démo');
+        return generateCodeDemo(request);
+      }
     }
     
     if (axios.isAxiosError(error)) {

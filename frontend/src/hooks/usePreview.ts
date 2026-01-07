@@ -37,6 +37,10 @@ export function usePreview(
     setError(null);
 
     try {
+      // Essayer d'abord l'API avec timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
+
       const response = await fetch(`${API_BASE_URL}/api/generate`, {
         method: 'POST',
         headers: {
@@ -48,7 +52,10 @@ export function usePreview(
           options: optionsRef.current,
           preview: true,
         }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
@@ -57,10 +64,23 @@ export function usePreview(
       const data = await response.json();
       setPreviewCode(data.code || null);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la prévisualisation';
-      setError(errorMessage);
-      setPreviewCode(null);
-      console.error('Erreur lors de la génération de la prévisualisation:', err);
+      // Si l'API échoue, utiliser la génération côté client
+      try {
+        const { generateCodeFromSnippet } = await import('../lib/clientCodeGenerator');
+        const result = await generateCodeFromSnippet({
+          language,
+          feature,
+          options: optionsRef.current,
+        });
+        setPreviewCode(result.code || null);
+        setError(null);
+      } catch (fallbackErr) {
+        const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la prévisualisation';
+        setError(errorMessage);
+        setPreviewCode(null);
+        console.error('Erreur lors de la génération de la prévisualisation:', err);
+        console.warn('Fallback côté client a également échoué:', fallbackErr);
+      }
     } finally {
       setIsGenerating(false);
     }
