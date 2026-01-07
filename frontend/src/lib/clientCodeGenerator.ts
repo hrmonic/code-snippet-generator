@@ -106,7 +106,10 @@ export async function generateCodeFromSnippet(
   request: GenerateRequest
 ): Promise<GenerateResponse> {
   // Charger le snippet JSON
-  const snippetResponse = await fetch(`/snippets/${request.language}/${request.feature}.json`);
+  // Utiliser le base path de Vite (important pour GitHub Pages)
+  const basePath = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '';
+  const snippetPath = `${basePath}/snippets/${request.language}/${request.feature}.json`;
+  const snippetResponse = await fetch(snippetPath);
   
   if (!snippetResponse.ok) {
     throw new Error(`Snippet non trouvé: ${request.language}/${request.feature}`);

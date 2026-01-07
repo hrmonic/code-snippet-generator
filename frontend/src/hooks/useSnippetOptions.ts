@@ -45,11 +45,12 @@ function transformVariablesToOptions(variables: any[]): OptionConfig[] {
       description: variable.description,
     };
 
-    // Ajouter les propriétés spécifiques au type
-    if (variable.type === 'select' || variable.type === 'multiselect') {
+    // Ajouter les propriétés spécifiques au type (utiliser variable.type original)
+    const originalType = variable.type;
+    if (originalType === 'select' || originalType === 'multiselect') {
       option.options = variable.options || [];
     }
-    if (variable.type === 'number' || variable.type === 'range') {
+    if (originalType === 'number' || originalType === 'range') {
       option.min = variable.min;
       option.max = variable.max;
     }
@@ -106,19 +107,27 @@ export function useSnippetOptions(
       } catch (err) {
         // Si l'API échoue, essayer de charger depuis les fichiers JSON statiques
         try {
-          const snippetResponse = await fetch(`/snippets/${language}/${feature}.json`);
+          // Utiliser le base path de Vite (important pour GitHub Pages)
+          const basePath = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '';
+          const snippetPath = `${basePath}/snippets/${language}/${feature}.json`;
+          
+          console.log('Tentative de chargement depuis:', snippetPath);
+          const snippetResponse = await fetch(snippetPath);
           
           if (!snippetResponse.ok) {
-            throw new Error('Snippet non trouvé');
+            console.error(`Erreur HTTP ${snippetResponse.status} pour ${snippetPath}`);
+            throw new Error(`Snippet non trouvé: ${snippetResponse.status}`);
           }
 
           const snippetData = await snippetResponse.json();
           
           if (snippetData.variables && Array.isArray(snippetData.variables)) {
             const transformedOptions = transformVariablesToOptions(snippetData.variables);
+            console.log(`Options chargées depuis fichier statique: ${transformedOptions.length} options`);
             setOptions(transformedOptions);
             setError(null); // Pas d'erreur si on a réussi à charger depuis les fichiers statiques
           } else {
+            console.error('Format de snippet invalide:', snippetData);
             throw new Error('Format de snippet invalide');
           }
         } catch (fallbackErr) {
