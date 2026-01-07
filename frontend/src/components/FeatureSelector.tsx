@@ -11,6 +11,7 @@ const features: Record<string, Array<{ value: FeatureType; label: string; descri
     { value: 'card', label: 'Card', description: 'Composant card avec hover', icon: '🃏' },
     { value: 'table', label: 'Table', description: 'Tableau responsive avec tri', icon: '📊' },
     { value: 'slider', label: 'Slider', description: 'Carousel d\'images responsive', icon: '🎠' },
+    { value: 'accordion', label: 'Accordion', description: 'Composant accordion avec animation', icon: '📑' },
   ],
   css3: [
     { value: 'layout', label: 'Layout', description: 'Grid, Flexbox, responsive', icon: '📐' },
@@ -20,6 +21,7 @@ const features: Record<string, Array<{ value: FeatureType; label: string; descri
     { value: 'grid', label: 'Grid', description: 'CSS Grid Layout avancé', icon: '🔲' },
     { value: 'buttons', label: 'Boutons', description: 'Boutons stylisés avec effets', icon: '🔘' },
     { value: 'variables', label: 'Variables CSS', description: 'Custom properties pour thèmes', icon: '🎨' },
+    { value: 'transforms', label: 'Transforms', description: 'Transformations et transitions CSS', icon: '🔄' },
   ],
   javascript: [
     { value: 'api', label: 'API Client', description: 'Client HTTP avec fetch/axios', icon: '🌐' },
@@ -30,6 +32,8 @@ const features: Record<string, Array<{ value: FeatureType; label: string; descri
     { value: 'debounce', label: 'Debounce/Throttle', description: 'Optimisation des performances', icon: '⚡' },
     { value: 'promise', label: 'Promises', description: 'Async/Await et utilitaires', icon: '🔮' },
     { value: 'observer', label: 'Observer', description: 'Pattern Observer et APIs', icon: '👁️' },
+    { value: 'event', label: 'Event Handling', description: 'Gestion d\'événements et delegation', icon: '🎯' },
+    { value: 'class', label: 'ES6 Classes', description: 'Classes avec héritage et patterns', icon: '🏛️' },
   ],
   java: [
     { value: 'crud', label: 'CRUD', description: 'Controller + Model + Service', icon: '🏗️' },
@@ -37,6 +41,7 @@ const features: Record<string, Array<{ value: FeatureType; label: string; descri
     { value: 'model', label: 'Model JPA', description: 'Entité JPA avec annotations', icon: '📋' },
     { value: 'service', label: 'Service', description: 'Service layer avec logique métier', icon: '⚙️' },
     { value: 'repository', label: 'Repository', description: 'Repository JPA avec requêtes', icon: '🗄️' },
+    { value: 'dto', label: 'DTO', description: 'Data Transfer Object avec validation', icon: '📦' },
   ],
   php: [
     { value: 'crud', label: 'CRUD', description: 'CRUD complet avec PDO', icon: '🏗️' },
@@ -44,12 +49,14 @@ const features: Record<string, Array<{ value: FeatureType; label: string; descri
     { value: 'validation', label: 'Validation', description: 'Classe de validation PHP', icon: '✅' },
     { value: 'router', label: 'Router', description: 'Routeur PHP avec paramètres', icon: '🛣️' },
     { value: 'middleware', label: 'Middleware', description: 'Système de middleware PHP', icon: '🔒' },
+    { value: 'auth', label: 'Authentification', description: 'Système d\'auth avec sessions', icon: '🔐' },
   ],
   sql: [
     { value: 'query', label: 'Requêtes', description: 'SELECT, INSERT, UPDATE, DELETE', icon: '📊' },
     { value: 'joins', label: 'JOIN', description: 'Requêtes avec JOIN (INNER, LEFT, etc.)', icon: '🔗' },
     { value: 'transactions', label: 'Transactions', description: 'Gestion des transactions SQL', icon: '🔄' },
     { value: 'indexes', label: 'Indexes', description: 'Création et optimisation d\'indexes', icon: '📈' },
+    { value: 'views', label: 'Vues', description: 'Création et utilisation de vues SQL', icon: '👁️' },
   ],
 };
 

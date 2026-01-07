@@ -90,6 +90,12 @@ export function SnippetOptions() {
         { key: 'columnName', label: 'Nom de la colonne', placeholder: 'email', required: true },
       ];
     }
+    if (selectedFeature === 'views' && selectedLanguage === 'sql') {
+      return [
+        { key: 'viewName', label: 'Nom de la vue', placeholder: 'user_summary', required: true },
+        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
+      ];
+    }
     if (selectedFeature === 'api' && selectedLanguage === 'javascript') {
       return [
         { key: 'baseURL', label: 'URL de base', placeholder: 'http://localhost:3000/api', required: false },
@@ -124,6 +130,11 @@ export function SnippetOptions() {
       return [
         { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
         { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
+      ];
+    }
+    if (selectedFeature === 'dto' && selectedLanguage === 'java') {
+      return [
+        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
       ];
     }
     if (selectedFeature === 'api' && selectedLanguage === 'php') {
@@ -168,6 +179,17 @@ export function SnippetOptions() {
         { key: 'sliderTitle', label: 'Titre du slider', placeholder: 'Carousel', required: true },
       ];
     }
+    if (selectedFeature === 'accordion' && selectedLanguage === 'html5') {
+      return [
+        { key: 'accordionTitle', label: 'Titre de l\'accordion', placeholder: 'FAQ', required: true },
+        { key: 'item1Title', label: 'Titre item 1', placeholder: 'Question 1', required: true },
+        { key: 'item1Content', label: 'Contenu item 1', placeholder: 'Réponse 1', required: true },
+        { key: 'item2Title', label: 'Titre item 2', placeholder: 'Question 2', required: true },
+        { key: 'item2Content', label: 'Contenu item 2', placeholder: 'Réponse 2', required: true },
+        { key: 'item3Title', label: 'Titre item 3', placeholder: 'Question 3', required: true },
+        { key: 'item3Content', label: 'Contenu item 3', placeholder: 'Réponse 3', required: true },
+      ];
+    }
     // Features sans options requises
     if (
       (selectedFeature === 'animation' && (selectedLanguage === 'css3' || selectedLanguage === 'javascript')) ||
@@ -179,12 +201,16 @@ export function SnippetOptions() {
       (selectedFeature === 'grid' && selectedLanguage === 'css3') ||
       (selectedFeature === 'buttons' && selectedLanguage === 'css3') ||
       (selectedFeature === 'variables' && selectedLanguage === 'css3') ||
+      (selectedFeature === 'transforms' && selectedLanguage === 'css3') ||
       (selectedFeature === 'storage' && selectedLanguage === 'javascript') ||
       (selectedFeature === 'debounce' && selectedLanguage === 'javascript') ||
       (selectedFeature === 'promise' && selectedLanguage === 'javascript') ||
       (selectedFeature === 'observer' && selectedLanguage === 'javascript') ||
+      (selectedFeature === 'event' && selectedLanguage === 'javascript') ||
+      (selectedFeature === 'class' && selectedLanguage === 'javascript') ||
       (selectedFeature === 'router' && selectedLanguage === 'php') ||
-      (selectedFeature === 'middleware' && selectedLanguage === 'php')
+      (selectedFeature === 'middleware' && selectedLanguage === 'php') ||
+      (selectedFeature === 'auth' && selectedLanguage === 'php')
     ) {
       return [];
     }

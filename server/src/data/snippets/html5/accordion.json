@@ -1,0 +1,57 @@
+{
+  "id": "html5-accordion",
+  "name": "Accordion HTML5",
+  "description": "Composant accordion avec animation et état",
+  "language": "html5",
+  "feature": "accordion",
+  "code": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{accordionTitle}}</title>\n    <style>\n        .accordion {\n            max-width: 600px;\n            margin: 0 auto;\n        }\n        .accordion-item {\n            border: 1px solid #ddd;\n            margin-bottom: 10px;\n            border-radius: 8px;\n            overflow: hidden;\n        }\n        .accordion-header {\n            background: #f8f9fa;\n            padding: 15px 20px;\n            cursor: pointer;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            transition: background 0.3s;\n        }\n        .accordion-header:hover {\n            background: #e9ecef;\n        }\n        .accordion-header.active {\n            background: #667eea;\n            color: white;\n        }\n        .accordion-content {\n            max-height: 0;\n            overflow: hidden;\n            transition: max-height 0.3s ease-out;\n            padding: 0 20px;\n        }\n        .accordion-content.active {\n            max-height: 500px;\n            padding: 20px;\n        }\n        .accordion-icon {\n            transition: transform 0.3s;\n        }\n        .accordion-header.active .accordion-icon {\n            transform: rotate(180deg);\n        }\n    </style>\n</head>\n<body>\n    <h2>{{accordionTitle}}</h2>\n    <div class=\"accordion\">\n        <div class=\"accordion-item\">\n            <div class=\"accordion-header\" onclick=\"toggleAccordion(this)\">\n                <span>{{item1Title}}</span>\n                <span class=\"accordion-icon\">▼</span>\n            </div>\n            <div class=\"accordion-content\">\n                <p>{{item1Content}}</p>\n            </div>\n        </div>\n        <div class=\"accordion-item\">\n            <div class=\"accordion-header\" onclick=\"toggleAccordion(this)\">\n                <span>{{item2Title}}</span>\n                <span class=\"accordion-icon\">▼</span>\n            </div>\n            <div class=\"accordion-content\">\n                <p>{{item2Content}}</p>\n            </div>\n        </div>\n        <div class=\"accordion-item\">\n            <div class=\"accordion-header\" onclick=\"toggleAccordion(this)\">\n                <span>{{item3Title}}</span>\n                <span class=\"accordion-icon\">▼</span>\n            </div>\n            <div class=\"accordion-content\">\n                <p>{{item3Content}}</p>\n            </div>\n        </div>\n    </div>\n    <script>\n        function toggleAccordion(header) {\n            const item = header.parentElement;\n            const content = item.querySelector('.accordion-content');\n            const isActive = header.classList.contains('active');\n            \n            // Fermer tous les autres\n            document.querySelectorAll('.accordion-header').forEach(h => {\n                if (h !== header) {\n                    h.classList.remove('active');\n                    h.nextElementSibling.classList.remove('active');\n                }\n            });\n            \n            // Toggle l'élément actuel\n            header.classList.toggle('active');\n            content.classList.toggle('active');\n        }\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "accordionTitle",
+      "type": "string",
+      "required": true,
+      "description": "Titre de l'accordion"
+    },
+    {
+      "name": "item1Title",
+      "type": "string",
+      "required": true,
+      "description": "Titre du premier item"
+    },
+    {
+      "name": "item1Content",
+      "type": "string",
+      "required": true,
+      "description": "Contenu du premier item"
+    },
+    {
+      "name": "item2Title",
+      "type": "string",
+      "required": true,
+      "description": "Titre du deuxième item"
+    },
+    {
+      "name": "item2Content",
+      "type": "string",
+      "required": true,
+      "description": "Contenu du deuxième item"
+    },
+    {
+      "name": "item3Title",
+      "type": "string",
+      "required": true,
+      "description": "Titre du troisième item"
+    },
+    {
+      "name": "item3Content",
+      "type": "string",
+      "required": true,
+      "description": "Contenu du troisième item"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

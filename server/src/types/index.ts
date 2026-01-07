@@ -31,7 +31,14 @@ export type FeatureType =
   | 'observer'
   | 'repository'
   | 'middleware'
-  | 'indexes';
+  | 'indexes'
+  | 'accordion'
+  | 'transforms'
+  | 'event'
+  | 'class'
+  | 'dto'
+  | 'auth'
+  | 'views';
 
 export interface SnippetVariable {
   name: string;

@@ -1,0 +1,39 @@
+{
+  "id": "sql-views",
+  "name": "Vues SQL",
+  "description": "Création et utilisation de vues SQL",
+  "language": "sql",
+  "feature": "views",
+  "code": "-- Vue simple\nCREATE VIEW {{viewName}} AS\nSELECT id, name, email, created_at\nFROM {{tableName}}\nWHERE active = 1;\n\n-- Vue avec JOIN\nCREATE VIEW {{viewName}}_with_posts AS\nSELECT \n    u.id as user_id,\n    u.name as user_name,\n    u.email,\n    p.id as post_id,\n    p.title as post_title,\n    p.created_at as post_created_at\nFROM {{tableName1}} u\nLEFT JOIN {{tableName2}} p ON u.id = p.user_id\nWHERE u.active = 1;\n\n-- Vue avec agrégation\nCREATE VIEW {{viewName}}_stats AS\nSELECT \n    u.id,\n    u.name,\n    COUNT(p.id) as post_count,\n    MAX(p.created_at) as last_post_date\nFROM {{tableName1}} u\nLEFT JOIN {{tableName2}} p ON u.id = p.user_id\nGROUP BY u.id, u.name;\n\n-- Vue avec calculs\nCREATE VIEW {{viewName}}_summary AS\nSELECT \n    id,\n    name,\n    email,\n    DATEDIFF(NOW(), created_at) as days_since_registration,\n    CASE \n        WHEN DATEDIFF(NOW(), created_at) < 30 THEN 'New'\n        WHEN DATEDIFF(NOW(), created_at) < 365 THEN 'Active'\n        ELSE 'Old'\n    END as user_status\nFROM {{tableName}};\n\n-- Vue matérialisée (PostgreSQL)\nCREATE MATERIALIZED VIEW {{viewName}}_materialized AS\nSELECT \n    u.id,\n    u.name,\n    COUNT(p.id) as post_count\nFROM {{tableName1}} u\nLEFT JOIN {{tableName2}} p ON u.id = p.user_id\nGROUP BY u.id, u.name;\n\n-- Rafraîchir une vue matérialisée\nREFRESH MATERIALIZED VIEW {{viewName}}_materialized;\n\n-- Vue avec UNION\nCREATE VIEW {{viewName}}_combined AS\nSELECT id, name, email, 'user' as type FROM {{tableName1}}\nUNION ALL\nSELECT id, name, email, 'admin' as type FROM {{tableName2}};\n\n-- Vue avec sous-requête\nCREATE VIEW {{viewName}}_with_subquery AS\nSELECT \n    u.id,\n    u.name,\n    u.email,\n    (SELECT COUNT(*) FROM {{tableName2}} WHERE user_id = u.id) as post_count\nFROM {{tableName1}} u;\n\n-- Vue avec fenêtrage (Window functions)\nCREATE VIEW {{viewName}}_ranked AS\nSELECT \n    id,\n    name,\n    email,\n    created_at,\n    ROW_NUMBER() OVER (ORDER BY created_at DESC) as registration_rank\nFROM {{tableName}};\n\n-- Vue avec filtres complexes\nCREATE VIEW {{viewName}}_active AS\nSELECT *\nFROM {{tableName}}\nWHERE active = 1\n  AND deleted_at IS NULL\n  AND email_verified = 1\n  AND created_at >= DATE_SUB(NOW(), INTERVAL 1 YEAR);\n\n-- Utiliser une vue\nSELECT * FROM {{viewName}} WHERE id = 1;\n\n-- Modifier une vue\nALTER VIEW {{viewName}} AS\nSELECT id, name, email, updated_at\nFROM {{tableName}}\nWHERE active = 1;\n\n-- Supprimer une vue\nDROP VIEW IF EXISTS {{viewName}};\n\n-- Voir la définition d'une vue\n-- MySQL\nSHOW CREATE VIEW {{viewName}};\n\n-- PostgreSQL\nSELECT definition FROM pg_views WHERE viewname = '{{viewName}}';\n\n-- SQL Server\nSELECT definition FROM sys.sql_modules WHERE object_id = OBJECT_ID('{{viewName}}');",
+  "variables": [
+    {
+      "name": "viewName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de la vue"
+    },
+    {
+      "name": "tableName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de la table"
+    },
+    {
+      "name": "tableName1",
+      "type": "string",
+      "required": false,
+      "description": "Première table"
+    },
+    {
+      "name": "tableName2",
+      "type": "string",
+      "required": false,
+      "description": "Deuxième table"
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+
