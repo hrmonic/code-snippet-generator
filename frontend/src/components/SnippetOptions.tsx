@@ -3,7 +3,7 @@ import { useGeneratorStore } from '../store/useGeneratorStore';
 import { generateCode } from '../lib/generator';
 import { FeatureInfo } from './FeatureInfo';
 import { OptionInput } from './OptionInput';
-import { useSnippetOptions, type OptionConfig } from '../hooks/useSnippetOptions';
+import { useSnippetOptions } from '../hooks/useSnippetOptions';
 import { LoadingSpinner } from './LoadingSpinner';
 import { OptionGroup, groupOptionsByCategory, GROUP_LABELS } from './OptionGroup';
 

@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, memo } from 'react';
+import { type ReactNode, useState, memo } from 'react';
 import type { OptionConfig } from '../hooks/useSnippetOptions';
 
 interface OptionGroupProps {

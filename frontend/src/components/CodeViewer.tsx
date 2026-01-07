@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { CodeEditor } from '../editor/CodeEditor';
 import { useGeneratorStore } from '../store/useGeneratorStore';
 import { CodeStats } from './CodeStats';
