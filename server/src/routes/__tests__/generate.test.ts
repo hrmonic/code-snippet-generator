@@ -1,13 +1,10 @@
 import request from 'supertest';
 import express from 'express';
 import { generateRouter } from '../generate.js';
+import { codeGenerator } from '../../lib/codeGenerator.js';
 
 // Mock codeGenerator
-jest.mock('../../lib/codeGenerator.js', () => ({
-  codeGenerator: {
-    generate: jest.fn(),
-  },
-}));
+jest.mock('../../lib/codeGenerator.js');
 
 const app = express();
 app.use(express.json());
@@ -24,6 +21,11 @@ describe('POST /api/generate', () => {
   });
 
   it('should return 500 if snippet not found', async () => {
+    const { codeGenerator } = await import('../../lib/codeGenerator.js');
+    (codeGenerator.generate as any).mockRejectedValue(
+      new Error('Aucun snippet trouvé')
+    );
+
     const response = await request(app)
       .post('/api/generate')
       .send({
@@ -35,4 +37,3 @@ describe('POST /api/generate', () => {
     expect(response.status).toBe(500);
   });
 });
-

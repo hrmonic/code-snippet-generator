@@ -1,18 +1,20 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LanguageSelector } from '../LanguageSelector';
 import { useGeneratorStore } from '../../store/useGeneratorStore';
 
 // Mock the store
-vi.mock('../../store/useGeneratorStore');
+vi.mock('../../store/useGeneratorStore', () => ({
+  useGeneratorStore: vi.fn(),
+}));
 
 describe('LanguageSelector', () => {
   const mockSetLanguage = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useGeneratorStore as any).mockReturnValue({
+    (useGeneratorStore as ReturnType<typeof vi.fn>).mockReturnValue({
       selectedLanguage: null,
       setLanguage: mockSetLanguage,
     });
@@ -39,4 +41,3 @@ describe('LanguageSelector', () => {
     }
   });
 });
-

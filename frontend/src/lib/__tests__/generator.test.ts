@@ -1,34 +1,39 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { generateCode, getAvailableSnippets } from '../generator';
 
-// Mock axios module
+// Create mock functions
 const mockPost = vi.fn();
 const mockGet = vi.fn();
 
-vi.mock('axios', () => ({
-  default: {
-    create: vi.fn(() => ({
-      post: mockPost,
-      get: mockGet,
-    })),
-    isAxiosError: vi.fn((error: unknown) => {
+// Mock axios module
+vi.mock('axios', async () => {
+  const actual = await vi.importActual('axios');
+  return {
+    ...actual,
+    default: {
+      create: vi.fn(() => ({
+        post: mockPost,
+        get: mockGet,
+      })),
+      isAxiosError: (error: unknown) => {
+        return (
+          typeof error === 'object' &&
+          error !== null &&
+          'isAxiosError' in error &&
+          (error as { isAxiosError?: boolean }).isAxiosError === true
+        );
+      },
+    },
+    isAxiosError: (error: unknown) => {
       return (
         typeof error === 'object' &&
         error !== null &&
         'isAxiosError' in error &&
         (error as { isAxiosError?: boolean }).isAxiosError === true
       );
-    }),
-  },
-  isAxiosError: vi.fn((error: unknown) => {
-    return (
-      typeof error === 'object' &&
-      error !== null &&
-      'isAxiosError' in error &&
-      (error as { isAxiosError?: boolean }).isAxiosError === true
-    );
-  }),
-}));
+    },
+  };
+});
 
 describe('generator', () => {
   beforeEach(() => {
@@ -60,12 +65,13 @@ describe('generator', () => {
     });
 
     it('should handle errors', async () => {
-      mockPost.mockRejectedValue({
+      const error = {
         isAxiosError: true,
         response: {
           data: { message: 'Error message' },
         },
-      });
+      };
+      mockPost.mockRejectedValue(error);
 
       await expect(
         generateCode({
