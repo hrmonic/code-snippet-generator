@@ -3,6 +3,7 @@ import type { Language, FeatureType } from '../types/index.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { security } from './security/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -130,14 +131,21 @@ class OptionTransformer {
     feature: FeatureType
   ): Promise<OptionConfig[] | null> {
     try {
-      const optionsPath = path.join(
-        __dirname,
-        '..',
-        'data',
-        'options',
-        language,
-        `${feature}.options.json`
-      );
+      // Valider et sanitizer les paramètres pour éviter path traversal
+      const sanitizedLanguage = security.sanitizePathSegment(language);
+      const sanitizedFeature = security.sanitizePathSegment(feature);
+      
+      if (!security.isValidPathSegment(sanitizedLanguage) || !security.isValidPathSegment(sanitizedFeature)) {
+        return null;
+      }
+      
+      const baseDir = path.resolve(__dirname, '..', 'data', 'options');
+      const optionsPath = path.resolve(baseDir, sanitizedLanguage, `${sanitizedFeature}.options.json`);
+      
+      // Vérifier que le chemin résolu reste dans le répertoire de base
+      if (!security.isPathSafe(optionsPath, baseDir)) {
+        return null;
+      }
 
       const fileContent = await fs.readFile(optionsPath, 'utf-8');
       const enrichedOptions = JSON.parse(fileContent) as OptionConfig[];
