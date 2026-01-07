@@ -72,9 +72,21 @@ export function SnippetOptions() {
         { key: 'columns', label: 'Colonnes', placeholder: 'id,name,email', required: false },
       ];
     }
+    if (selectedFeature === 'joins' && selectedLanguage === 'sql') {
+      return [
+        { key: 'tableName1', label: 'Première table', placeholder: 'users', required: true },
+        { key: 'tableName2', label: 'Deuxième table', placeholder: 'posts', required: true },
+      ];
+    }
     if (selectedFeature === 'api' && selectedLanguage === 'javascript') {
       return [
         { key: 'baseURL', label: 'URL de base', placeholder: 'http://localhost:3000/api', required: false },
+        { key: 'endpoint', label: 'Endpoint', placeholder: '/api/users', required: true },
+      ];
+    }
+    if (selectedFeature === 'fetch' && selectedLanguage === 'javascript') {
+      return [
+        { key: 'baseURL', label: 'URL de base', placeholder: 'http://localhost:3000/api', required: true },
         { key: 'endpoint', label: 'Endpoint', placeholder: '/api/users', required: true },
       ];
     }
@@ -82,6 +94,12 @@ export function SnippetOptions() {
       return [
         { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
         { key: 'endpoint', label: 'Endpoint', placeholder: '/api/users', required: true },
+      ];
+    }
+    if (selectedFeature === 'model' && selectedLanguage === 'java') {
+      return [
+        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
+        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
       ];
     }
     if (selectedFeature === 'api' && selectedLanguage === 'php') {
@@ -95,19 +113,26 @@ export function SnippetOptions() {
         { key: 'companyName', label: 'Nom de l\'entreprise', placeholder: 'Mon Entreprise', required: false },
       ];
     }
-    if (selectedFeature === 'animation' && selectedLanguage === 'css3') {
-      return [];
+    if (selectedFeature === 'modal' && selectedLanguage === 'html5') {
+      return [
+        { key: 'modalTitle', label: 'Titre de la modal', placeholder: 'Confirmation', required: true },
+        { key: 'modalContent', label: 'Contenu de la modal', placeholder: 'Êtes-vous sûr ?', required: true },
+      ];
     }
-    if (selectedFeature === 'animation' && selectedLanguage === 'javascript') {
-      return [];
+    if (selectedFeature === 'navbar' && selectedLanguage === 'html5') {
+      return [
+        { key: 'siteName', label: 'Nom du site', placeholder: 'Mon Site', required: true },
+      ];
     }
-    if (selectedFeature === 'validation' && selectedLanguage === 'javascript') {
-      return [];
-    }
-    if (selectedFeature === 'input' && selectedLanguage === 'html5') {
-      return [];
-    }
-    if (selectedFeature === 'layout' && selectedLanguage === 'css3') {
+    // Features sans options requises
+    if (
+      (selectedFeature === 'animation' && (selectedLanguage === 'css3' || selectedLanguage === 'javascript')) ||
+      (selectedFeature === 'validation' && (selectedLanguage === 'javascript' || selectedLanguage === 'php')) ||
+      (selectedFeature === 'input' && selectedLanguage === 'html5') ||
+      (selectedFeature === 'layout' && selectedLanguage === 'css3') ||
+      (selectedFeature === 'responsive' && selectedLanguage === 'css3') ||
+      (selectedFeature === 'flexbox' && selectedLanguage === 'css3')
+    ) {
       return [];
     }
     return [];

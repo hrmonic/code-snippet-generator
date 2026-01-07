@@ -1,0 +1,27 @@
+{
+  "id": "sql-joins",
+  "name": "Requêtes SQL avec JOIN",
+  "description": "Exemples de JOIN (INNER, LEFT, RIGHT, FULL)",
+  "language": "sql",
+  "feature": "joins",
+  "code": "-- INNER JOIN (intersection)\nSELECT u.id, u.name, u.email, p.title as post_title\nFROM {{tableName1}} u\nINNER JOIN {{tableName2}} p ON u.id = p.user_id\nWHERE u.active = 1;\n\n-- LEFT JOIN (tous les utilisateurs, même sans posts)\nSELECT u.id, u.name, u.email, p.title as post_title\nFROM {{tableName1}} u\nLEFT JOIN {{tableName2}} p ON u.id = p.user_id;\n\n-- RIGHT JOIN (tous les posts, même sans utilisateur)\nSELECT u.id, u.name, u.email, p.title as post_title\nFROM {{tableName1}} u\nRIGHT JOIN {{tableName2}} p ON u.id = p.user_id;\n\n-- FULL OUTER JOIN (tous les enregistrements)\nSELECT u.id, u.name, u.email, p.title as post_title\nFROM {{tableName1}} u\nFULL OUTER JOIN {{tableName2}} p ON u.id = p.user_id;\n\n-- JOIN avec plusieurs tables\nSELECT u.name, p.title, c.content\nFROM {{tableName1}} u\nINNER JOIN {{tableName2}} p ON u.id = p.user_id\nINNER JOIN comments c ON p.id = c.post_id\nWHERE u.active = 1;\n\n-- JOIN avec agrégation\nSELECT u.name, COUNT(p.id) as post_count\nFROM {{tableName1}} u\nLEFT JOIN {{tableName2}} p ON u.id = p.user_id\nGROUP BY u.id, u.name\nHAVING COUNT(p.id) > 0;\n\n-- Self JOIN (table joinée avec elle-même)\nSELECT e1.name as employee, e2.name as manager\nFROM employees e1\nLEFT JOIN employees e2 ON e1.manager_id = e2.id;",
+  "variables": [
+    {
+      "name": "tableName1",
+      "type": "string",
+      "required": true,
+      "description": "Première table (ex: users)"
+    },
+    {
+      "name": "tableName2",
+      "type": "string",
+      "required": true,
+      "description": "Deuxième table (ex: posts)"
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

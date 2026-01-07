@@ -1,0 +1,14 @@
+{
+  "id": "css3-responsive",
+  "name": "Media Queries Responsive",
+  "description": "Breakpoints responsive pour mobile, tablette et desktop",
+  "language": "css3",
+  "feature": "responsive",
+  "code": "/* Mobile First Approach */\n\n/* Base styles (mobile) */\n.container {\n    width: 100%;\n    padding: 1rem;\n    margin: 0 auto;\n}\n\n/* Tablet (768px and up) */\n@media (min-width: 768px) {\n    .container {\n        max-width: 750px;\n        padding: 2rem;\n    }\n    \n    .grid {\n        display: grid;\n        grid-template-columns: repeat(2, 1fr);\n        gap: 1.5rem;\n    }\n}\n\n/* Desktop (1024px and up) */\n@media (min-width: 1024px) {\n    .container {\n        max-width: 1200px;\n        padding: 3rem;\n    }\n    \n    .grid {\n        grid-template-columns: repeat(3, 1fr);\n        gap: 2rem;\n    }\n}\n\n/* Large Desktop (1440px and up) */\n@media (min-width: 1440px) {\n    .container {\n        max-width: 1400px;\n    }\n    \n    .grid {\n        grid-template-columns: repeat(4, 1fr);\n    }\n}\n\n/* Orientation */\n@media (orientation: landscape) {\n    .header {\n        height: 60px;\n    }\n}\n\n@media (orientation: portrait) {\n    .header {\n        height: 80px;\n    }\n}\n\n/* Print styles */\n@media print {\n    .no-print {\n        display: none;\n    }\n    \n    body {\n        font-size: 12pt;\n        line-height: 1.5;\n    }\n}",
+  "variables": [],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

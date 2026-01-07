@@ -1,0 +1,27 @@
+{
+  "id": "html5-modal",
+  "name": "Modal HTML5",
+  "description": "Modal responsive avec overlay et fermeture",
+  "language": "html5",
+  "feature": "modal",
+  "code": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{modalTitle}}</title>\n    <style>\n        .modal-overlay {\n            display: none;\n            position: fixed;\n            top: 0;\n            left: 0;\n            width: 100%;\n            height: 100%;\n            background: rgba(0, 0, 0, 0.5);\n            z-index: 1000;\n        }\n        .modal {\n            position: fixed;\n            top: 50%;\n            left: 50%;\n            transform: translate(-50%, -50%);\n            background: white;\n            padding: 2rem;\n            border-radius: 8px;\n            max-width: 500px;\n            width: 90%;\n            z-index: 1001;\n        }\n        .modal-header {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            margin-bottom: 1rem;\n        }\n        .close-btn {\n            background: none;\n            border: none;\n            font-size: 1.5rem;\n            cursor: pointer;\n        }\n    </style>\n</head>\n<body>\n    <button onclick=\"openModal()\">Ouvrir Modal</button>\n    \n    <div id=\"modalOverlay\" class=\"modal-overlay\" onclick=\"closeModal()\">\n        <div class=\"modal\" onclick=\"event.stopPropagation()\">\n            <div class=\"modal-header\">\n                <h2>{{modalTitle}}</h2>\n                <button class=\"close-btn\" onclick=\"closeModal()\">&times;</button>\n            </div>\n            <div class=\"modal-body\">\n                <p>{{modalContent}}</p>\n            </div>\n            <div class=\"modal-footer\">\n                <button onclick=\"closeModal()\">Fermer</button>\n            </div>\n        </div>\n    </div>\n    \n    <script>\n        function openModal() {\n            document.getElementById('modalOverlay').style.display = 'block';\n        }\n        function closeModal() {\n            document.getElementById('modalOverlay').style.display = 'none';\n        }\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "modalTitle",
+      "type": "string",
+      "required": true,
+      "description": "Titre de la modal"
+    },
+    {
+      "name": "modalContent",
+      "type": "string",
+      "required": true,
+      "description": "Contenu de la modal"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

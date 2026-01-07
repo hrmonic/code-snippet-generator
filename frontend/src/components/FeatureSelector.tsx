@@ -6,26 +6,34 @@ const features: Record<string, Array<{ value: FeatureType; label: string; descri
     { value: 'form', label: 'Formulaire', description: 'Formulaire HTML avec validation', icon: '📝' },
     { value: 'input', label: 'Champs Input', description: 'Inputs HTML5 (email, date, etc.)', icon: '📥' },
     { value: 'layout', label: 'Layout', description: 'Structure HTML responsive', icon: '📐' },
+    { value: 'modal', label: 'Modal', description: 'Modal responsive avec overlay', icon: '🪟' },
+    { value: 'navbar', label: 'Navbar', description: 'Barre de navigation responsive', icon: '🧭' },
   ],
   css3: [
     { value: 'layout', label: 'Layout', description: 'Grid, Flexbox, responsive', icon: '📐' },
     { value: 'animation', label: 'Animation', description: 'Animations CSS3', icon: '🎬' },
+    { value: 'responsive', label: 'Responsive', description: 'Media queries et breakpoints', icon: '📱' },
+    { value: 'flexbox', label: 'Flexbox', description: 'Layouts avec Flexbox', icon: '📦' },
   ],
   javascript: [
     { value: 'api', label: 'API Client', description: 'Client HTTP avec fetch/axios', icon: '🌐' },
     { value: 'validation', label: 'Validation', description: 'Validation de formulaire', icon: '✅' },
     { value: 'animation', label: 'Animation', description: 'Animations JavaScript', icon: '🎬' },
+    { value: 'fetch', label: 'Fetch API', description: 'Fetch avec gestion d\'erreurs et retry', icon: '🔄' },
   ],
   java: [
     { value: 'crud', label: 'CRUD', description: 'Controller + Model + Service', icon: '🏗️' },
     { value: 'api', label: 'API REST', description: 'Endpoints REST avec Spring', icon: '🌐' },
+    { value: 'model', label: 'Model JPA', description: 'Entité JPA avec annotations', icon: '📋' },
   ],
   php: [
     { value: 'crud', label: 'CRUD', description: 'CRUD complet avec PDO', icon: '🏗️' },
     { value: 'api', label: 'API REST', description: 'API REST avec validation', icon: '🌐' },
+    { value: 'validation', label: 'Validation', description: 'Classe de validation PHP', icon: '✅' },
   ],
   sql: [
     { value: 'query', label: 'Requêtes', description: 'SELECT, INSERT, UPDATE, DELETE', icon: '📊' },
+    { value: 'joins', label: 'JOIN', description: 'Requêtes avec JOIN (INNER, LEFT, etc.)', icon: '🔗' },
   ],
 };
 

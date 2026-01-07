@@ -8,7 +8,14 @@ export type FeatureType =
   | 'query'
   | 'validation'
   | 'layout'
-  | 'input';
+  | 'input'
+  | 'modal'
+  | 'navbar'
+  | 'responsive'
+  | 'flexbox'
+  | 'fetch'
+  | 'model'
+  | 'joins';
 
 export interface SnippetVariable {
   name: string;
@@ -57,4 +64,3 @@ export interface GeneratorState {
   isLoading: boolean;
   error: string | null;
 }
-

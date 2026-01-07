@@ -1,0 +1,29 @@
+{
+  "id": "javascript-fetch",
+  "name": "Fetch API avec Gestion d'Erreurs",
+  "description": "Client HTTP moderne avec fetch, gestion d'erreurs et retry",
+  "language": "javascript",
+  "feature": "fetch",
+  "code": "class FetchClient {\n    constructor(baseURL = '{{baseURL}}', options = {}) {\n        this.baseURL = baseURL;\n        this.defaultOptions = {\n            headers: {\n                'Content-Type': 'application/json',\n                ...options.headers,\n            },\n            ...options,\n        };\n    }\n\n    async request(endpoint, options = {}, retries = 3) {\n        const url = `${this.baseURL}${endpoint}`;\n        const config = {\n            ...this.defaultOptions,\n            ...options,\n            headers: {\n                ...this.defaultOptions.headers,\n                ...options.headers,\n            },\n        };\n\n        for (let i = 0; i < retries; i++) {\n            try {\n                const response = await fetch(url, config);\n                \n                if (!response.ok) {\n                    const errorData = await response.json().catch(() => ({}));\n                    throw new Error(\n                        errorData.message || `HTTP error! status: ${response.status}`\n                    );\n                }\n                \n                const contentType = response.headers.get('content-type');\n                if (contentType && contentType.includes('application/json')) {\n                    return await response.json();\n                }\n                \n                return await response.text();\n            } catch (error) {\n                if (i === retries - 1) throw error;\n                await this.delay(1000 * (i + 1)); // Exponential backoff\n            }\n        }\n    }\n\n    delay(ms) {\n        return new Promise(resolve => setTimeout(resolve, ms));\n    }\n\n    async get(endpoint, options = {}) {\n        return this.request(endpoint, { ...options, method: 'GET' });\n    }\n\n    async post(endpoint, data, options = {}) {\n        return this.request(endpoint, {\n            ...options,\n            method: 'POST',\n            body: JSON.stringify(data),\n        });\n    }\n\n    async put(endpoint, data, options = {}) {\n        return this.request(endpoint, {\n            ...options,\n            method: 'PUT',\n            body: JSON.stringify(data),\n        });\n    }\n\n    async delete(endpoint, options = {}) {\n        return this.request(endpoint, { ...options, method: 'DELETE' });\n    }\n\n    async patch(endpoint, data, options = {}) {\n        return this.request(endpoint, {\n            ...options,\n            method: 'PATCH',\n            body: JSON.stringify(data),\n        });\n    }\n}\n\n// Utilisation\nconst client = new FetchClient('{{baseURL}}');\n\ntry {\n    const data = await client.get('{{endpoint}}');\n    console.log('Success:', data);\n} catch (error) {\n    console.error('Error:', error.message);\n}",
+  "variables": [
+    {
+      "name": "baseURL",
+      "type": "string",
+      "required": true,
+      "description": "URL de base de l'API",
+      "defaultValue": "http://localhost:3000/api"
+    },
+    {
+      "name": "endpoint",
+      "type": "string",
+      "required": true,
+      "description": "Endpoint à appeler"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true,
+    "csrf": true
+  }
+}
+

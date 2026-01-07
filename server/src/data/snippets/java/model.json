@@ -1,0 +1,27 @@
+{
+  "id": "java-model",
+  "name": "Model Java avec JPA",
+  "description": "Entité JPA avec annotations et relations",
+  "language": "java",
+  "feature": "model",
+  "code": "package com.example.model;\n\nimport jakarta.persistence.*;\nimport java.time.LocalDateTime;\n\n@Entity\n@Table(name = \"{{tableName}}\")\npublic class {{entityName}} {\n    \n    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long id;\n    \n    @Column(nullable = false, length = 100)\n    private String name;\n    \n    @Column(unique = true, nullable = false)\n    private String email;\n    \n    @Column(name = \"created_at\")\n    private LocalDateTime createdAt;\n    \n    @Column(name = \"updated_at\")\n    private LocalDateTime updatedAt;\n    \n    @PrePersist\n    protected void onCreate() {\n        createdAt = LocalDateTime.now();\n        updatedAt = LocalDateTime.now();\n    }\n    \n    @PreUpdate\n    protected void onUpdate() {\n        updatedAt = LocalDateTime.now();\n    }\n    \n    // Constructors\n    public {{entityName}}() {}\n    \n    public {{entityName}}(String name, String email) {\n        this.name = name;\n        this.email = email;\n    }\n    \n    // Getters and Setters\n    public Long getId() {\n        return id;\n    }\n    \n    public void setId(Long id) {\n        this.id = id;\n    }\n    \n    public String getName() {\n        return name;\n    }\n    \n    public void setName(String name) {\n        this.name = name;\n    }\n    \n    public String getEmail() {\n        return email;\n    }\n    \n    public void setEmail(String email) {\n        this.email = email;\n    }\n    \n    public LocalDateTime getCreatedAt() {\n        return createdAt;\n    }\n    \n    public void setCreatedAt(LocalDateTime createdAt) {\n        this.createdAt = createdAt;\n    }\n    \n    public LocalDateTime getUpdatedAt() {\n        return updatedAt;\n    }\n    \n    public void setUpdatedAt(LocalDateTime updatedAt) {\n        this.updatedAt = updatedAt;\n    }\n    \n    @Override\n    public String toString() {\n        return \"{{entityName}}{\" +\n                \"id=\" + id +\n                \", name='\" + name + '\\'' +\n                \", email='\" + email + '\\'' +\n                \", createdAt=\" + createdAt +\n                \", updatedAt=\" + updatedAt +\n                '}';\n    }\n}",
+  "variables": [
+    {
+      "name": "entityName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de l'entité (ex: User)"
+    },
+    {
+      "name": "tableName",
+      "type": "string",
+      "required": true,
+      "description": "Nom de la table (ex: users)"
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+
