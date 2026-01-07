@@ -78,6 +78,89 @@ const DEMO_SNIPPETS: Record<string, Record<string, string>> = {
     </footer>
 </body>
 </html>`,
+    modal: `<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal</title>
+    <style>
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="openModal()">Ouvrir Modal</button>
+    <div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">
+            <h2>Confirmation</h2>
+            <p>Êtes-vous sûr ?</p>
+            <button onclick="closeModal()">Fermer</button>
+        </div>
+    </div>
+    <script>
+        function openModal() {
+            document.getElementById('modalOverlay').style.display = 'block';
+        }
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>`,
+    navbar: `<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Site</title>
+    <style>
+        .navbar {
+            background: #333;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Mon Site</div>
+        <ul class="nav-links">
+            <li><a href="#home">Accueil</a></li>
+            <li><a href="#about">À propos</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+</body>
+</html>`,
   },
   css3: {
     animation: `@keyframes fadeIn {
@@ -137,6 +220,40 @@ const DEMO_SNIPPETS: Record<string, Record<string, string>> = {
         grid-template-columns: 1fr;
     }
 }`,
+    responsive: `/* Mobile First */
+.container {
+    width: 100%;
+    padding: 1rem;
+}
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+    .container {
+        max-width: 750px;
+        padding: 2rem;
+    }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1200px;
+        padding: 3rem;
+    }
+}`,
+    flexbox: `.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}`,
   },
   javascript: {
     api: `class ApiClient {
@@ -178,20 +295,8 @@ const DEMO_SNIPPETS: Record<string, Record<string, string>> = {
             body: JSON.stringify(data),
         });
     }
-
-    async put(endpoint, data) {
-        return this.request(endpoint, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-        });
-    }
-
-    async delete(endpoint) {
-        return this.request(endpoint, { method: 'DELETE' });
-    }
 }
 
-// Utilisation
 const api = new ApiClient('http://localhost:3000/api');
 const data = await api.get('/api/users');`,
     validation: `function validateForm(formData) {
@@ -227,6 +332,50 @@ const data = await api.get('/api/users');`,
     
     requestAnimationFrame(animate);
 }`,
+    fetch: `class FetchClient {
+    constructor(baseURL = 'http://localhost:3000/api') {
+        this.baseURL = baseURL;
+    }
+
+    async request(endpoint, options = {}, retries = 3) {
+        const url = \`\${this.baseURL}\${endpoint}\`;
+        
+        for (let i = 0; i < retries; i++) {
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers,
+                    },
+                });
+                
+                if (!response.ok) {
+                    throw new Error(\`HTTP error! status: \${response.status}\`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                if (i === retries - 1) throw error;
+                await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+            }
+        }
+    }
+
+    async get(endpoint) {
+        return this.request(endpoint, { method: 'GET' });
+    }
+
+    async post(endpoint, data) {
+        return this.request(endpoint, {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    }
+}
+
+const client = new FetchClient('http://localhost:3000/api');
+const data = await client.get('/api/users');`,
   },
 };
 
