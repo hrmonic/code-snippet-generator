@@ -1,0 +1,46 @@
+{
+  "id": "javascript-animation",
+  "name": "Animations JavaScript",
+  "description": "Animations JavaScript avec requestAnimationFrame",
+  "language": "javascript",
+  "feature": "animation",
+  "code": "class Animator {\n    constructor(element) {\n        this.element = element;\n        this.isAnimating = false;\n        this.animationId = null;\n    }\n\n    fadeIn(duration = 500) {\n        this.element.style.opacity = '0';\n        this.element.style.display = 'block';\n        \n        const startTime = performance.now();\n        \n        const animate = (currentTime) => {\n            const elapsed = currentTime - startTime;\n            const progress = Math.min(elapsed / duration, 1);\n            \n            this.element.style.opacity = progress.toString();\n            \n            if (progress < 1) {\n                this.animationId = requestAnimationFrame(animate);\n            } else {\n                this.isAnimating = false;\n            }\n        };\n        \n        this.isAnimating = true;\n        this.animationId = requestAnimationFrame(animate);\n    }\n\n    slideDown(duration = 300) {\n        const startHeight = 0;\n        const endHeight = this.element.scrollHeight;\n        \n        this.element.style.height = startHeight + 'px';\n        this.element.style.overflow = 'hidden';\n        this.element.style.display = 'block';\n        \n        const startTime = performance.now();\n        \n        const animate = (currentTime) => {\n            const elapsed = currentTime - startTime;\n            const progress = Math.min(elapsed / duration, 1);\n            \n            const currentHeight = startHeight + (endHeight - startHeight) * progress;\n            this.element.style.height = currentHeight + 'px';\n            \n            if (progress < 1) {\n                this.animationId = requestAnimationFrame(animate);\n            } else {\n                this.element.style.height = 'auto';\n                this.isAnimating = false;\n            }\n        };\n        \n        this.isAnimating = true;\n        this.animationId = requestAnimationFrame(animate);\n    }\n\n    stop() {\n        if (this.animationId) {\n            cancelAnimationFrame(this.animationId);\n            this.animationId = null;\n            this.isAnimating = false;\n        }\n    }\n}\n\n// Utilisation\nconst element = document.getElementById('myElement');\nconst animator = new Animator(element);\nanimator.fadeIn(500);",
+  "variables": [
+    {
+      "name": "animationTypes",
+      "type": "multiselect",
+      "label": "Types d'animations",
+      "required": true,
+      "description": "Sélectionnez les types d'animations à inclure",
+      "defaultValue": ["fadeIn"],
+      "options": [
+        { "value": "fadeIn", "label": "Fade In" },
+        { "value": "slideDown", "label": "Slide Down" },
+        { "value": "all", "label": "Toutes les animations" }
+      ]
+    },
+    {
+      "name": "defaultDuration",
+      "type": "number",
+      "label": "Durée par défaut (ms)",
+      "required": false,
+      "description": "Durée par défaut des animations",
+      "defaultValue": 500,
+      "min": 100,
+      "max": 3000
+    },
+    {
+      "name": "includeStopMethod",
+      "type": "checkbox",
+      "label": "Méthode stop()",
+      "required": false,
+      "description": "Inclure la méthode pour arrêter l'animation",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

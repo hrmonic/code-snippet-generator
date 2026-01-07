@@ -1,0 +1,135 @@
+{
+  "id": "css3-buttons",
+  "name": "Boutons CSS3 Stylisés",
+  "description": "Collection de boutons avec effets et animations",
+  "language": "css3",
+  "feature": "buttons",
+  "code": "/* Bouton primaire */\n.btn-primary {\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n    color: white;\n    padding: 12px 24px;\n    border: none;\n    border-radius: 8px;\n    font-size: 16px;\n    font-weight: 600;\n    cursor: pointer;\n    transition: transform 0.2s, box-shadow 0.2s;\n    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n}\n\n.btn-primary:hover {\n    transform: translateY(-2px);\n    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);\n}\n\n.btn-primary:active {\n    transform: translateY(0);\n}\n\n/* Bouton avec effet ripple */\n.btn-ripple {\n    position: relative;\n    overflow: hidden;\n    background: #4CAF50;\n    color: white;\n    padding: 12px 24px;\n    border: none;\n    border-radius: 8px;\n    cursor: pointer;\n}\n\n.btn-ripple::after {\n    content: '';\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 0;\n    height: 0;\n    border-radius: 50%;\n    background: rgba(255, 255, 255, 0.5);\n    transform: translate(-50%, -50%);\n    transition: width 0.6s, height 0.6s;\n}\n\n.btn-ripple:active::after {\n    width: 300px;\n    height: 300px;\n}\n\n/* Bouton avec bordure animée */\n.btn-border-animated {\n    background: transparent;\n    color: #667eea;\n    padding: 12px 24px;\n    border: 2px solid #667eea;\n    border-radius: 8px;\n    position: relative;\n    overflow: hidden;\n    transition: color 0.3s;\n}\n\n.btn-border-animated::before {\n    content: '';\n    position: absolute;\n    top: 0;\n    left: -100%;\n    width: 100%;\n    height: 100%;\n    background: #667eea;\n    transition: left 0.3s;\n    z-index: -1;\n}\n\n.btn-border-animated:hover {\n    color: white;\n}\n\n.btn-border-animated:hover::before {\n    left: 0;\n}\n\n/* Bouton avec icône */\n.btn-icon {\n    display: inline-flex;\n    align-items: center;\n    gap: 8px;\n    background: #2196F3;\n    color: white;\n    padding: 12px 24px;\n    border: none;\n    border-radius: 8px;\n    cursor: pointer;\n    transition: background 0.3s;\n}\n\n.btn-icon:hover {\n    background: #1976D2;\n}\n\n/* Bouton loading */\n.btn-loading {\n    position: relative;\n    color: transparent;\n    pointer-events: none;\n}\n\n.btn-loading::after {\n    content: '';\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 20px;\n    height: 20px;\n    margin: -10px 0 0 -10px;\n    border: 3px solid rgba(255, 255, 255, 0.3);\n    border-top-color: white;\n    border-radius: 50%;\n    animation: spin 0.8s linear infinite;\n}\n\n@keyframes spin {\n    to { transform: rotate(360deg); }\n}",
+  "variables": [
+    {
+      "name": "buttonStyle",
+      "type": "select",
+      "label": "Style de bouton",
+      "required": true,
+      "description": "Choisissez le style de bouton à générer",
+      "defaultValue": "primary",
+      "options": [
+        { "value": "primary", "label": "Primaire (dégradé)" },
+        { "value": "ripple", "label": "Avec effet ripple" },
+        { "value": "border-animated", "label": "Bordure animée" },
+        { "value": "icon", "label": "Avec icône" },
+        { "value": "loading", "label": "État loading" }
+      ]
+    },
+    {
+      "name": "primaryColor",
+      "type": "color",
+      "label": "Couleur primaire",
+      "required": false,
+      "description": "Couleur principale du bouton",
+      "defaultValue": "#667eea",
+      "dependsOn": {
+        "buttonStyle": ["primary", "border-animated"]
+      }
+    },
+    {
+      "name": "secondaryColor",
+      "type": "color",
+      "label": "Couleur secondaire",
+      "required": false,
+      "description": "Couleur pour le dégradé",
+      "defaultValue": "#764ba2",
+      "dependsOn": {
+        "buttonStyle": ["primary"]
+      }
+    },
+    {
+      "name": "borderColor",
+      "type": "color",
+      "label": "Couleur de bordure",
+      "required": false,
+      "description": "Couleur de la bordure animée",
+      "defaultValue": "#667eea",
+      "dependsOn": {
+        "buttonStyle": ["border-animated"]
+      }
+    },
+    {
+      "name": "padding",
+      "type": "select",
+      "label": "Espacement interne",
+      "required": false,
+      "description": "Padding du bouton",
+      "defaultValue": "12px 24px",
+      "options": [
+        { "value": "8px 16px", "label": "Petit" },
+        { "value": "12px 24px", "label": "Moyen" },
+        { "value": "16px 32px", "label": "Grand" }
+      ]
+    },
+    {
+      "name": "borderRadius",
+      "type": "select",
+      "label": "Rayon des bordures",
+      "required": false,
+      "description": "Border radius du bouton",
+      "defaultValue": "8px",
+      "options": [
+        { "value": "0px", "label": "Carré" },
+        { "value": "4px", "label": "Petit" },
+        { "value": "8px", "label": "Moyen" },
+        { "value": "16px", "label": "Grand" },
+        { "value": "50px", "label": "Pill" }
+      ]
+    },
+    {
+      "name": "fontSize",
+      "type": "select",
+      "label": "Taille de police",
+      "required": false,
+      "description": "Taille du texte",
+      "defaultValue": "16px",
+      "options": [
+        { "value": "14px", "label": "Petit" },
+        { "value": "16px", "label": "Moyen" },
+        { "value": "18px", "label": "Grand" },
+        { "value": "20px", "label": "Très grand" }
+      ]
+    },
+    {
+      "name": "fontWeight",
+      "type": "select",
+      "label": "Poids de police",
+      "required": false,
+      "description": "Épaisseur du texte",
+      "defaultValue": "600",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" }
+      ]
+    },
+    {
+      "name": "hoverEffect",
+      "type": "checkbox",
+      "label": "Effet hover",
+      "required": false,
+      "description": "Ajouter un effet au survol",
+      "defaultValue": true
+    },
+    {
+      "name": "shadow",
+      "type": "checkbox",
+      "label": "Ombre",
+      "required": false,
+      "description": "Ajouter une ombre au bouton",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

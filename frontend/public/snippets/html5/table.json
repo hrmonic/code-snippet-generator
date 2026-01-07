@@ -1,0 +1,82 @@
+{
+  "id": "html5-table",
+  "name": "Table HTML5 Responsive",
+  "description": "Tableau HTML5 avec tri et style responsive",
+  "language": "html5",
+  "feature": "table",
+  "code": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{tableTitle}}</title>\n    <style>\n        table {\n            width: 100%;\n            border-collapse: collapse;\n            margin: 1rem 0;\n        }\n        th, td {\n            padding: 12px;\n            text-align: left;\n            border-bottom: 1px solid #ddd;\n        }\n        th {\n            background-color: #f8f9fa;\n            font-weight: bold;\n            cursor: pointer;\n        }\n        th:hover {\n            background-color: #e9ecef;\n        }\n        tr:hover {\n            background-color: #f5f5f5;\n        }\n        @media (max-width: 768px) {\n            table, thead, tbody, th, td, tr {\n                display: block;\n            }\n            thead tr {\n                position: absolute;\n                top: -9999px;\n                left: -9999px;\n            }\n            tr {\n                border: 1px solid #ccc;\n                margin-bottom: 10px;\n            }\n            td {\n                border: none;\n                position: relative;\n                padding-left: 50%;\n            }\n            td:before {\n                content: attr(data-label);\n                position: absolute;\n                left: 6px;\n                font-weight: bold;\n            }\n        }\n    </style>\n</head>\n<body>\n    <h2>{{tableTitle}}</h2>\n    <table>\n        <thead>\n            <tr>\n                <th onclick=\"sortTable(0)\">{{column1}} ↕</th>\n                <th onclick=\"sortTable(1)\">{{column2}} ↕</th>\n                <th onclick=\"sortTable(2)\">{{column3}} ↕</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td data-label=\"{{column1}}\">Donnée 1</td>\n                <td data-label=\"{{column2}}\">Donnée 2</td>\n                <td data-label=\"{{column3}}\">Donnée 3</td>\n            </tr>\n        </tbody>\n    </table>\n    <script>\n        function sortTable(n) {\n            const table = document.querySelector('table');\n            let switching = true;\n            let shouldSwitch;\n            while (switching) {\n                switching = false;\n                const rows = table.rows;\n                for (let i = 1; i < rows.length - 1; i++) {\n                    shouldSwitch = false;\n                    const x = rows[i].getElementsByTagName('TD')[n];\n                    const y = rows[i + 1].getElementsByTagName('TD')[n];\n                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {\n                        shouldSwitch = true;\n                        break;\n                    }\n                }\n                if (shouldSwitch) {\n                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);\n                    switching = true;\n                }\n            }\n        }\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "tableTitle",
+      "type": "text",
+      "label": "Titre du tableau",
+      "required": true,
+      "description": "Titre principal du tableau",
+      "placeholder": "Tableau des données"
+    },
+    {
+      "name": "numberOfColumns",
+      "type": "number",
+      "label": "Nombre de colonnes",
+      "required": true,
+      "description": "Nombre de colonnes dans le tableau",
+      "defaultValue": 3,
+      "min": 2,
+      "max": 10
+    },
+    {
+      "name": "columnNames",
+      "type": "text",
+      "label": "Noms des colonnes",
+      "required": true,
+      "description": "Noms des colonnes séparés par des virgules",
+      "placeholder": "Nom,Email,Âge",
+      "defaultValue": "Nom,Email,Âge"
+    },
+    {
+      "name": "includeSorting",
+      "type": "checkbox",
+      "label": "Tri des colonnes",
+      "required": false,
+      "description": "Ajouter la fonctionnalité de tri au clic",
+      "defaultValue": true
+    },
+    {
+      "name": "responsive",
+      "type": "checkbox",
+      "label": "Mode responsive",
+      "required": false,
+      "description": "Adapter le tableau pour mobile",
+      "defaultValue": true
+    },
+    {
+      "name": "stripedRows",
+      "type": "checkbox",
+      "label": "Lignes alternées",
+      "required": false,
+      "description": "Alterner les couleurs des lignes",
+      "defaultValue": false
+    },
+    {
+      "name": "hoverEffect",
+      "type": "checkbox",
+      "label": "Effet hover",
+      "required": false,
+      "description": "Mettre en évidence la ligne au survol",
+      "defaultValue": true
+    },
+    {
+      "name": "headerColor",
+      "type": "color",
+      "label": "Couleur de l'en-tête",
+      "required": false,
+      "description": "Couleur de fond de l'en-tête",
+      "defaultValue": "#f8f9fa"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

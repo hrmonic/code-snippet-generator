@@ -1,0 +1,78 @@
+{
+  "id": "sql-indexes",
+  "name": "Indexes SQL",
+  "description": "Création et optimisation d'indexes pour performance",
+  "language": "sql",
+  "feature": "indexes",
+  "code": "-- Index simple\nCREATE INDEX idx_{{columnName}} ON {{tableName}} ({{columnName}});\n\n-- Index composite (plusieurs colonnes)\nCREATE INDEX idx_{{tableName}}_composite ON {{tableName}} ({{column1}}, {{column2}});\n\n-- Index unique\nCREATE UNIQUE INDEX idx_{{tableName}}_unique ON {{tableName}} ({{columnName}});\n\n-- Index partiel (avec condition WHERE)\nCREATE INDEX idx_{{tableName}}_active ON {{tableName}} ({{columnName}}) WHERE active = 1;\n\n-- Index sur expression\nCREATE INDEX idx_{{tableName}}_lower ON {{tableName}} (LOWER({{columnName}}));\n\n-- Index avec tri (DESC)\nCREATE INDEX idx_{{tableName}}_desc ON {{tableName}} ({{columnName}} DESC);\n\n-- Index couvrant (covering index) - inclut les colonnes supplémentaires\nCREATE INDEX idx_{{tableName}}_covering ON {{tableName}} ({{column1}}) INCLUDE ({{column2}}, {{column3}});\n\n-- Index pour recherche full-text (MySQL)\nCREATE FULLTEXT INDEX idx_{{tableName}}_fulltext ON {{tableName}} ({{columnName}});\n\n-- Index pour recherche full-text (PostgreSQL)\nCREATE INDEX idx_{{tableName}}_fulltext ON {{tableName}} USING GIN (to_tsvector('english', {{columnName}}));\n\n-- Index partiel avec plusieurs conditions\nCREATE INDEX idx_{{tableName}}_filtered ON {{tableName}} ({{columnName}}) \nWHERE active = 1 AND deleted_at IS NULL;\n\n-- Index sur clé étrangère (améliore les JOINs)\nCREATE INDEX idx_{{tableName}}_fk ON {{tableName}} ({{foreignKeyColumn}});\n\n-- Index pour tri et filtrage combinés\nCREATE INDEX idx_{{tableName}}_sort_filter ON {{tableName}} ({{filterColumn}}, {{sortColumn}} DESC);\n\n-- Vérifier les index existants\n-- MySQL\nSHOW INDEXES FROM {{tableName}};\n\n-- PostgreSQL\nSELECT indexname, indexdef FROM pg_indexes WHERE tablename = '{{tableName}}';\n\n-- SQL Server\nSELECT name, type_desc FROM sys.indexes WHERE object_id = OBJECT_ID('{{tableName}}');\n\n-- Supprimer un index\nDROP INDEX idx_{{columnName}} ON {{tableName}};\n\n-- Analyser l'utilisation des index (PostgreSQL)\nEXPLAIN ANALYZE SELECT * FROM {{tableName}} WHERE {{columnName}} = 'value';\n\n-- Reconstruire un index (SQL Server)\nALTER INDEX idx_{{columnName}} ON {{tableName}} REBUILD;\n\n-- Réorganiser un index (SQL Server)\nALTER INDEX idx_{{columnName}} ON {{tableName}} REORGANIZE;",
+  "variables": [
+    {
+      "name": "tableName",
+      "type": "text",
+      "label": "Nom de la table",
+      "required": true,
+      "description": "Nom de la table",
+      "placeholder": "users"
+    },
+    {
+      "name": "columnName",
+      "type": "text",
+      "label": "Nom de la colonne",
+      "required": true,
+      "description": "Nom de la colonne principale",
+      "placeholder": "email"
+    },
+    {
+      "name": "indexTypes",
+      "type": "multiselect",
+      "label": "Types d'index",
+      "required": true,
+      "description": "Sélectionnez les types d'index à inclure",
+      "defaultValue": ["simple", "unique"],
+      "options": [
+        { "value": "simple", "label": "Index simple" },
+        { "value": "composite", "label": "Index composite" },
+        { "value": "unique", "label": "Index unique" },
+        { "value": "partial", "label": "Index partiel" },
+        { "value": "expression", "label": "Index sur expression" },
+        { "value": "fulltext", "label": "Index full-text" },
+        { "value": "foreign", "label": "Index sur clé étrangère" }
+      ]
+    },
+    {
+      "name": "column1",
+      "type": "text",
+      "label": "Première colonne (composite)",
+      "required": false,
+      "description": "Première colonne pour index composite",
+      "placeholder": "name",
+      "dependsOn": {
+        "indexTypes": ["composite"]
+      }
+    },
+    {
+      "name": "column2",
+      "type": "text",
+      "label": "Deuxième colonne (composite)",
+      "required": false,
+      "description": "Deuxième colonne pour index composite",
+      "placeholder": "email",
+      "dependsOn": {
+        "indexTypes": ["composite"]
+      }
+    },
+    {
+      "name": "includeManagement",
+      "type": "checkbox",
+      "label": "Commandes de gestion",
+      "required": false,
+      "description": "Inclure SHOW, DROP, REBUILD, etc.",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

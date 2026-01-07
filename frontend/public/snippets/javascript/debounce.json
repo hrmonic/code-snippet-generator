@@ -1,0 +1,82 @@
+{
+  "id": "javascript-debounce",
+  "name": "Debounce & Throttle",
+  "description": "Fonctions debounce et throttle pour optimiser les performances",
+  "language": "javascript",
+  "feature": "debounce",
+  "code": "// Debounce: Exécute la fonction après un délai d'inactivité\nfunction debounce(func, wait) {\n    let timeout;\n    return function executedFunction(...args) {\n        const later = () => {\n            clearTimeout(timeout);\n            func(...args);\n        };\n        clearTimeout(timeout);\n        timeout = setTimeout(later, wait);\n    };\n}\n\n// Throttle: Exécute la fonction au plus une fois par période\nfunction throttle(func, limit) {\n    let inThrottle;\n    return function executedFunction(...args) {\n        if (!inThrottle) {\n            func.apply(this, args);\n            inThrottle = true;\n            setTimeout(() => inThrottle = false, limit);\n        }\n    };\n}\n\n// Debounce avec options avancées\nfunction advancedDebounce(func, wait, options = {}) {\n    let timeout;\n    let maxWait;\n    let maxWaitTimeout;\n    let lastCallTime;\n    \n    const { leading = false, trailing = true, maxWait: maxWaitOption } = options;\n    \n    if (maxWaitOption) {\n        maxWait = maxWaitOption;\n    }\n    \n    function invokeFunc(...args) {\n        return func.apply(this, args);\n    }\n    \n    function leadingEdge(...args) {\n        if (maxWaitOption) {\n            lastCallTime = Date.now();\n        }\n        return leading ? invokeFunc(...args) : undefined;\n    }\n    \n    function trailingEdge(...args) {\n        timeout = undefined;\n        if (trailing) {\n            return invokeFunc(...args);\n        }\n    }\n    \n    function shouldInvoke() {\n        const time = Date.now();\n        const timeSinceLastCall = time - lastCallTime;\n        \n        return (\n            lastCallTime === undefined ||\n            timeSinceLastCall >= wait ||\n            (maxWaitOption && timeSinceLastCall >= maxWait)\n        );\n    }\n    \n    return function debounced(...args) {\n        const isInvoking = shouldInvoke();\n        \n        if (isInvoking) {\n            if (timeout === undefined) {\n                return leadingEdge(...args);\n            }\n            if (maxWaitOption) {\n                timeout = setTimeout(trailingEdge, wait);\n                return invokeFunc(...args);\n            }\n        }\n        \n        if (timeout === undefined) {\n            timeout = setTimeout(trailingEdge, wait);\n        }\n        \n        if (maxWaitOption && !maxWaitTimeout) {\n            maxWaitTimeout = setTimeout(() => {\n                if (shouldInvoke()) {\n                    trailingEdge(...args);\n                }\n                maxWaitTimeout = undefined;\n            }, maxWait);\n        }\n    };\n}\n\n// Utilisation\n// Debounce simple\nconst debouncedSearch = debounce((query) => {\n    console.log('Searching for:', query);\n}, 300);\n\n// Throttle simple\nconst throttledScroll = throttle(() => {\n    console.log('Scroll event');\n}, 100);\n\n// Debounce avancé\nconst advancedDebounced = advancedDebounce(\n    (value) => console.log('Value:', value),\n    300,\n    { leading: true, trailing: true, maxWait: 1000 }\n);\n\n// Exemple avec input\nconst searchInput = document.getElementById('search');\nsearchInput.addEventListener('input', (e) => {\n    debouncedSearch(e.target.value);\n});\n\n// Exemple avec scroll\nwindow.addEventListener('scroll', throttledScroll);",
+  "variables": [
+    {
+      "name": "functionType",
+      "type": "select",
+      "label": "Type de fonction",
+      "required": true,
+      "description": "Choisissez le type de fonction à générer",
+      "defaultValue": "debounce",
+      "options": [
+        { "value": "debounce", "label": "Debounce simple" },
+        { "value": "throttle", "label": "Throttle simple" },
+        { "value": "advanced", "label": "Debounce avancé" },
+        { "value": "all", "label": "Toutes les fonctions" }
+      ]
+    },
+    {
+      "name": "delay",
+      "type": "number",
+      "label": "Délai (ms)",
+      "required": false,
+      "description": "Délai en millisecondes",
+      "defaultValue": 300,
+      "min": 100,
+      "max": 5000
+    },
+    {
+      "name": "includeLeading",
+      "type": "checkbox",
+      "label": "Exécution immédiate (leading)",
+      "required": false,
+      "description": "Exécuter immédiatement au premier appel",
+      "defaultValue": false,
+      "dependsOn": {
+        "functionType": ["advanced", "all"]
+      }
+    },
+    {
+      "name": "includeTrailing",
+      "type": "checkbox",
+      "label": "Exécution finale (trailing)",
+      "required": false,
+      "description": "Exécuter après le délai",
+      "defaultValue": true,
+      "dependsOn": {
+        "functionType": ["advanced", "all"]
+      }
+    },
+    {
+      "name": "maxWait",
+      "type": "number",
+      "label": "Délai maximum (ms)",
+      "required": false,
+      "description": "Délai maximum avant exécution forcée",
+      "defaultValue": 1000,
+      "min": 500,
+      "max": 10000,
+      "dependsOn": {
+        "functionType": ["advanced", "all"]
+      }
+    },
+    {
+      "name": "includeExamples",
+      "type": "checkbox",
+      "label": "Exemples d'utilisation",
+      "required": false,
+      "description": "Inclure des exemples d'utilisation",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

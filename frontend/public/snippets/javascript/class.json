@@ -1,0 +1,48 @@
+{
+  "id": "javascript-class",
+  "name": "ES6 Classes & Inheritance",
+  "description": "Classes ES6 avec héritage et méthodes statiques",
+  "language": "javascript",
+  "feature": "class",
+  "code": "// Classe de base\nclass Animal {\n    constructor(name, species) {\n        this.name = name;\n        this.species = species;\n    }\n    \n    speak() {\n        return `${this.name} makes a sound`;\n    }\n    \n    static create(name, species) {\n        return new Animal(name, species);\n    }\n    \n    get info() {\n        return `Name: ${this.name}, Species: ${this.species}`;\n    }\n    \n    set name(newName) {\n        if (newName.length < 2) {\n            throw new Error('Name must be at least 2 characters');\n        }\n        this._name = newName;\n    }\n    \n    get name() {\n        return this._name;\n    }\n}\n\n// Héritage\nclass Dog extends Animal {\n    constructor(name, breed) {\n        super(name, 'Canine');\n        this.breed = breed;\n    }\n    \n    speak() {\n        return `${this.name} barks`;\n    }\n    \n    fetch() {\n        return `${this.name} fetches the ball`;\n    }\n}\n\n// Classe avec méthodes privées (ES2022)\nclass BankAccount {\n    #balance = 0;\n    \n    constructor(owner, initialBalance = 0) {\n        this.owner = owner;\n        this.#balance = initialBalance;\n    }\n    \n    deposit(amount) {\n        if (amount <= 0) {\n            throw new Error('Amount must be positive');\n        }\n        this.#balance += amount;\n        return this.#balance;\n    }\n    \n    withdraw(amount) {\n        if (amount > this.#balance) {\n            throw new Error('Insufficient funds');\n        }\n        this.#balance -= amount;\n        return this.#balance;\n    }\n    \n    getBalance() {\n        return this.#balance;\n    }\n    \n    static createAccount(owner, initialBalance) {\n        return new BankAccount(owner, initialBalance);\n    }\n}\n\n// Classe abstraite (pattern)\nclass Shape {\n    constructor(color) {\n        if (this.constructor === Shape) {\n            throw new Error('Shape is an abstract class');\n        }\n        this.color = color;\n    }\n    \n    area() {\n        throw new Error('Method area() must be implemented');\n    }\n    \n    perimeter() {\n        throw new Error('Method perimeter() must be implemented');\n    }\n}\n\nclass Circle extends Shape {\n    constructor(color, radius) {\n        super(color);\n        this.radius = radius;\n    }\n    \n    area() {\n        return Math.PI * this.radius ** 2;\n    }\n    \n    perimeter() {\n        return 2 * Math.PI * this.radius;\n    }\n}\n\n// Mixin pattern\nconst CanFly = {\n    fly() {\n        return `${this.name} is flying`;\n    }\n};\n\nconst CanSwim = {\n    swim() {\n        return `${this.name} is swimming`;\n    }\n};\n\nclass Duck extends Animal {\n    constructor(name) {\n        super(name, 'Bird');\n    }\n}\n\nObject.assign(Duck.prototype, CanFly, CanSwim);\n\n// Classe avec Symbol pour propriétés privées\nconst _private = Symbol('private');\n\nclass SecureClass {\n    constructor() {\n        this[_private] = {\n            secret: 'hidden data'\n        };\n    }\n    \n    getSecret() {\n        return this[_private].secret;\n    }\n}\n\n// Singleton pattern\nclass Singleton {\n    static instance = null;\n    \n    constructor() {\n        if (Singleton.instance) {\n            return Singleton.instance;\n        }\n        Singleton.instance = this;\n    }\n    \n    static getInstance() {\n        if (!Singleton.instance) {\n            Singleton.instance = new Singleton();\n        }\n        return Singleton.instance;\n    }\n}\n\n// Factory pattern avec classes\nclass AnimalFactory {\n    static create(type, name) {\n        switch (type) {\n            case 'dog':\n                return new Dog(name, 'Unknown');\n            case 'cat':\n                return new Cat(name);\n            default:\n                throw new Error(`Unknown animal type: ${type}`);\n        }\n    }\n}\n\n// Utilisation\nconst dog = new Dog('Buddy', 'Golden Retriever');\nconsole.log(dog.speak()); // Buddy barks\nconsole.log(dog.info); // Name: Buddy, Species: Canine\n\nconst account = new BankAccount('John', 1000);\naccount.deposit(500);\nconsole.log(account.getBalance()); // 1500\n\nconst circle = new Circle('red', 5);\nconsole.log(circle.area()); // ~78.54",
+  "variables": [
+    {
+      "name": "classFeatures",
+      "type": "multiselect",
+      "label": "Fonctionnalités de classe",
+      "required": true,
+      "description": "Sélectionnez les fonctionnalités à inclure",
+      "defaultValue": ["basic", "inheritance"],
+      "options": [
+        { "value": "basic", "label": "Classe de base" },
+        { "value": "inheritance", "label": "Héritage" },
+        { "value": "private", "label": "Méthodes privées (ES2022)" },
+        { "value": "abstract", "label": "Pattern classe abstraite" },
+        { "value": "mixin", "label": "Mixin pattern" },
+        { "value": "singleton", "label": "Singleton pattern" },
+        { "value": "factory", "label": "Factory pattern" }
+      ]
+    },
+    {
+      "name": "includeGettersSetters",
+      "type": "checkbox",
+      "label": "Getters et Setters",
+      "required": false,
+      "description": "Inclure les getters et setters",
+      "defaultValue": true
+    },
+    {
+      "name": "includeStatic",
+      "type": "checkbox",
+      "label": "Méthodes statiques",
+      "required": false,
+      "description": "Inclure les méthodes statiques",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

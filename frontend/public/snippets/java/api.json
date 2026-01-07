@@ -1,0 +1,57 @@
+{
+  "id": "java-api",
+  "name": "API REST Java Spring",
+  "description": "Endpoints REST avec Spring Boot",
+  "language": "java",
+  "feature": "api",
+  "code": "// {{entityName}}RestController.java\npackage com.example.rest;\n\nimport org.springframework.web.bind.annotation.*;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.http.HttpStatus;\n\n@RestController\n@RequestMapping(\"/api/v1/{{endpoint}}\")\npublic class {{entityName}}RestController {\n    \n    @GetMapping\n    public ResponseEntity<?> getAll() {\n        // Implémentation\n        return ResponseEntity.ok().build();\n    }\n    \n    @GetMapping(\"/{id}\")\n    public ResponseEntity<?> getById(@PathVariable Long id) {\n        // Implémentation\n        return ResponseEntity.ok().build();\n    }\n    \n    @PostMapping\n    public ResponseEntity<?> create(@RequestBody Object dto) {\n        // Implémentation\n        return ResponseEntity.status(HttpStatus.CREATED).build();\n    }\n    \n    @PutMapping(\"/{id}\")\n    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Object dto) {\n        // Implémentation\n        return ResponseEntity.ok().build();\n    }\n    \n    @DeleteMapping(\"/{id}\")\n    public ResponseEntity<?> delete(@PathVariable Long id) {\n        // Implémentation\n        return ResponseEntity.noContent().build();\n    }\n}",
+  "variables": [
+    {
+      "name": "entityName",
+      "type": "text",
+      "label": "Nom de l'entité",
+      "required": true,
+      "description": "Nom de la classe Controller (ex: User)",
+      "placeholder": "User"
+    },
+    {
+      "name": "endpoint",
+      "type": "text",
+      "label": "Endpoint",
+      "required": true,
+      "description": "Endpoint de l'API (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": false,
+      "description": "Package Java (ex: com.example.rest)",
+      "placeholder": "com.example.rest",
+      "defaultValue": "com.example.rest"
+    },
+    {
+      "name": "apiVersion",
+      "type": "text",
+      "label": "Version de l'API",
+      "required": false,
+      "description": "Version de l'API dans le path",
+      "defaultValue": "v1",
+      "placeholder": "v1"
+    },
+    {
+      "name": "includeAllMethods",
+      "type": "checkbox",
+      "label": "Toutes les méthodes CRUD",
+      "required": false,
+      "description": "Inclure GET, POST, PUT, DELETE",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

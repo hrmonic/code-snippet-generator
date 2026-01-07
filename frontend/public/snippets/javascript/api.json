@@ -1,0 +1,30 @@
+{
+  "id": "javascript-api",
+  "name": "Client API JavaScript",
+  "description": "Client HTTP avec fetch pour appels API",
+  "language": "javascript",
+  "feature": "api",
+  "code": "class ApiClient {\n    constructor(baseURL = '{{baseURL}}') {\n        this.baseURL = baseURL;\n    }\n\n    async request(endpoint, options = {}) {\n        const url = `${this.baseURL}${endpoint}`;\n        const config = {\n            headers: {\n                'Content-Type': 'application/json',\n                ...options.headers,\n            },\n            ...options,\n        };\n\n        try {\n            const response = await fetch(url, config);\n            \n            if (!response.ok) {\n                throw new Error(`HTTP error! status: ${response.status}`);\n            }\n            \n            return await response.json();\n        } catch (error) {\n            console.error('API Error:', error);\n            throw error;\n        }\n    }\n\n    async get(endpoint) {\n        return this.request(endpoint, { method: 'GET' });\n    }\n\n    async post(endpoint, data) {\n        return this.request(endpoint, {\n            method: 'POST',\n            body: JSON.stringify(data),\n        });\n    }\n\n    async put(endpoint, data) {\n        return this.request(endpoint, {\n            method: 'PUT',\n            body: JSON.stringify(data),\n        });\n    }\n\n    async delete(endpoint) {\n        return this.request(endpoint, { method: 'DELETE' });\n    }\n}\n\n// Utilisation\nconst api = new ApiClient('{{baseURL}}');\nconst data = await api.get('{{endpoint}}');",
+  "variables": [
+    {
+      "name": "baseURL",
+      "type": "string",
+      "required": true,
+      "description": "URL de base de l'API",
+      "defaultValue": "http://localhost:3000/api"
+    },
+    {
+      "name": "endpoint",
+      "type": "string",
+      "required": true,
+      "description": "Endpoint à appeler"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true,
+    "csrf": true
+  },
+  "tests": "describe('ApiClient', () => {\n    it('should make GET request', async () => {\n        const client = new ApiClient('http://localhost:3000');\n        const result = await client.get('/api/users');\n        expect(result).toBeDefined();\n    });\n});"
+}
+

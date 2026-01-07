@@ -1,0 +1,157 @@
+{
+  "id": "html5-navbar",
+  "name": "Navigation Bar Responsive",
+  "description": "Barre de navigation responsive avec menu hamburger et options avancées",
+  "language": "html5",
+  "feature": "navbar",
+  "code": "<!DOCTYPE html>\n<html lang=\"{{language}}\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{siteName}}</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        \n        .navbar {\n            background: {{backgroundColor}};\n            color: {{textColor}};\n            padding: {{padding}};\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            {{#if sticky}}\n            position: sticky;\n            top: 0;\n            z-index: 1000;\n            {{/if}}\n            {{#if shadow}}\n            box-shadow: 0 2px 8px rgba(0,0,0,0.1);\n            {{/if}}\n        }\n        \n        .logo {\n            font-size: {{logoSize}};\n            font-weight: bold;\n            text-decoration: none;\n            color: {{textColor}};\n        }\n        \n        .nav-links {\n            display: flex;\n            list-style: none;\n            gap: {{linkGap}};\n        }\n        \n        .nav-links a {\n            color: {{textColor}};\n            text-decoration: none;\n            transition: opacity 0.3s;\n            padding: 0.5rem 1rem;\n            border-radius: 4px;\n        }\n        \n        .nav-links a:hover {\n            {{#if hoverEffect}}\n            background: rgba(255,255,255,0.1);\n            {{else}}\n            opacity: 0.7;\n            {{/if}}\n        }\n        \n        .hamburger {\n            display: none;\n            flex-direction: column;\n            cursor: pointer;\n        }\n        \n        .hamburger span {\n            width: 25px;\n            height: 3px;\n            background: {{textColor}};\n            margin: 3px 0;\n            transition: 0.3s;\n        }\n        \n        @media (max-width: {{breakpoint}}px) {\n            .hamburger {\n                display: flex;\n            }\n            \n            .nav-links {\n                position: fixed;\n                left: -100%;\n                top: {{navbarHeight}};\n                flex-direction: column;\n                background: {{backgroundColor}};\n                width: 100%;\n                text-align: center;\n                transition: 0.3s;\n                padding: 2rem 0;\n                {{#if shadow}}\n                box-shadow: 0 4px 8px rgba(0,0,0,0.2);\n                {{/if}}\n            }\n            \n            .nav-links.active {\n                left: 0;\n            }\n        }\n    </style>\n</head>\n<body>\n    <nav class=\"navbar\">\n        <a href=\"#\" class=\"logo\">{{siteName}}</a>\n        <ul class=\"nav-links\" id=\"navLinks\">\n            {{navLinks}}\n        </ul>\n        <div class=\"hamburger\" onclick=\"toggleMenu()\">\n            <span></span>\n            <span></span>\n            <span></span>\n        </div>\n    </nav>\n    \n    <script>\n        function toggleMenu() {\n            const navLinks = document.getElementById('navLinks');\n            navLinks.classList.toggle('active');\n        }\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "siteName",
+      "type": "string",
+      "required": true,
+      "description": "Nom du site"
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "required": false,
+      "description": "Langue de la page",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" },
+        { "value": "es", "label": "Español" },
+        { "value": "de", "label": "Deutsch" },
+        { "value": "it", "label": "Italiano" }
+      ]
+    },
+    {
+      "name": "backgroundColor",
+      "type": "select",
+      "required": false,
+      "description": "Couleur de fond",
+      "defaultValue": "#333",
+      "options": [
+        { "value": "#333", "label": "Gris foncé" },
+        { "value": "#1a1a1a", "label": "Noir" },
+        { "value": "#667eea", "label": "Bleu" },
+        { "value": "#764ba2", "label": "Violet" },
+        { "value": "#f093fb", "label": "Rose" },
+        { "value": "#4facfe", "label": "Bleu clair" },
+        { "value": "#ffffff", "label": "Blanc" }
+      ]
+    },
+    {
+      "name": "textColor",
+      "type": "select",
+      "required": false,
+      "description": "Couleur du texte",
+      "defaultValue": "white",
+      "options": [
+        { "value": "white", "label": "Blanc" },
+        { "value": "#333", "label": "Gris foncé" },
+        { "value": "#000", "label": "Noir" }
+      ]
+    },
+    {
+      "name": "sticky",
+      "type": "checkbox",
+      "required": false,
+      "description": "Navbar fixe en haut lors du scroll",
+      "defaultValue": false
+    },
+    {
+      "name": "shadow",
+      "type": "checkbox",
+      "required": false,
+      "description": "Ajouter une ombre",
+      "defaultValue": true
+    },
+    {
+      "name": "hoverEffect",
+      "type": "checkbox",
+      "required": false,
+      "description": "Effet hover avec fond",
+      "defaultValue": false
+    },
+    {
+      "name": "padding",
+      "type": "select",
+      "required": false,
+      "description": "Espacement interne",
+      "defaultValue": "1rem 2rem",
+      "options": [
+        { "value": "0.5rem 1rem", "label": "Petit" },
+        { "value": "1rem 2rem", "label": "Moyen" },
+        { "value": "1.5rem 3rem", "label": "Grand" }
+      ]
+    },
+    {
+      "name": "logoSize",
+      "type": "select",
+      "required": false,
+      "description": "Taille du logo",
+      "defaultValue": "1.5rem",
+      "options": [
+        { "value": "1.25rem", "label": "Petit" },
+        { "value": "1.5rem", "label": "Moyen" },
+        { "value": "2rem", "label": "Grand" }
+      ]
+    },
+    {
+      "name": "linkGap",
+      "type": "select",
+      "required": false,
+      "description": "Espacement entre les liens",
+      "defaultValue": "2rem",
+      "options": [
+        { "value": "1rem", "label": "Petit" },
+        { "value": "2rem", "label": "Moyen" },
+        { "value": "3rem", "label": "Grand" }
+      ]
+    },
+    {
+      "name": "breakpoint",
+      "type": "select",
+      "required": false,
+      "description": "Point de rupture mobile",
+      "defaultValue": "768",
+      "options": [
+        { "value": "640", "label": "640px (sm)" },
+        { "value": "768", "label": "768px (md)" },
+        { "value": "1024", "label": "1024px (lg)" }
+      ]
+    },
+    {
+      "name": "navbarHeight",
+      "type": "select",
+      "required": false,
+      "description": "Hauteur de la navbar",
+      "defaultValue": "70px",
+      "options": [
+        { "value": "60px", "label": "60px" },
+        { "value": "70px", "label": "70px" },
+        { "value": "80px", "label": "80px" }
+      ]
+    },
+    {
+      "name": "navLinks",
+      "type": "multiselect",
+      "required": true,
+      "description": "Liens de navigation",
+      "options": [
+        { "value": "home", "label": "Accueil" },
+        { "value": "about", "label": "À propos" },
+        { "value": "services", "label": "Services" },
+        { "value": "portfolio", "label": "Portfolio" },
+        { "value": "blog", "label": "Blog" },
+        { "value": "contact", "label": "Contact" }
+      ]
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}

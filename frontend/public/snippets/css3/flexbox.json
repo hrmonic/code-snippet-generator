@@ -1,0 +1,120 @@
+{
+  "id": "css3-flexbox",
+  "name": "Layout Flexbox",
+  "description": "Exemples de layouts avec Flexbox",
+  "language": "css3",
+  "feature": "flexbox",
+  "code": "/* Container Flexbox de base */\n.flex-container {\n    display: flex;\n    flex-direction: row; /* row | column | row-reverse | column-reverse */\n    flex-wrap: wrap; /* nowrap | wrap | wrap-reverse */\n    justify-content: center; /* flex-start | flex-end | center | space-between | space-around | space-evenly */\n    align-items: center; /* flex-start | flex-end | center | baseline | stretch */\n    align-content: center; /* Pour plusieurs lignes */\n    gap: 1rem;\n}\n\n/* Centrer verticalement et horizontalement */\n.center {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n}\n\n/* Layout en colonnes égales */\n.equal-columns {\n    display: flex;\n}\n\n.equal-columns > * {\n    flex: 1;\n}\n\n/* Layout avec sidebar fixe */\n.layout-with-sidebar {\n    display: flex;\n}\n\n.sidebar {\n    flex: 0 0 250px; /* Ne grandit pas, ne rétrécit pas, largeur de 250px */\n}\n\n.main-content {\n    flex: 1; /* Prend tout l'espace restant */\n}\n\n/* Cards en grille responsive */\n.cards-container {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 1rem;\n}\n\n.card {\n    flex: 1 1 300px; /* Min 300px, peut grandir et rétrécir */\n    max-width: 400px;\n}\n\n/* Navigation horizontale */\n.nav {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n}\n\n.nav-item {\n    flex: 0 1 auto;\n}\n\n/* Footer collé en bas */\n.page-wrapper {\n    display: flex;\n    flex-direction: column;\n    min-height: 100vh;\n}\n\n.main {\n    flex: 1;\n}\n\n.footer {\n    flex: 0 0 auto;\n}",
+  "variables": [
+    {
+      "name": "layoutType",
+      "type": "select",
+      "label": "Type de layout",
+      "required": true,
+      "description": "Choisissez le type de layout Flexbox",
+      "defaultValue": "basic",
+      "options": [
+        { "value": "basic", "label": "Container de base" },
+        { "value": "center", "label": "Centrage vertical/horizontal" },
+        { "value": "equal-columns", "label": "Colonnes égales" },
+        { "value": "sidebar", "label": "Layout avec sidebar" },
+        { "value": "cards", "label": "Grille de cards responsive" },
+        { "value": "nav", "label": "Navigation horizontale" },
+        { "value": "footer", "label": "Footer collé en bas" },
+        { "value": "all", "label": "Tous les exemples" }
+      ]
+    },
+    {
+      "name": "flexDirection",
+      "type": "select",
+      "label": "Direction",
+      "required": false,
+      "description": "Direction principale des éléments",
+      "defaultValue": "row",
+      "options": [
+        { "value": "row", "label": "Ligne (row)" },
+        { "value": "column", "label": "Colonne (column)" },
+        { "value": "row-reverse", "label": "Ligne inversée" },
+        { "value": "column-reverse", "label": "Colonne inversée" }
+      ],
+      "dependsOn": {
+        "layoutType": ["basic", "all"]
+      }
+    },
+    {
+      "name": "justifyContent",
+      "type": "select",
+      "label": "Justification",
+      "required": false,
+      "description": "Alignement sur l'axe principal",
+      "defaultValue": "center",
+      "options": [
+        { "value": "flex-start", "label": "Début" },
+        { "value": "flex-end", "label": "Fin" },
+        { "value": "center", "label": "Centre" },
+        { "value": "space-between", "label": "Espace entre" },
+        { "value": "space-around", "label": "Espace autour" },
+        { "value": "space-evenly", "label": "Espace égal" }
+      ],
+      "dependsOn": {
+        "layoutType": ["basic", "center", "nav", "all"]
+      }
+    },
+    {
+      "name": "alignItems",
+      "type": "select",
+      "label": "Alignement",
+      "required": false,
+      "description": "Alignement sur l'axe secondaire",
+      "defaultValue": "center",
+      "options": [
+        { "value": "flex-start", "label": "Début" },
+        { "value": "flex-end", "label": "Fin" },
+        { "value": "center", "label": "Centre" },
+        { "value": "baseline", "label": "Baseline" },
+        { "value": "stretch", "label": "Étirer" }
+      ],
+      "dependsOn": {
+        "layoutType": ["basic", "center", "all"]
+      }
+    },
+    {
+      "name": "gap",
+      "type": "select",
+      "label": "Espacement",
+      "required": false,
+      "description": "Espacement entre les éléments",
+      "defaultValue": "1rem",
+      "options": [
+        { "value": "0.5rem", "label": "Petit (0.5rem)" },
+        { "value": "1rem", "label": "Moyen (1rem)" },
+        { "value": "1.5rem", "label": "Grand (1.5rem)" },
+        { "value": "2rem", "label": "Très grand (2rem)" }
+      ],
+      "dependsOn": {
+        "layoutType": ["basic", "cards", "all"]
+      }
+    },
+    {
+      "name": "sidebarWidth",
+      "type": "select",
+      "label": "Largeur de la sidebar",
+      "required": false,
+      "description": "Largeur fixe de la sidebar",
+      "defaultValue": "250px",
+      "options": [
+        { "value": "200px", "label": "200px" },
+        { "value": "250px", "label": "250px" },
+        { "value": "300px", "label": "300px" }
+      ],
+      "dependsOn": {
+        "layoutType": ["sidebar", "all"]
+      }
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

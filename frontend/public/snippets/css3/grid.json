@@ -1,0 +1,99 @@
+{
+  "id": "css3-grid",
+  "name": "CSS Grid Layout",
+  "description": "Layouts avec CSS Grid avancé",
+  "language": "css3",
+  "feature": "grid",
+  "code": "/* Grid Container de base */\n.grid-container {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    grid-template-rows: auto;\n    gap: 1.5rem;\n    padding: 1rem;\n}\n\n/* Grid avec zones nommées */\n.layout-grid {\n    display: grid;\n    grid-template-areas:\n        \"header header header\"\n        \"sidebar main main\"\n        \"footer footer footer\";\n    grid-template-columns: 250px 1fr 1fr;\n    grid-template-rows: auto 1fr auto;\n    gap: 1rem;\n    min-height: 100vh;\n}\n\n.header { grid-area: header; }\n.sidebar { grid-area: sidebar; }\n.main { grid-area: main; }\n.footer { grid-area: footer; }\n\n/* Grid responsive auto-fit */\n.auto-grid {\n    display: grid;\n    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));\n    gap: 1rem;\n}\n\n/* Grid avec auto-fill */\n.fill-grid {\n    display: grid;\n    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));\n    gap: 1rem;\n}\n\n/* Grid avec lignes implicites */\n.implicit-grid {\n    display: grid;\n    grid-auto-flow: row dense;\n    grid-template-columns: repeat(4, 1fr);\n    gap: 1rem;\n}\n\n.item-large {\n    grid-column: span 2;\n    grid-row: span 2;\n}\n\n/* Grid avec alignement */\n.aligned-grid {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    align-items: center;\n    justify-items: center;\n    gap: 1rem;\n}\n\n/* Grid responsive avec media queries */\n@media (max-width: 768px) {\n    .layout-grid {\n        grid-template-areas:\n            \"header\"\n            \"main\"\n            \"sidebar\"\n            \"footer\";\n        grid-template-columns: 1fr;\n    }\n    \n    .grid-container {\n        grid-template-columns: 1fr;\n    }\n}",
+  "variables": [
+    {
+      "name": "gridType",
+      "type": "select",
+      "label": "Type de grid",
+      "required": true,
+      "description": "Choisissez le type de layout Grid",
+      "defaultValue": "basic",
+      "options": [
+        { "value": "basic", "label": "Grid de base" },
+        { "value": "named-areas", "label": "Zones nommées" },
+        { "value": "auto-fit", "label": "Auto-fit responsive" },
+        { "value": "auto-fill", "label": "Auto-fill" },
+        { "value": "implicit", "label": "Lignes implicites" },
+        { "value": "aligned", "label": "Avec alignement" },
+        { "value": "all", "label": "Tous les exemples" }
+      ]
+    },
+    {
+      "name": "columns",
+      "type": "number",
+      "label": "Nombre de colonnes",
+      "required": false,
+      "description": "Nombre de colonnes dans le grid",
+      "defaultValue": 3,
+      "min": 1,
+      "max": 12,
+      "dependsOn": {
+        "gridType": ["basic", "implicit", "aligned"]
+      }
+    },
+    {
+      "name": "gap",
+      "type": "select",
+      "label": "Espacement",
+      "required": false,
+      "description": "Espacement entre les éléments",
+      "defaultValue": "1.5rem",
+      "options": [
+        { "value": "0.5rem", "label": "Petit (0.5rem)" },
+        { "value": "1rem", "label": "Moyen (1rem)" },
+        { "value": "1.5rem", "label": "Grand (1.5rem)" },
+        { "value": "2rem", "label": "Très grand (2rem)" }
+      ]
+    },
+    {
+      "name": "minItemWidth",
+      "type": "select",
+      "label": "Largeur minimale des items",
+      "required": false,
+      "description": "Largeur minimale pour auto-fit/auto-fill",
+      "defaultValue": "300px",
+      "options": [
+        { "value": "200px", "label": "200px" },
+        { "value": "300px", "label": "300px" },
+        { "value": "400px", "label": "400px" }
+      ],
+      "dependsOn": {
+        "gridType": ["auto-fit", "auto-fill"]
+      }
+    },
+    {
+      "name": "responsive",
+      "type": "checkbox",
+      "label": "Mode responsive",
+      "required": false,
+      "description": "Ajouter les media queries pour mobile",
+      "defaultValue": true
+    },
+    {
+      "name": "breakpoint",
+      "type": "select",
+      "label": "Point de rupture",
+      "required": false,
+      "description": "Breakpoint pour le mode responsive",
+      "defaultValue": "768",
+      "options": [
+        { "value": "640", "label": "640px (sm)" },
+        { "value": "768", "label": "768px (md)" },
+        { "value": "1024", "label": "1024px (lg)" }
+      ],
+      "dependsOn": {
+        "responsive": [true]
+      }
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

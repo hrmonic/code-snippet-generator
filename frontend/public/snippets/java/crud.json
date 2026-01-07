@@ -1,0 +1,56 @@
+{
+  "id": "java-crud",
+  "name": "CRUD Java avec Spring",
+  "description": "Controller, Model et Service pour opérations CRUD",
+  "language": "java",
+  "feature": "crud",
+  "code": "// {{entityName}}Controller.java\npackage com.example.controller;\n\nimport com.example.model.{{entityName}};\nimport com.example.service.{{entityName}}Service;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.http.HttpStatus;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.*;\n\nimport java.util.List;\n\n@RestController\n@RequestMapping(\"/api/{{tableName}}\")\npublic class {{entityName}}Controller {\n    \n    @Autowired\n    private {{entityName}}Service {{tableName}}Service;\n    \n    @GetMapping\n    public ResponseEntity<List<{{entityName}}>> getAll() {\n        return ResponseEntity.ok({{tableName}}Service.findAll());\n    }\n    \n    @GetMapping(\"/{id}\")\n    public ResponseEntity<{{entityName}}> getById(@PathVariable Long id) {\n        {{entityName}} entity = {{tableName}}Service.findById(id);\n        if (entity == null) {\n            return ResponseEntity.notFound().build();\n        }\n        return ResponseEntity.ok(entity);\n    }\n    \n    @PostMapping\n    public ResponseEntity<{{entityName}}> create(@RequestBody {{entityName}} entity) {\n        {{entityName}} created = {{tableName}}Service.save(entity);\n        return ResponseEntity.status(HttpStatus.CREATED).body(created);\n    }\n    \n    @PutMapping(\"/{id}\")\n    public ResponseEntity<{{entityName}}> update(@PathVariable Long id, @RequestBody {{entityName}} entity) {\n        {{entityName}} updated = {{tableName}}Service.update(id, entity);\n        if (updated == null) {\n            return ResponseEntity.notFound().build();\n        }\n        return ResponseEntity.ok(updated);\n    }\n    \n    @DeleteMapping(\"/{id}\")\n    public ResponseEntity<Void> delete(@PathVariable Long id) {\n        if ({{tableName}}Service.delete(id)) {\n            return ResponseEntity.noContent().build();\n        }\n        return ResponseEntity.notFound().build();\n    }\n}",
+  "variables": [
+    {
+      "name": "entityName",
+      "type": "text",
+      "label": "Nom de l'entité",
+      "required": true,
+      "description": "Nom de la classe entité (ex: User)",
+      "placeholder": "User"
+    },
+    {
+      "name": "tableName",
+      "type": "text",
+      "label": "Nom de la table",
+      "required": true,
+      "description": "Nom de la table en base de données (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": false,
+      "description": "Package Java (ex: com.example.controller)",
+      "placeholder": "com.example.controller",
+      "defaultValue": "com.example.controller"
+    },
+    {
+      "name": "includeAllMethods",
+      "type": "checkbox",
+      "label": "Toutes les méthodes CRUD",
+      "required": false,
+      "description": "Inclure GET, POST, PUT, DELETE",
+      "defaultValue": true
+    },
+    {
+      "name": "generateMultipleFiles",
+      "type": "checkbox",
+      "label": "Générer plusieurs fichiers",
+      "required": false,
+      "description": "Générer Controller, Service et Repository séparément",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

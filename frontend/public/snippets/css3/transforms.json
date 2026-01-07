@@ -1,0 +1,79 @@
+{
+  "id": "css3-transforms",
+  "name": "CSS Transforms & Transitions",
+  "description": "Transformations CSS3 et transitions fluides",
+  "language": "css3",
+  "feature": "transforms",
+  "code": "/* Transformations de base */\n.transform-translate {\n    transform: translate(50px, 100px);\n}\n\n.transform-rotate {\n    transform: rotate(45deg);\n}\n\n.transform-scale {\n    transform: scale(1.5);\n}\n\n.transform-skew {\n    transform: skew(20deg, 10deg);\n}\n\n/* Transformations combinées */\n.transform-combined {\n    transform: translate(50px, 50px) rotate(45deg) scale(1.2);\n}\n\n/* Transform 3D */\n.transform-3d {\n    transform: perspective(1000px) rotateX(45deg) rotateY(30deg);\n    transform-style: preserve-3d;\n}\n\n.transform-rotate-y {\n    transform: rotateY(180deg);\n    backface-visibility: hidden;\n}\n\n/* Transitions */\n.transition-basic {\n    transition: all 0.3s ease;\n}\n\n.transition-property {\n    transition-property: transform, opacity;\n    transition-duration: 0.3s, 0.5s;\n    transition-timing-function: ease-in-out, linear;\n}\n\n/* Timing functions */\n.ease { transition-timing-function: ease; }\n.ease-in { transition-timing-function: ease-in; }\n.ease-out { transition-timing-function: ease-out; }\n.ease-in-out { transition-timing-function: ease-in-out; }\n.linear { transition-timing-function: linear; }\n.cubic-bezier { transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }\n\n/* Hover effects */\n.hover-scale:hover {\n    transform: scale(1.1);\n    transition: transform 0.3s ease;\n}\n\n.hover-rotate:hover {\n    transform: rotate(5deg);\n    transition: transform 0.3s ease;\n}\n\n.hover-lift:hover {\n    transform: translateY(-10px);\n    box-shadow: 0 10px 20px rgba(0,0,0,0.2);\n    transition: all 0.3s ease;\n}\n\n/* Flip card effect */\n.flip-card {\n    perspective: 1000px;\n}\n\n.flip-card-inner {\n    position: relative;\n    width: 100%;\n    height: 100%;\n    transition: transform 0.6s;\n    transform-style: preserve-3d;\n}\n\n.flip-card:hover .flip-card-inner {\n    transform: rotateY(180deg);\n}\n\n.flip-card-front,\n.flip-card-back {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    backface-visibility: hidden;\n}\n\n.flip-card-back {\n    transform: rotateY(180deg);\n}\n\n/* Transform origin */\n.transform-origin-center {\n    transform-origin: center center;\n}\n\n.transform-origin-top-left {\n    transform-origin: top left;\n}\n\n.transform-origin-custom {\n    transform-origin: 30% 70%;\n}\n\n/* Will-change pour performance */\n.optimized-transform {\n    will-change: transform;\n    transform: translateZ(0);\n}\n\n/* Animation avec transform */\n@keyframes slideInFromLeft {\n    from {\n        transform: translateX(-100%);\n        opacity: 0;\n    }\n    to {\n        transform: translateX(0);\n        opacity: 1;\n    }\n}\n\n.animate-slide-in {\n    animation: slideInFromLeft 0.5s ease-out;\n}",
+  "variables": [
+    {
+      "name": "transformTypes",
+      "type": "multiselect",
+      "label": "Types de transformations",
+      "required": true,
+      "description": "Sélectionnez les types de transformations à inclure",
+      "defaultValue": ["translate", "rotate", "scale"],
+      "options": [
+        { "value": "translate", "label": "Translate" },
+        { "value": "rotate", "label": "Rotate" },
+        { "value": "scale", "label": "Scale" },
+        { "value": "skew", "label": "Skew" },
+        { "value": "3d", "label": "3D Transforms" },
+        { "value": "combined", "label": "Transformations combinées" }
+      ]
+    },
+    {
+      "name": "includeTransitions",
+      "type": "checkbox",
+      "label": "Transitions",
+      "required": false,
+      "description": "Inclure les exemples de transitions",
+      "defaultValue": true
+    },
+    {
+      "name": "includeHoverEffects",
+      "type": "checkbox",
+      "label": "Effets hover",
+      "required": false,
+      "description": "Inclure les effets au survol",
+      "defaultValue": true
+    },
+    {
+      "name": "includeFlipCard",
+      "type": "checkbox",
+      "label": "Effet flip card",
+      "required": false,
+      "description": "Inclure l'exemple de carte retournable",
+      "defaultValue": false
+    },
+    {
+      "name": "includeAnimations",
+      "type": "checkbox",
+      "label": "Animations",
+      "required": false,
+      "description": "Inclure les animations avec keyframes",
+      "defaultValue": false
+    },
+    {
+      "name": "transitionDuration",
+      "type": "select",
+      "label": "Durée des transitions",
+      "required": false,
+      "description": "Durée par défaut des transitions",
+      "defaultValue": "0.3s",
+      "options": [
+        { "value": "0.2s", "label": "Rapide (0.2s)" },
+        { "value": "0.3s", "label": "Moyen (0.3s)" },
+        { "value": "0.5s", "label": "Lent (0.5s)" }
+      ],
+      "dependsOn": {
+        "includeTransitions": [true]
+      }
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

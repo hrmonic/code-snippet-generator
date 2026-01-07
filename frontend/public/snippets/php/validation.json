@@ -1,0 +1,52 @@
+{
+  "id": "php-validation",
+  "name": "Validation PHP",
+  "description": "Classe de validation avec règles et messages d'erreur",
+  "language": "php",
+  "feature": "validation",
+  "code": "<?php\n\nclass Validator {\n    private $errors = [];\n    private $data = [];\n    \n    public function __construct($data) {\n        $this->data = $data;\n    }\n    \n    public function validate($rules) {\n        $this->errors = [];\n        \n        foreach ($rules as $field => $ruleString) {\n            $rulesArray = explode('|', $ruleString);\n            $value = $this->data[$field] ?? null;\n            \n            foreach ($rulesArray as $rule) {\n                $this->applyRule($field, $value, $rule);\n            }\n        }\n        \n        return empty($this->errors);\n    }\n    \n    private function applyRule($field, $value, $rule) {\n        $parts = explode(':', $rule);\n        $ruleName = $parts[0];\n        $ruleValue = $parts[1] ?? null;\n        \n        switch ($ruleName) {\n            case 'required':\n                if (empty($value)) {\n                    $this->addError($field, 'Le champ ' . $field . ' est requis');\n                }\n                break;\n                \n            case 'email':\n                if (!empty($value) && !filter_var($value, FILTER_VALIDATE_EMAIL)) {\n                    $this->addError($field, 'Le champ ' . $field . ' doit être un email valide');\n                }\n                break;\n                \n            case 'min':\n                if (!empty($value) && strlen($value) < (int)$ruleValue) {\n                    $this->addError($field, 'Le champ ' . $field . ' doit contenir au moins ' . $ruleValue . ' caractères');\n                }\n                break;\n                \n            case 'max':\n                if (!empty($value) && strlen($value) > (int)$ruleValue) {\n                    $this->addError($field, 'Le champ ' . $field . ' ne doit pas dépasser ' . $ruleValue . ' caractères');\n                }\n                break;\n                \n            case 'numeric':\n                if (!empty($value) && !is_numeric($value)) {\n                    $this->addError($field, 'Le champ ' . $field . ' doit être numérique');\n                }\n                break;\n        }\n    }\n    \n    private function addError($field, $message) {\n        if (!isset($this->errors[$field])) {\n            $this->errors[$field] = [];\n        }\n        $this->errors[$field][] = $message;\n    }\n    \n    public function getErrors() {\n        return $this->errors;\n    }\n    \n    public function hasErrors() {\n        return !empty($this->errors);\n    }\n}\n\n// Utilisation\n$data = [\n    'name' => $_POST['name'] ?? '',\n    'email' => $_POST['email'] ?? '',\n    'age' => $_POST['age'] ?? '',\n];\n\n$validator = new Validator($data);\n$rules = [\n    'name' => 'required|min:2|max:50',\n    'email' => 'required|email',\n    'age' => 'required|numeric|min:18',\n];\n\nif ($validator->validate($rules)) {\n    // Données valides\n    echo 'Validation réussie';\n} else {\n    // Afficher les erreurs\n    $errors = $validator->getErrors();\n    foreach ($errors as $field => $messages) {\n        foreach ($messages as $message) {\n            echo $message . '\\n';\n        }\n    }\n}",
+  "variables": [
+    {
+      "name": "validationRules",
+      "type": "multiselect",
+      "label": "Règles de validation",
+      "required": true,
+      "description": "Sélectionnez les règles de validation à inclure",
+      "defaultValue": ["required", "email", "min", "max"],
+      "options": [
+        { "value": "required", "label": "Champ requis" },
+        { "value": "email", "label": "Validation email" },
+        { "value": "min", "label": "Longueur minimale" },
+        { "value": "max", "label": "Longueur maximale" },
+        { "value": "numeric", "label": "Validation numérique" },
+        { "value": "url", "label": "Validation URL" },
+        { "value": "date", "label": "Validation date" }
+      ]
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "label": "Langue des messages",
+      "required": false,
+      "description": "Langue des messages d'erreur",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" }
+      ]
+    },
+    {
+      "name": "includeCustomRules",
+      "type": "checkbox",
+      "label": "Règles personnalisées",
+      "required": false,
+      "description": "Permettre l'ajout de règles personnalisées",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

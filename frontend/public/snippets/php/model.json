@@ -1,0 +1,47 @@
+{
+  "id": "php-model",
+  "name": "Model PHP avec PDO",
+  "description": "Classe Model PHP avec PDO pour accès aux données",
+  "language": "php",
+  "feature": "crud",
+  "code": "<?php\n\nclass {{entityName}}Model {\n    private $db;\n    private $tableName = '{{tableName}}';\n    \n    public function __construct($db) {\n        $this->db = $db;\n    }\n    \n    public function findAll() {\n        $sql = \"SELECT * FROM {$this->tableName} ORDER BY id DESC\";\n        $stmt = $this->db->prepare($sql);\n        $stmt->execute();\n        return $stmt->fetchAll(PDO::FETCH_ASSOC);\n    }\n    \n    public function findById($id) {\n        $sql = \"SELECT * FROM {$this->tableName} WHERE id = :id\";\n        $stmt = $this->db->prepare($sql);\n        $stmt->bindValue(':id', $id, PDO::PARAM_INT);\n        $stmt->execute();\n        return $stmt->fetch(PDO::FETCH_ASSOC);\n    }\n    \n    public function create($data) {\n        $fields = implode(', ', array_keys($data));\n        $placeholders = ':' . implode(', :', array_keys($data));\n        \n        $sql = \"INSERT INTO {$this->tableName} ({$fields}) VALUES ({$placeholders})\";\n        $stmt = $this->db->prepare($sql);\n        \n        foreach ($data as $key => $value) {\n            $stmt->bindValue(':' . $key, $value);\n        }\n        \n        if ($stmt->execute()) {\n            return $this->db->lastInsertId();\n        }\n        return false;\n    }\n    \n    public function update($id, $data) {\n        $set = [];\n        foreach (array_keys($data) as $field) {\n            $set[] = \"{$field} = :{$field}\";\n        }\n        $setClause = implode(', ', $set);\n        \n        $sql = \"UPDATE {$this->tableName} SET {$setClause} WHERE id = :id\";\n        $stmt = $this->db->prepare($sql);\n        \n        foreach ($data as $key => $value) {\n            $stmt->bindValue(':' . $key, $value);\n        }\n        $stmt->bindValue(':id', $id, PDO::PARAM_INT);\n        \n        return $stmt->execute();\n    }\n    \n    public function delete($id) {\n        $sql = \"DELETE FROM {$this->tableName} WHERE id = :id\";\n        $stmt = $this->db->prepare($sql);\n        $stmt->bindValue(':id', $id, PDO::PARAM_INT);\n        return $stmt->execute();\n    }\n}",
+  "variables": [
+    {
+      "name": "entityName",
+      "type": "text",
+      "label": "Nom de l'entité",
+      "required": true,
+      "description": "Nom de la classe Model (ex: User)",
+      "placeholder": "User"
+    },
+    {
+      "name": "tableName",
+      "type": "text",
+      "label": "Nom de la table",
+      "required": true,
+      "description": "Nom de la table en base de données (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "includeSoftDelete",
+      "type": "checkbox",
+      "label": "Soft delete",
+      "required": false,
+      "description": "Ajouter le support du soft delete (deleted_at)",
+      "defaultValue": false
+    },
+    {
+      "name": "includeTimestamps",
+      "type": "checkbox",
+      "label": "Timestamps",
+      "required": false,
+      "description": "Inclure created_at et updated_at",
+      "defaultValue": true
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

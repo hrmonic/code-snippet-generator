@@ -1,0 +1,72 @@
+{
+  "id": "java-model",
+  "name": "Model Java avec JPA",
+  "description": "Entité JPA avec annotations et relations",
+  "language": "java",
+  "feature": "model",
+  "code": "package com.example.model;\n\nimport jakarta.persistence.*;\nimport java.time.LocalDateTime;\n\n@Entity\n@Table(name = \"{{tableName}}\")\npublic class {{entityName}} {\n    \n    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long id;\n    \n    @Column(nullable = false, length = 100)\n    private String name;\n    \n    @Column(unique = true, nullable = false)\n    private String email;\n    \n    @Column(name = \"created_at\")\n    private LocalDateTime createdAt;\n    \n    @Column(name = \"updated_at\")\n    private LocalDateTime updatedAt;\n    \n    @PrePersist\n    protected void onCreate() {\n        createdAt = LocalDateTime.now();\n        updatedAt = LocalDateTime.now();\n    }\n    \n    @PreUpdate\n    protected void onUpdate() {\n        updatedAt = LocalDateTime.now();\n    }\n    \n    // Constructors\n    public {{entityName}}() {}\n    \n    public {{entityName}}(String name, String email) {\n        this.name = name;\n        this.email = email;\n    }\n    \n    // Getters and Setters\n    public Long getId() {\n        return id;\n    }\n    \n    public void setId(Long id) {\n        this.id = id;\n    }\n    \n    public String getName() {\n        return name;\n    }\n    \n    public void setName(String name) {\n        this.name = name;\n    }\n    \n    public String getEmail() {\n        return email;\n    }\n    \n    public void setEmail(String email) {\n        this.email = email;\n    }\n    \n    public LocalDateTime getCreatedAt() {\n        return createdAt;\n    }\n    \n    public void setCreatedAt(LocalDateTime createdAt) {\n        this.createdAt = createdAt;\n    }\n    \n    public LocalDateTime getUpdatedAt() {\n        return updatedAt;\n    }\n    \n    public void setUpdatedAt(LocalDateTime updatedAt) {\n        this.updatedAt = updatedAt;\n    }\n    \n    @Override\n    public String toString() {\n        return \"{{entityName}}{\" +\n                \"id=\" + id +\n                \", name='\" + name + '\\'' +\n                \", email='\" + email + '\\'' +\n                \", createdAt=\" + createdAt +\n                \", updatedAt=\" + updatedAt +\n                '}';\n    }\n}",
+  "variables": [
+    {
+      "name": "entityName",
+      "type": "text",
+      "label": "Nom de l'entité",
+      "required": true,
+      "description": "Nom de la classe entité (ex: User)",
+      "placeholder": "User"
+    },
+    {
+      "name": "tableName",
+      "type": "text",
+      "label": "Nom de la table",
+      "required": true,
+      "description": "Nom de la table en base de données (ex: users)",
+      "placeholder": "users"
+    },
+    {
+      "name": "packageName",
+      "type": "text",
+      "label": "Nom du package",
+      "required": false,
+      "description": "Package Java (ex: com.example.model)",
+      "placeholder": "com.example.model",
+      "defaultValue": "com.example.model"
+    },
+    {
+      "name": "includeTimestamps",
+      "type": "checkbox",
+      "label": "Inclure les timestamps",
+      "required": false,
+      "description": "Ajouter createdAt et updatedAt avec @PrePersist et @PreUpdate",
+      "defaultValue": true
+    },
+    {
+      "name": "fields",
+      "type": "text",
+      "label": "Champs additionnels",
+      "required": false,
+      "description": "Champs supplémentaires séparés par des virgules (ex: name,email,age)",
+      "placeholder": "name,email,age"
+    },
+    {
+      "name": "includeToString",
+      "type": "checkbox",
+      "label": "Méthode toString()",
+      "required": false,
+      "description": "Générer la méthode toString()",
+      "defaultValue": true
+    },
+    {
+      "name": "includeEqualsHashCode",
+      "type": "checkbox",
+      "label": "equals() et hashCode()",
+      "required": false,
+      "description": "Générer les méthodes equals() et hashCode()",
+      "defaultValue": false
+    }
+  ],
+  "security": {
+    "sqlInjection": true,
+    "xss": false
+  }
+}
+

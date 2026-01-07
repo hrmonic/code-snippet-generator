@@ -1,0 +1,70 @@
+{
+  "id": "html5-input",
+  "name": "Champs Input HTML5",
+  "description": "Collection de champs input HTML5 avec types modernes",
+  "language": "html5",
+  "feature": "input",
+  "code": "<div class=\"form-container\">\n    <input type=\"text\" placeholder=\"Texte\" required>\n    <input type=\"email\" placeholder=\"Email\" required>\n    <input type=\"tel\" placeholder=\"Téléphone\">\n    <input type=\"url\" placeholder=\"URL\">\n    <input type=\"number\" placeholder=\"Nombre\" min=\"0\" max=\"100\">\n    <input type=\"date\" placeholder=\"Date\">\n    <input type=\"time\" placeholder=\"Heure\">\n    <input type=\"datetime-local\" placeholder=\"Date et heure\">\n    <input type=\"color\" placeholder=\"Couleur\">\n    <input type=\"range\" min=\"0\" max=\"100\" value=\"50\">\n    <input type=\"search\" placeholder=\"Recherche\">\n    <input type=\"password\" placeholder=\"Mot de passe\" required>\n</div>",
+  "variables": [
+    {
+      "name": "inputTypes",
+      "type": "multiselect",
+      "label": "Types d'input",
+      "required": true,
+      "description": "Sélectionnez les types d'input à inclure",
+      "defaultValue": ["text", "email", "password"],
+      "options": [
+        { "value": "text", "label": "Texte" },
+        { "value": "email", "label": "Email" },
+        { "value": "tel", "label": "Téléphone" },
+        { "value": "url", "label": "URL" },
+        { "value": "number", "label": "Nombre" },
+        { "value": "date", "label": "Date" },
+        { "value": "time", "label": "Heure" },
+        { "value": "datetime-local", "label": "Date et heure" },
+        { "value": "color", "label": "Couleur" },
+        { "value": "range", "label": "Range (slider)" },
+        { "value": "search", "label": "Recherche" },
+        { "value": "password", "label": "Mot de passe" }
+      ]
+    },
+    {
+      "name": "includeLabels",
+      "type": "checkbox",
+      "label": "Inclure les labels",
+      "required": false,
+      "description": "Ajouter des labels pour chaque input",
+      "defaultValue": true
+    },
+    {
+      "name": "includePlaceholders",
+      "type": "checkbox",
+      "label": "Inclure les placeholders",
+      "required": false,
+      "description": "Ajouter des placeholders",
+      "defaultValue": true
+    },
+    {
+      "name": "includeValidation",
+      "type": "checkbox",
+      "label": "Attributs de validation",
+      "required": false,
+      "description": "Ajouter les attributs required, min, max, etc.",
+      "defaultValue": true
+    },
+    {
+      "name": "containerClass",
+      "type": "text",
+      "label": "Classe du container",
+      "required": false,
+      "description": "Classe CSS pour le container",
+      "defaultValue": "form-container",
+      "placeholder": "form-container"
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+

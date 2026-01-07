@@ -1,0 +1,80 @@
+{
+  "id": "html5-layout",
+  "name": "Layout HTML5 Responsive",
+  "description": "Structure HTML5 sémantique responsive",
+  "language": "html5",
+  "feature": "layout",
+  "code": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{title}}</title>\n</head>\n<body>\n    <header>\n        <nav>\n            <ul>\n                <li><a href=\"#\">Accueil</a></li>\n                <li><a href=\"#\">À propos</a></li>\n                <li><a href=\"#\">Contact</a></li>\n            </ul>\n        </nav>\n    </header>\n    \n    <main>\n        <article>\n            <h1>{{title}}</h1>\n            <section>\n                <p>Contenu principal</p>\n            </section>\n        </article>\n        \n        <aside>\n            <h2>Sidebar</h2>\n            <p>Contenu secondaire</p>\n        </aside>\n    </main>\n    \n    <footer>\n        <p>&copy; 2024 {{companyName}}</p>\n    </footer>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "title",
+      "type": "text",
+      "label": "Titre de la page",
+      "required": true,
+      "description": "Titre principal de la page",
+      "placeholder": "Ma Page"
+    },
+    {
+      "name": "companyName",
+      "type": "text",
+      "label": "Nom de l'entreprise",
+      "required": false,
+      "description": "Nom de l'entreprise pour le footer",
+      "placeholder": "Mon Entreprise"
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "label": "Langue",
+      "required": false,
+      "description": "Langue de la page",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" },
+        { "value": "es", "label": "Español" }
+      ]
+    },
+    {
+      "name": "includeNav",
+      "type": "checkbox",
+      "label": "Navigation",
+      "required": false,
+      "description": "Inclure une barre de navigation",
+      "defaultValue": true
+    },
+    {
+      "name": "includeSidebar",
+      "type": "checkbox",
+      "label": "Sidebar",
+      "required": false,
+      "description": "Inclure une sidebar (aside)",
+      "defaultValue": true
+    },
+    {
+      "name": "includeFooter",
+      "type": "checkbox",
+      "label": "Footer",
+      "required": false,
+      "description": "Inclure un footer",
+      "defaultValue": true
+    },
+    {
+      "name": "navLinks",
+      "type": "text",
+      "label": "Liens de navigation",
+      "required": false,
+      "description": "Liens séparés par des virgules",
+      "placeholder": "Accueil,À propos,Contact",
+      "defaultValue": "Accueil,À propos,Contact",
+      "dependsOn": {
+        "includeNav": [true]
+      }
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+
