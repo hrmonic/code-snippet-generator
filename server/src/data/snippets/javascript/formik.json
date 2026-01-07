@@ -1,0 +1,89 @@
+{
+  "id": "javascript-formik",
+  "name": "Formik Forms",
+  "description": "Gestion de formulaires avec Formik, validation Yup, et gestion d'erreurs",
+  "language": "javascript",
+  "feature": "formik",
+  "code": "import { Formik, Form, Field, ErrorMessage } from 'formik';\n{{#if includeYup}}\nimport * as Yup from 'yup';\n{{/if}}\n\n{{#if includeValidationSchema}}\n// Schéma de validation\nconst {{validationSchemaName}} = Yup.object().shape({\n  {{fieldName}}: Yup.string()\n    .required('{{requiredMessage}}')\n    .min({{minLength}}, '{{minLengthMessage}}')\n    .max({{maxLength}}, '{{maxLengthMessage}}'),\n  \n  {{#if includeEmail}}\n  email: Yup.string()\n    .email('{{emailInvalidMessage}}')\n    .required('{{emailRequiredMessage}}'),\n  {{/if}}\n  \n  {{#if includePassword}}\n  password: Yup.string()\n    .required('{{passwordRequiredMessage}}')\n    .min(8, '{{passwordMinMessage}}')\n    .matches(\n      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)/,\n      '{{passwordComplexityMessage}}'\n    ),\n  \n  confirmPassword: Yup.string()\n    .oneOf([Yup.ref('password'), null], '{{passwordMatchMessage}}')\n    .required('{{confirmPasswordRequiredMessage}}'),\n  {{/if}}\n  \n  {{#if includeNumber}}\n  age: Yup.number()\n    .required('{{ageRequiredMessage}}')\n    .min({{minAge}}, '{{ageMinMessage}}')\n    .max({{maxAge}}, '{{ageMaxMessage}}'),\n  {{/if}}\n  \n  {{#if includeCheckbox}}\n  terms: Yup.boolean()\n    .oneOf([true], '{{termsRequiredMessage}}'),\n  {{/if}}\n});\n{{/if}}\n\n{{#if includeComponent}}\n// Composant de formulaire\nfunction {{formName}}() {\n  const initialValues = {\n    {{fieldName}}: '{{initialFieldValue}}',\n    {{#if includeEmail}}\n    email: '',\n    {{/if}}\n    {{#if includePassword}}\n    password: '',\n    confirmPassword: '',\n    {{/if}}\n    {{#if includeNumber}}\n    age: {{initialAge}},\n    {{/if}}\n    {{#if includeCheckbox}}\n    terms: false,\n    {{/if}}\n  };\n  \n  const handleSubmit = async (values, { setSubmitting, setErrors }) => {\n    try {\n      {{#if includeAsyncSubmit}}\n      const response = await fetch('{{apiEndpoint}}', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify(values),\n      });\n      \n      if (!response.ok) {\n        const errors = await response.json();\n        setErrors(errors);\n        return;\n      }\n      \n      const data = await response.json();\n      console.log('Success:', data);\n      {{else}}\n      console.log('Form values:', values);\n      // Traitement du formulaire\n      {{/if}}\n    } catch (error) {\n      setErrors({ submit: error.message });\n    } finally {\n      setSubmitting(false);\n    }\n  };\n  \n  return (\n    <Formik\n      initialValues={initialValues}\n      {{#if includeValidationSchema}}\n      validationSchema={{{validationSchemaName}}}\n      {{/if}}\n      onSubmit={handleSubmit}\n    >\n      {({ isSubmitting, errors, touched }) => (\n        <Form>\n          <div>\n            <label htmlFor=\"{{fieldName}}\">{{fieldLabel}}</label>\n            <Field\n              type=\"text\"\n              name=\"{{fieldName}}\"\n              id=\"{{fieldName}}\"\n              placeholder=\"{{fieldPlaceholder}}\"\n              className={errors.{{fieldName}} && touched.{{fieldName}} ? 'error' : ''}\n            />\n            <ErrorMessage name=\"{{fieldName}}\" component=\"div\" className=\"error-message\" />\n          </div>\n          \n          {{#if includeEmail}}\n          <div>\n            <label htmlFor=\"email\">Email</label>\n            <Field\n              type=\"email\"\n              name=\"email\"\n              id=\"email\"\n              placeholder=\"votre@email.com\"\n              className={errors.email && touched.email ? 'error' : ''}\n            />\n            <ErrorMessage name=\"email\" component=\"div\" className=\"error-message\" />\n          </div>\n          {{/if}}\n          \n          {{#if includePassword}}\n          <div>\n            <label htmlFor=\"password\">Mot de passe</label>\n            <Field\n              type=\"password\"\n              name=\"password\"\n              id=\"password\"\n              className={errors.password && touched.password ? 'error' : ''}\n            />\n            <ErrorMessage name=\"password\" component=\"div\" className=\"error-message\" />\n          </div>\n          \n          <div>\n            <label htmlFor=\"confirmPassword\">Confirmer le mot de passe</label>\n            <Field\n              type=\"password\"\n              name=\"confirmPassword\"\n              id=\"confirmPassword\"\n              className={errors.confirmPassword && touched.confirmPassword ? 'error' : ''}\n            />\n            <ErrorMessage name=\"confirmPassword\" component=\"div\" className=\"error-message\" />\n          </div>\n          {{/if}}\n          \n          {{#if includeNumber}}\n          <div>\n            <label htmlFor=\"age\">Âge</label>\n            <Field\n              type=\"number\"\n              name=\"age\"\n              id=\"age\"\n              className={errors.age && touched.age ? 'error' : ''}\n            />\n            <ErrorMessage name=\"age\" component=\"div\" className=\"error-message\" />\n          </div>\n          {{/if}}\n          \n          {{#if includeCheckbox}}\n          <div>\n            <label>\n              <Field type=\"checkbox\" name=\"terms\" />\n              J'accepte les conditions d'utilisation\n            </label>\n            <ErrorMessage name=\"terms\" component=\"div\" className=\"error-message\" />\n          </div>\n          {{/if}}\n          \n          {{#if includeSelect}}\n          <div>\n            <label htmlFor=\"{{selectFieldName}}\">{{selectFieldLabel}}</label>\n            <Field as=\"select\" name=\"{{selectFieldName}}\" id=\"{{selectFieldName}}\">\n              <option value=\"\">Sélectionnez...</option>\n              {{#each selectOptions}}\n              <option value=\"{{this.value}}\">{{this.label}}</option>\n              {{/each}}\n            </Field>\n            <ErrorMessage name=\"{{selectFieldName}}\" component=\"div\" className=\"error-message\" />\n          </div>\n          {{/if}}\n          \n          {{#if includeTextarea}}\n          <div>\n            <label htmlFor=\"{{textareaFieldName}}\">{{textareaFieldLabel}}</label>\n            <Field\n              as=\"textarea\"\n              name=\"{{textareaFieldName}}\"\n              id=\"{{textareaFieldName}}\"\n              rows=\"{{textareaRows}}\"\n              className={errors.{{textareaFieldName}} && touched.{{textareaFieldName}} ? 'error' : ''}\n            />\n            <ErrorMessage name=\"{{textareaFieldName}}\" component=\"div\" className=\"error-message\" />\n          </div>\n          {{/if}}\n          \n          {errors.submit && <div className=\"error-message\">{errors.submit}</div>}\n          \n          <button type=\"submit\" disabled={isSubmitting}>\n            {isSubmitting ? 'Envoi...' : '{{submitButtonText}}'}\n          </button>\n        </Form>\n      )}\n    </Formik>\n  );\n}\n{{/if}}\n\nexport default {{formName}};",
+  "variables": [
+    {
+      "name": "formikFeatures",
+      "type": "multiselect",
+      "label": "Fonctionnalités Formik",
+      "required": true,
+      "description": "Sélectionnez les fonctionnalités à inclure",
+      "defaultValue": ["validation", "component"],
+      "options": [
+        { "value": "validation", "label": "Validation Schema (Yup)" },
+        { "value": "component", "label": "Composant de formulaire" },
+        { "value": "email", "label": "Champ email" },
+        { "value": "password", "label": "Champs mot de passe" },
+        { "value": "number", "label": "Champ nombre" },
+        { "value": "checkbox", "label": "Checkbox" },
+        { "value": "select", "label": "Select" },
+        { "value": "textarea", "label": "Textarea" },
+        { "value": "asyncSubmit", "label": "Soumission asynchrone" }
+      ]
+    },
+    {
+      "name": "formName",
+      "type": "text",
+      "label": "Nom du formulaire",
+      "required": true,
+      "description": "Nom du composant de formulaire",
+      "placeholder": "ContactForm",
+      "defaultValue": "MyForm"
+    },
+    {
+      "name": "fieldName",
+      "type": "text",
+      "label": "Nom du champ principal",
+      "required": false,
+      "description": "Nom du champ principal",
+      "placeholder": "name",
+      "defaultValue": "name"
+    },
+    {
+      "name": "fieldLabel",
+      "type": "text",
+      "label": "Label du champ principal",
+      "required": false,
+      "description": "Label affiché pour le champ principal",
+      "placeholder": "Nom",
+      "defaultValue": "Nom"
+    },
+    {
+      "name": "includeYup",
+      "type": "checkbox",
+      "label": "Utiliser Yup",
+      "required": false,
+      "description": "Inclure la validation avec Yup",
+      "defaultValue": true
+    },
+    {
+      "name": "includeAsyncSubmit",
+      "type": "checkbox",
+      "label": "Soumission asynchrone",
+      "required": false,
+      "description": "Inclure la soumission asynchrone avec API",
+      "defaultValue": false
+    },
+    {
+      "name": "apiEndpoint",
+      "type": "text",
+      "label": "Endpoint API",
+      "required": false,
+      "description": "URL de l'endpoint API pour la soumission",
+      "placeholder": "/api/submit",
+      "defaultValue": "/api/submit",
+      "dependsOn": {
+        "includeAsyncSubmit": [true]
+      }
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

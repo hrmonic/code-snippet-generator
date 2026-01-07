@@ -1,0 +1,76 @@
+{
+  "id": "css3-keyframes",
+  "name": "CSS Keyframes Animations",
+  "description": "Collection d'animations CSS avec keyframes (fade, slide, rotate, scale, bounce, etc.)",
+  "language": "css3",
+  "feature": "keyframes",
+  "code": "{{#if includeFade}}\n/* Fade In */\n@keyframes fadeIn {\n    from {\n        opacity: 0;\n    }\n    to {\n        opacity: 1;\n    }\n}\n\n.fade-in {\n    animation: fadeIn {{duration}}s ease-in-out;\n}\n\n/* Fade Out */\n@keyframes fadeOut {\n    from {\n        opacity: 1;\n    }\n    to {\n        opacity: 0;\n    }\n}\n\n.fade-out {\n    animation: fadeOut {{duration}}s ease-in-out;\n}\n{{/if}}\n\n{{#if includeSlide}}\n/* Slide In */\n@keyframes slideInLeft {\n    from {\n        transform: translateX(-100%);\n        opacity: 0;\n    }\n    to {\n        transform: translateX(0);\n        opacity: 1;\n    }\n}\n\n.slide-in-left {\n    animation: slideInLeft {{duration}}s ease-out;\n}\n\n@keyframes slideInRight {\n    from {\n        transform: translateX(100%);\n        opacity: 0;\n    }\n    to {\n        transform: translateX(0);\n        opacity: 1;\n    }\n}\n\n.slide-in-right {\n    animation: slideInRight {{duration}}s ease-out;\n}\n\n@keyframes slideInUp {\n    from {\n        transform: translateY(100%);\n        opacity: 0;\n    }\n    to {\n        transform: translateY(0);\n        opacity: 1;\n    }\n}\n\n.slide-in-up {\n    animation: slideInUp {{duration}}s ease-out;\n}\n\n@keyframes slideInDown {\n    from {\n        transform: translateY(-100%);\n        opacity: 0;\n    }\n    to {\n        transform: translateY(0);\n        opacity: 1;\n    }\n}\n\n.slide-in-down {\n    animation: slideInDown {{duration}}s ease-out;\n}\n{{/if}}\n\n{{#if includeRotate}}\n/* Rotate */\n@keyframes rotate {\n    from {\n        transform: rotate(0deg);\n    }\n    to {\n        transform: rotate(360deg);\n    }\n}\n\n.rotate {\n    animation: rotate {{duration}}s linear infinite;\n}\n\n@keyframes rotateIn {\n    from {\n        transform: rotate(-200deg);\n        opacity: 0;\n    }\n    to {\n        transform: rotate(0deg);\n        opacity: 1;\n    }\n}\n\n.rotate-in {\n    animation: rotateIn {{duration}}s ease-out;\n}\n{{/if}}\n\n{{#if includeScale}}\n/* Scale */\n@keyframes scaleIn {\n    from {\n        transform: scale(0);\n        opacity: 0;\n    }\n    to {\n        transform: scale(1);\n        opacity: 1;\n    }\n}\n\n.scale-in {\n    animation: scaleIn {{duration}}s ease-out;\n}\n\n@keyframes scaleOut {\n    from {\n        transform: scale(1);\n        opacity: 1;\n    }\n    to {\n        transform: scale(0);\n        opacity: 0;\n    }\n}\n\n.scale-out {\n    animation: scaleOut {{duration}}s ease-out;\n}\n\n@keyframes pulse {\n    0%, 100% {\n        transform: scale(1);\n    }\n    50% {\n        transform: scale({{pulseScale}});\n    }\n}\n\n.pulse {\n    animation: pulse {{duration}}s ease-in-out infinite;\n}\n{{/if}}\n\n{{#if includeBounce}}\n/* Bounce */\n@keyframes bounce {\n    0%, 20%, 50%, 80%, 100% {\n        transform: translateY(0);\n    }\n    40% {\n        transform: translateY(-{{bounceHeight}}px);\n    }\n    60% {\n        transform: translateY(-{{bounceHeight}}px / 2);\n    }\n}\n\n.bounce {\n    animation: bounce {{duration}}s infinite;\n}\n\n@keyframes bounceIn {\n    0% {\n        transform: scale(0.3);\n        opacity: 0;\n    }\n    50% {\n        transform: scale(1.05);\n    }\n    70% {\n        transform: scale(0.9);\n    }\n    100% {\n        transform: scale(1);\n        opacity: 1;\n    }\n}\n\n.bounce-in {\n    animation: bounceIn {{duration}}s ease-out;\n}\n{{/if}}\n\n{{#if includeShake}}\n/* Shake */\n@keyframes shake {\n    0%, 100% {\n        transform: translateX(0);\n    }\n    10%, 30%, 50%, 70%, 90% {\n        transform: translateX(-{{shakeDistance}}px);\n    }\n    20%, 40%, 60%, 80% {\n        transform: translateX({{shakeDistance}}px);\n    }\n}\n\n.shake {\n    animation: shake {{duration}}s;\n}\n{{/if}}\n\n{{#if includeFlip}}\n/* Flip */\n@keyframes flipInX {\n    from {\n        transform: perspective(400px) rotateX(90deg);\n        opacity: 0;\n    }\n    40% {\n        transform: perspective(400px) rotateX(-20deg);\n    }\n    60% {\n        transform: perspective(400px) rotateX(10deg);\n    }\n    80% {\n        transform: perspective(400px) rotateX(-5deg);\n    }\n    to {\n        transform: perspective(400px) rotateX(0deg);\n        opacity: 1;\n    }\n}\n\n.flip-in-x {\n    animation: flipInX {{duration}}s;\n}\n{{/if}}\n\n{{#if includeZoom}}\n/* Zoom */\n@keyframes zoomIn {\n    from {\n        transform: scale(0);\n        opacity: 0;\n    }\n    50% {\n        opacity: 1;\n    }\n    to {\n        transform: scale(1);\n        opacity: 1;\n    }\n}\n\n.zoom-in {\n    animation: zoomIn {{duration}}s ease-out;\n}\n\n@keyframes zoomOut {\n    from {\n        transform: scale(1);\n        opacity: 1;\n    }\n    50% {\n        opacity: 1;\n    }\n    to {\n        transform: scale(0);\n        opacity: 0;\n    }\n}\n\n.zoom-out {\n    animation: zoomOut {{duration}}s ease-out;\n}\n{{/if}}\n\n{{#if includeCustom}}\n/* Animation personnalisée */\n@keyframes {{customAnimationName}} {\n    0% {\n        {{customKeyframe0}}\n    }\n    50% {\n        {{customKeyframe50}}\n    }\n    100% {\n        {{customKeyframe100}}\n    }\n}\n\n.{{customAnimationClass}} {\n    animation: {{customAnimationName}} {{duration}}s {{timingFunction}} {{iterationCount}};\n}\n{{/if}}\n\n/* Utilisation avec animation-delay */\n{{#if includeDelay}}\n.animated-delay-1 {\n    animation-delay: 0.1s;\n}\n\n.animated-delay-2 {\n    animation-delay: 0.2s;\n}\n\n.animated-delay-3 {\n    animation-delay: 0.3s;\n}\n{{/if}}",
+  "variables": [
+    {
+      "name": "animationTypes",
+      "type": "multiselect",
+      "label": "Types d'animations",
+      "required": true,
+      "description": "Sélectionnez les types d'animations à inclure",
+      "defaultValue": ["fade", "slide"],
+      "options": [
+        { "value": "fade", "label": "Fade (fadeIn, fadeOut)" },
+        { "value": "slide", "label": "Slide (slideInLeft, slideInRight, slideInUp, slideInDown)" },
+        { "value": "rotate", "label": "Rotate (rotate, rotateIn)" },
+        { "value": "scale", "label": "Scale (scaleIn, scaleOut, pulse)" },
+        { "value": "bounce", "label": "Bounce (bounce, bounceIn)" },
+        { "value": "shake", "label": "Shake" },
+        { "value": "flip", "label": "Flip (flipInX)" },
+        { "value": "zoom", "label": "Zoom (zoomIn, zoomOut)" },
+        { "value": "custom", "label": "Animation personnalisée" },
+        { "value": "delay", "label": "Animation delays" }
+      ]
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "label": "Durée (secondes)",
+      "required": false,
+      "description": "Durée de l'animation en secondes",
+      "defaultValue": 0.5,
+      "min": 0.1,
+      "max": 5,
+      "step": 0.1
+    },
+    {
+      "name": "timingFunction",
+      "type": "select",
+      "label": "Fonction de timing",
+      "required": false,
+      "description": "Fonction de timing de l'animation",
+      "defaultValue": "ease",
+      "options": [
+        { "value": "ease", "label": "ease" },
+        { "value": "ease-in", "label": "ease-in" },
+        { "value": "ease-out", "label": "ease-out" },
+        { "value": "ease-in-out", "label": "ease-in-out" },
+        { "value": "linear", "label": "linear" },
+        { "value": "cubic-bezier(0.68, -0.55, 0.265, 1.55)", "label": "Bounce" }
+      ]
+    },
+    {
+      "name": "iterationCount",
+      "type": "select",
+      "label": "Nombre d'itérations",
+      "required": false,
+      "description": "Nombre de fois que l'animation se répète",
+      "defaultValue": "1",
+      "options": [
+        { "value": "1", "label": "1 fois" },
+        { "value": "infinite", "label": "Infinie" },
+        { "value": "2", "label": "2 fois" },
+        { "value": "3", "label": "3 fois" }
+      ]
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": false
+  }
+}
+

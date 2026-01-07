@@ -1,0 +1,97 @@
+{
+  "id": "html5-carousel",
+  "name": "Carousel/Slider",
+  "description": "Carrousel d'images accessible avec navigation, autoplay, et indicateurs",
+  "language": "html5",
+  "feature": "carousel",
+  "code": "<!DOCTYPE html>\n<html lang=\"{{language}}\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{title}}</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        \n        body {\n            font-family: {{fontFamily}};\n            padding: 2rem;\n        }\n        \n        .carousel-container {\n            position: relative;\n            max-width: {{maxWidth}};\n            margin: 0 auto;\n            overflow: hidden;\n            border-radius: {{borderRadius}};\n            {{#if shadow}}\n            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\n            {{/if}}\n        }\n        \n        .carousel-track {\n            display: flex;\n            transition: transform {{transitionDuration}}s ease-in-out;\n        }\n        \n        .carousel-slide {\n            min-width: 100%;\n            height: {{slideHeight}};\n            position: relative;\n        }\n        \n        .carousel-slide img {\n            width: 100%;\n            height: 100%;\n            object-fit: {{objectFit}};\n        }\n        \n        .carousel-slide-content {\n            position: absolute;\n            bottom: 0;\n            left: 0;\n            right: 0;\n            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);\n            color: {{textColor}};\n            padding: {{contentPadding}};\n        }\n        \n        .carousel-button {\n            position: absolute;\n            top: 50%;\n            transform: translateY(-50%);\n            background: {{buttonBackground}};\n            color: {{buttonColor}};\n            border: none;\n            width: {{buttonSize}};\n            height: {{buttonSize}};\n            border-radius: 50%;\n            cursor: pointer;\n            font-size: {{buttonFontSize}};\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            transition: all 0.3s ease;\n            z-index: 10;\n            opacity: {{buttonOpacity}};\n        }\n        \n        .carousel-button:hover {\n            opacity: 1;\n            background: {{buttonHoverBackground}};\n        }\n        \n        .carousel-button:focus {\n            outline: 2px solid {{focusColor}};\n            outline-offset: 2px;\n        }\n        \n        .carousel-button.prev {\n            left: {{buttonOffset}};\n        }\n        \n        .carousel-button.next {\n            right: {{buttonOffset}};\n        }\n        \n        .carousel-indicators {\n            position: absolute;\n            bottom: {{indicatorOffset}};\n            left: 50%;\n            transform: translateX(-50%);\n            display: flex;\n            gap: {{indicatorGap}};\n            z-index: 10;\n        }\n        \n        .carousel-indicator {\n            width: {{indicatorSize}};\n            height: {{indicatorSize}};\n            border-radius: 50%;\n            background: {{indicatorColor}};\n            border: none;\n            cursor: pointer;\n            opacity: 0.5;\n            transition: opacity 0.3s ease;\n        }\n        \n        .carousel-indicator.active {\n            opacity: 1;\n            background: {{activeIndicatorColor}};\n        }\n        \n        .carousel-indicator:hover {\n            opacity: 0.8;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"carousel-container\" role=\"region\" aria-label=\"{{ariaLabel}}\">\n        <div class=\"carousel-track\" id=\"carouselTrack\">\n            {{carouselSlides}}\n        </div>\n        \n        <button\n            class=\"carousel-button prev\"\n            aria-label=\"{{prevLabel}}\"\n            id=\"prevButton\">\n            ‹\n        </button>\n        \n        <button\n            class=\"carousel-button next\"\n            aria-label=\"{{nextLabel}}\"\n            id=\"nextButton\">\n            ›\n        </button>\n        \n        {{#if includeIndicators}}\n        <div class=\"carousel-indicators\" role=\"tablist\" id=\"indicators\">\n            <!-- Généré dynamiquement -->\n        </div>\n        {{/if}}\n    </div>\n    \n    <script>\n        class Carousel {\n            constructor(container, options = {}) {\n                this.container = container;\n                this.track = container.querySelector('#carouselTrack');\n                this.slides = Array.from(this.track.querySelectorAll('.carousel-slide'));\n                this.currentIndex = 0;\n                this.autoplayInterval = options.autoplayInterval || {{autoplayInterval}};\n                this.autoplayEnabled = options.autoplay || {{autoplay}};\n                this.intervalId = null;\n                \n                this.init();\n            }\n            \n            init() {\n                this.updateTrack();\n                this.setupButtons();\n                {{#if includeIndicators}}\n                this.setupIndicators();\n                {{/if}}\n                \n                if (this.autoplayEnabled) {\n                    this.startAutoplay();\n                }\n                \n                // Pause au survol\n                this.container.addEventListener('mouseenter', () => this.stopAutoplay());\n                this.container.addEventListener('mouseleave', () => {\n                    if (this.autoplayEnabled) {\n                        this.startAutoplay();\n                    }\n                });\n            }\n            \n            updateTrack() {\n                const offset = -this.currentIndex * 100;\n                this.track.style.transform = `translateX(${offset}%)`;\n                {{#if includeIndicators}}\n                this.updateIndicators();\n                {{/if}}\n            }\n            \n            goToSlide(index) {\n                if (index < 0) {\n                    index = this.slides.length - 1;\n                } else if (index >= this.slides.length) {\n                    index = 0;\n                }\n                \n                this.currentIndex = index;\n                this.updateTrack();\n            }\n            \n            next() {\n                this.goToSlide(this.currentIndex + 1);\n            }\n            \n            prev() {\n                this.goToSlide(this.currentIndex - 1);\n            }\n            \n            setupButtons() {\n                const prevBtn = this.container.querySelector('#prevButton');\n                const nextBtn = this.container.querySelector('#nextButton');\n                \n                prevBtn.addEventListener('click', () => this.prev());\n                nextBtn.addEventListener('click', () => this.next());\n                \n                // Navigation clavier\n                this.container.addEventListener('keydown', (e) => {\n                    if (e.key === 'ArrowLeft') {\n                        this.prev();\n                    } else if (e.key === 'ArrowRight') {\n                        this.next();\n                    }\n                });\n            }\n            \n            {{#if includeIndicators}}\n            setupIndicators() {\n                const indicatorsContainer = this.container.querySelector('#indicators');\n                indicatorsContainer.innerHTML = '';\n                \n                this.slides.forEach((_, index) => {\n                    const indicator = document.createElement('button');\n                    indicator.className = 'carousel-indicator';\n                    indicator.setAttribute('role', 'tab');\n                    indicator.setAttribute('aria-label', `Go to slide ${index + 1}`);\n                    indicator.addEventListener('click', () => this.goToSlide(index));\n                    indicatorsContainer.appendChild(indicator);\n                });\n                \n                this.updateIndicators();\n            }\n            \n            updateIndicators() {\n                const indicators = this.container.querySelectorAll('.carousel-indicator');\n                indicators.forEach((indicator, index) => {\n                    if (index === this.currentIndex) {\n                        indicator.classList.add('active');\n                        indicator.setAttribute('aria-selected', 'true');\n                    } else {\n                        indicator.classList.remove('active');\n                        indicator.setAttribute('aria-selected', 'false');\n                    }\n                });\n            }\n            {{/if}}\n            \n            startAutoplay() {\n                this.stopAutoplay();\n                this.intervalId = setInterval(() => this.next(), this.autoplayInterval);\n            }\n            \n            stopAutoplay() {\n                if (this.intervalId) {\n                    clearInterval(this.intervalId);\n                    this.intervalId = null;\n                }\n            }\n        }\n        \n        // Initialisation\n        const carouselContainer = document.querySelector('.carousel-container');\n        const carousel = new Carousel(carouselContainer, {\n            autoplay: {{autoplay}},\n            autoplayInterval: {{autoplayInterval}},\n        });\n    </script>\n</body>\n</html>",
+  "variables": [
+    {
+      "name": "title",
+      "type": "text",
+      "label": "Titre de la page",
+      "required": false,
+      "description": "Titre de la page",
+      "defaultValue": "Carousel Component"
+    },
+    {
+      "name": "language",
+      "type": "select",
+      "label": "Langue",
+      "required": false,
+      "description": "Langue de la page",
+      "defaultValue": "fr",
+      "options": [
+        { "value": "fr", "label": "Français" },
+        { "value": "en", "label": "English" }
+      ]
+    },
+    {
+      "name": "carouselSlides",
+      "type": "textarea",
+      "label": "Slides du carousel",
+      "required": true,
+      "description": "HTML des slides (un par slide)",
+      "placeholder": "<div class=\"carousel-slide\"><img src=\"image1.jpg\" alt=\"Slide 1\"><div class=\"carousel-slide-content\"><h3>Titre 1</h3><p>Description 1</p></div></div>",
+      "defaultValue": "<div class=\"carousel-slide\"><img src=\"https://via.placeholder.com/800x400\" alt=\"Slide 1\"><div class=\"carousel-slide-content\"><h3>Slide 1</h3><p>Description du slide 1</p></div></div>\n<div class=\"carousel-slide\"><img src=\"https://via.placeholder.com/800x400\" alt=\"Slide 2\"><div class=\"carousel-slide-content\"><h3>Slide 2</h3><p>Description du slide 2</p></div></div>\n<div class=\"carousel-slide\"><img src=\"https://via.placeholder.com/800x400\" alt=\"Slide 3\"><div class=\"carousel-slide-content\"><h3>Slide 3</h3><p>Description du slide 3</p></div></div>"
+    },
+    {
+      "name": "maxWidth",
+      "type": "text",
+      "label": "Largeur maximale",
+      "required": false,
+      "description": "Largeur maximale du carousel",
+      "defaultValue": "800px"
+    },
+    {
+      "name": "slideHeight",
+      "type": "text",
+      "label": "Hauteur des slides",
+      "required": false,
+      "description": "Hauteur des slides",
+      "defaultValue": "400px"
+    },
+    {
+      "name": "autoplay",
+      "type": "checkbox",
+      "label": "Autoplay",
+      "required": false,
+      "description": "Défilement automatique",
+      "defaultValue": true
+    },
+    {
+      "name": "autoplayInterval",
+      "type": "number",
+      "label": "Intervalle autoplay (ms)",
+      "required": false,
+      "description": "Délai entre les slides en millisecondes",
+      "defaultValue": 3000,
+      "min": 1000,
+      "max": 10000
+    },
+    {
+      "name": "includeIndicators",
+      "type": "checkbox",
+      "label": "Indicateurs",
+      "required": false,
+      "description": "Afficher les indicateurs de slide",
+      "defaultValue": true
+    },
+    {
+      "name": "transitionDuration",
+      "type": "number",
+      "label": "Durée de transition (s)",
+      "required": false,
+      "description": "Durée de la transition entre les slides",
+      "defaultValue": 0.5,
+      "min": 0.1,
+      "max": 2,
+      "step": 0.1
+    }
+  ],
+  "security": {
+    "sqlInjection": false,
+    "xss": true
+  }
+}
+
