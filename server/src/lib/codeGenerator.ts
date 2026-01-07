@@ -41,19 +41,91 @@ class CodeGenerator {
   }
 }
 
+// Fonction helper pour remplacer les placeholders
+function replacePlaceholders(
+  code: string,
+  options: Record<string, unknown>,
+  sanitizeFn: (value: string) => string = (v) => v
+): string {
+  let result = code;
+
+  for (const [key, value] of Object.entries(options)) {
+    const placeholder = new RegExp(`{{${key}}}`, 'g');
+    
+    // Gérer les arrays (pour multiselect)
+    if (Array.isArray(value)) {
+      const arrayCode = value
+        .map((item, index) => {
+          if (typeof item === 'object' && item !== null) {
+            // Objet avec label et value
+            return `            <li><a href="#${item.value || item}">${item.label || item}</a></li>`;
+          }
+          // String simple
+          const linkMap: Record<string, string> = {
+            home: 'Accueil',
+            about: 'À propos',
+            services: 'Services',
+            portfolio: 'Portfolio',
+            blog: 'Blog',
+            contact: 'Contact',
+          };
+          return `            <li><a href="#${item}">${linkMap[item as string] || item}</a></li>`;
+        })
+        .join('\n');
+      result = result.replace(placeholder, arrayCode);
+      continue;
+    }
+
+    // Gérer les booleans (pour checkboxes)
+    if (typeof value === 'boolean') {
+      // Pour les conditions Handlebars-like dans le code
+      // Pattern: {{#if key}}...{{/if}}
+      const ifPattern = new RegExp(`{{#if ${key}}}([\\s\\S]*?){{/if}}`, 'g');
+      // Pattern: {{#unless key}}...{{/unless}}
+      const unlessPattern = new RegExp(`{{#unless ${key}}}([\\s\\S]*?){{/unless}}`, 'g');
+      
+      if (value) {
+        // Si true: garder le contenu de {{#if}}, supprimer {{#unless}}
+        result = result.replace(ifPattern, '$1');
+        result = result.replace(unlessPattern, '');
+      } else {
+        // Si false: supprimer {{#if}}, garder le contenu de {{#unless}}
+        result = result.replace(ifPattern, '');
+        result = result.replace(unlessPattern, '$1');
+      }
+      // Retirer aussi les placeholders simples
+      result = result.replace(placeholder, '');
+      continue;
+    }
+
+    // Gérer les objets (pour les options complexes)
+    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      const objStr = JSON.stringify(value);
+      result = result.replace(placeholder, sanitizeFn(objStr));
+      continue;
+    }
+
+    // Valeur simple
+    result = result.replace(placeholder, sanitizeFn(String(value)));
+  }
+
+  // Nettoyer les conditions non résolues (après tous les remplacements)
+  result = result.replace(/{{#if\s+\w+}}[\s\S]*?{{\/if}}/g, '');
+  result = result.replace(/{{#unless\s+\w+}}[\s\S]*?{{\/unless}}/g, '');
+  result = result.replace(/{{#each\s+\w+}}[\s\S]*?{{\/each}}/g, '');
+  
+  // Nettoyer les placeholders restants (optionnels)
+  result = result.replace(/{{[^}]+}}/g, '');
+
+  return result;
+}
+
 // Strategies de génération par langage
 class PhpGeneratorStrategy implements CodeGeneratorStrategy {
   generate(snippet: any, options: Record<string, unknown>): GenerateResult {
     let code = snippet.code;
+    code = replacePlaceholders(code, options, (v) => security.sanitizeInput(v));
 
-    // Remplacement des variables
-    for (const [key, value] of Object.entries(options)) {
-      const placeholder = new RegExp(`{{${key}}}`, 'g');
-      const sanitized = security.sanitizeInput(String(value));
-      code = code.replace(placeholder, sanitized);
-    }
-
-    // Génération de nom de fichier
     const filename = options.entityName
       ? `${String(options.entityName)}Controller.php`
       : 'generated.php';
@@ -71,11 +143,7 @@ class JavaGeneratorStrategy implements CodeGeneratorStrategy {
       return this.generateCrudFiles(snippet, options);
     }
 
-    for (const [key, value] of Object.entries(options)) {
-      const placeholder = new RegExp(`{{${key}}}`, 'g');
-      const sanitized = security.sanitizeInput(String(value));
-      code = code.replace(placeholder, sanitized);
-    }
+    code = replacePlaceholders(code, options, (v) => security.sanitizeInput(v));
 
     const filename = options.entityName
       ? `${String(options.entityName)}Controller.java`
@@ -296,12 +364,30 @@ public class ${entityName}Service {
 class HtmlGeneratorStrategy implements CodeGeneratorStrategy {
   generate(snippet: any, options: Record<string, unknown>): GenerateResult {
     let code = snippet.code;
-
-    for (const [key, value] of Object.entries(options)) {
-      const placeholder = new RegExp(`{{${key}}}`, 'g');
-      const sanitized = security.escapeHtml(String(value));
-      code = code.replace(placeholder, sanitized);
+    
+    // Traitement spécial pour navbar avec navLinks
+    if (snippet.feature === 'navbar' && options.navLinks && Array.isArray(options.navLinks)) {
+      const navLinks = options.navLinks as string[];
+      const linkMap: Record<string, { href: string; label: string }> = {
+        home: { href: '#home', label: 'Accueil' },
+        about: { href: '#about', label: 'À propos' },
+        services: { href: '#services', label: 'Services' },
+        portfolio: { href: '#portfolio', label: 'Portfolio' },
+        blog: { href: '#blog', label: 'Blog' },
+        contact: { href: '#contact', label: 'Contact' },
+      };
+      
+      const linksHtml = navLinks
+        .map((link) => {
+          const linkData = linkMap[link] || { href: `#${link}`, label: link };
+          return `            <li><a href="${linkData.href}">${linkData.label}</a></li>`;
+        })
+        .join('\n');
+      
+      code = code.replace(/{{navLinks}}/g, linksHtml);
     }
+    
+    code = replacePlaceholders(code, options, (v) => security.escapeHtml(v));
 
     return { code, filename: 'index.html', tests: snippet.tests };
   }
@@ -310,11 +396,7 @@ class HtmlGeneratorStrategy implements CodeGeneratorStrategy {
 class CssGeneratorStrategy implements CodeGeneratorStrategy {
   generate(snippet: any, options: Record<string, unknown>): GenerateResult {
     let code = snippet.code;
-
-    for (const [key, value] of Object.entries(options)) {
-      const placeholder = new RegExp(`{{${key}}}`, 'g');
-      code = code.replace(placeholder, String(value));
-    }
+    code = replacePlaceholders(code, options, (v) => v);
 
     return { code, filename: 'styles.css', tests: snippet.tests };
   }
@@ -323,12 +405,7 @@ class CssGeneratorStrategy implements CodeGeneratorStrategy {
 class JavascriptGeneratorStrategy implements CodeGeneratorStrategy {
   generate(snippet: any, options: Record<string, unknown>): GenerateResult {
     let code = snippet.code;
-
-    for (const [key, value] of Object.entries(options)) {
-      const placeholder = new RegExp(`{{${key}}}`, 'g');
-      const sanitized = security.escapeJs(String(value));
-      code = code.replace(placeholder, sanitized);
-    }
+    code = replacePlaceholders(code, options, (v) => security.escapeJs(v));
 
     return { code, filename: 'script.js', tests: snippet.tests };
   }
@@ -339,11 +416,7 @@ class SqlGeneratorStrategy implements CodeGeneratorStrategy {
     let code = snippet.code;
 
     // Sécurisation spéciale pour SQL
-    for (const [key, value] of Object.entries(options)) {
-      const placeholder = new RegExp(`{{${key}}}`, 'g');
-      const sanitized = security.sanitizeSqlIdentifier(String(value));
-      code = code.replace(placeholder, sanitized);
-    }
+    code = replacePlaceholders(code, options, (v) => security.sanitizeSqlIdentifier(v));
 
     return { code, filename: 'query.sql', tests: snippet.tests };
   }

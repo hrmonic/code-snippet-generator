@@ -2,11 +2,25 @@ import { useState, useEffect } from 'react';
 import { useGeneratorStore } from '../store/useGeneratorStore';
 import { generateCode } from '../lib/generator';
 import { FeatureInfo } from './FeatureInfo';
+import { OptionInput, type OptionInputType } from './OptionInput';
+
+interface OptionConfig {
+  key: string;
+  label: string;
+  type: OptionInputType;
+  placeholder?: string;
+  required?: boolean;
+  description?: string;
+  options?: Array<{ value: string; label: string }>;
+  defaultValue?: string | boolean | number | string[];
+  min?: number;
+  max?: number;
+}
 
 export function SnippetOptions() {
   const { selectedLanguage, selectedFeature, setOptions, setGeneratedCode, setLoading, setError } =
     useGeneratorStore();
-  const [localOptions, setLocalOptions] = useState<Record<string, string>>({});
+  const [localOptions, setLocalOptions] = useState<Record<string, any>>({});
 
   useEffect(() => {
     // Reset options when language or feature changes
@@ -18,7 +32,7 @@ export function SnippetOptions() {
     return null;
   }
 
-  const handleOptionChange = (key: string, value: string) => {
+  const handleOptionChange = (key: string, value: any) => {
     const newOptions = { ...localOptions, [key]: value };
     setLocalOptions(newOptions);
     setOptions(newOptions);
@@ -44,152 +58,423 @@ export function SnippetOptions() {
     }
   };
 
-  // Options dynamiques selon le langage et feature
-  const getOptionsForFeature = () => {
-    if (selectedFeature === 'crud' && (selectedLanguage === 'php' || selectedLanguage === 'java')) {
+  // Configuration complète des options avec types
+  const getOptionsForFeature = (): OptionConfig[] => {
+    // Navbar HTML5 - Enrichi
+    if (selectedFeature === 'navbar' && selectedLanguage === 'html5') {
       return [
-        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
-        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
         {
-          key: 'fields',
-          label: 'Champs (séparés par des virgules)',
-          placeholder: 'id,name,email,created_at',
+          key: 'siteName',
+          label: 'Nom du site',
+          type: 'text',
+          placeholder: 'Mon Site',
           required: true,
+        },
+        {
+          key: 'language',
+          label: 'Langue de la page',
+          type: 'select',
+          required: false,
+          defaultValue: 'fr',
+          options: [
+            { value: 'fr', label: 'Français' },
+            { value: 'en', label: 'English' },
+            { value: 'es', label: 'Español' },
+            { value: 'de', label: 'Deutsch' },
+            { value: 'it', label: 'Italiano' },
+          ],
+        },
+        {
+          key: 'backgroundColor',
+          label: 'Couleur de fond',
+          type: 'select',
+          required: false,
+          defaultValue: '#333',
+          options: [
+            { value: '#333', label: 'Gris foncé' },
+            { value: '#1a1a1a', label: 'Noir' },
+            { value: '#667eea', label: 'Bleu' },
+            { value: '#764ba2', label: 'Violet' },
+            { value: '#f093fb', label: 'Rose' },
+            { value: '#4facfe', label: 'Bleu clair' },
+            { value: '#ffffff', label: 'Blanc' },
+          ],
+        },
+        {
+          key: 'textColor',
+          label: 'Couleur du texte',
+          type: 'select',
+          required: false,
+          defaultValue: 'white',
+          options: [
+            { value: 'white', label: 'Blanc' },
+            { value: '#333', label: 'Gris foncé' },
+            { value: '#000', label: 'Noir' },
+          ],
+        },
+        {
+          key: 'sticky',
+          label: 'Navbar fixe',
+          type: 'checkbox',
+          required: false,
+          defaultValue: false,
+          description: 'Navbar reste fixe en haut lors du scroll',
+        },
+        {
+          key: 'shadow',
+          label: 'Ombre',
+          type: 'checkbox',
+          required: false,
+          defaultValue: true,
+          description: 'Ajouter une ombre à la navbar',
+        },
+        {
+          key: 'hoverEffect',
+          label: 'Effet hover',
+          type: 'checkbox',
+          required: false,
+          defaultValue: false,
+          description: 'Effet hover avec fond sur les liens',
+        },
+        {
+          key: 'padding',
+          label: 'Espacement interne',
+          type: 'select',
+          required: false,
+          defaultValue: '1rem 2rem',
+          options: [
+            { value: '0.5rem 1rem', label: 'Petit' },
+            { value: '1rem 2rem', label: 'Moyen' },
+            { value: '1.5rem 3rem', label: 'Grand' },
+          ],
+        },
+        {
+          key: 'logoSize',
+          label: 'Taille du logo',
+          type: 'select',
+          required: false,
+          defaultValue: '1.5rem',
+          options: [
+            { value: '1.25rem', label: 'Petit' },
+            { value: '1.5rem', label: 'Moyen' },
+            { value: '2rem', label: 'Grand' },
+          ],
+        },
+        {
+          key: 'linkGap',
+          label: 'Espacement entre les liens',
+          type: 'select',
+          required: false,
+          defaultValue: '2rem',
+          options: [
+            { value: '1rem', label: 'Petit' },
+            { value: '2rem', label: 'Moyen' },
+            { value: '3rem', label: 'Grand' },
+          ],
+        },
+        {
+          key: 'breakpoint',
+          label: 'Point de rupture mobile',
+          type: 'select',
+          required: false,
+          defaultValue: '768',
+          options: [
+            { value: '640', label: '640px (sm)' },
+            { value: '768', label: '768px (md)' },
+            { value: '1024', label: '1024px (lg)' },
+          ],
+        },
+        {
+          key: 'navbarHeight',
+          label: 'Hauteur de la navbar',
+          type: 'select',
+          required: false,
+          defaultValue: '70px',
+          options: [
+            { value: '60px', label: '60px' },
+            { value: '70px', label: '70px' },
+            { value: '80px', label: '80px' },
+          ],
+        },
+        {
+          key: 'navLinks',
+          label: 'Liens de navigation',
+          type: 'multiselect',
+          required: true,
+          description: 'Sélectionnez les liens à afficher dans la navbar',
+          options: [
+            { value: 'home', label: 'Accueil' },
+            { value: 'about', label: 'À propos' },
+            { value: 'services', label: 'Services' },
+            { value: 'portfolio', label: 'Portfolio' },
+            { value: 'blog', label: 'Blog' },
+            { value: 'contact', label: 'Contact' },
+          ],
         },
       ];
     }
+
+    // Form HTML5 - Enrichi
     if (selectedFeature === 'form' && selectedLanguage === 'html5') {
       return [
-        { key: 'formName', label: 'Nom du formulaire', placeholder: 'contact', required: true },
-        { key: 'action', label: 'Action (URL)', placeholder: '/submit', required: false },
-        { key: 'method', label: 'Méthode HTTP', placeholder: 'POST', required: false },
+        {
+          key: 'formName',
+          label: 'Nom du formulaire',
+          type: 'text',
+          placeholder: 'Formulaire de contact',
+          required: true,
+        },
+        {
+          key: 'action',
+          label: 'URL de soumission',
+          type: 'text',
+          placeholder: '/submit',
+          required: false,
+          defaultValue: '/submit',
+        },
+        {
+          key: 'method',
+          label: 'Méthode HTTP',
+          type: 'select',
+          required: false,
+          defaultValue: 'POST',
+          options: [
+            { value: 'GET', label: 'GET' },
+            { value: 'POST', label: 'POST' },
+            { value: 'PUT', label: 'PUT' },
+          ],
+        },
+        {
+          key: 'includeName',
+          label: 'Champ Nom',
+          type: 'checkbox',
+          required: false,
+          defaultValue: true,
+          description: 'Inclure un champ nom',
+        },
+        {
+          key: 'includeEmail',
+          label: 'Champ Email',
+          type: 'checkbox',
+          required: false,
+          defaultValue: true,
+          description: 'Inclure un champ email',
+        },
+        {
+          key: 'includePhone',
+          label: 'Champ Téléphone',
+          type: 'checkbox',
+          required: false,
+          defaultValue: false,
+          description: 'Inclure un champ téléphone',
+        },
+        {
+          key: 'includeMessage',
+          label: 'Champ Message',
+          type: 'checkbox',
+          required: false,
+          defaultValue: true,
+          description: 'Inclure un champ message',
+        },
+        {
+          key: 'includeSubject',
+          label: 'Champ Sujet',
+          type: 'checkbox',
+          required: false,
+          defaultValue: false,
+          description: 'Inclure un champ sujet',
+        },
+        {
+          key: 'buttonText',
+          label: 'Texte du bouton',
+          type: 'select',
+          required: false,
+          defaultValue: 'Envoyer',
+          options: [
+            { value: 'Envoyer', label: 'Envoyer' },
+            { value: 'Soumettre', label: 'Soumettre' },
+            { value: 'Valider', label: 'Valider' },
+            { value: 'Confirmer', label: 'Confirmer' },
+          ],
+        },
       ];
     }
-    if (selectedFeature === 'query' && selectedLanguage === 'sql') {
-      return [
-        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
-        { key: 'operation', label: 'Opération', placeholder: 'SELECT', required: false },
-        { key: 'columns', label: 'Colonnes', placeholder: 'id,name,email', required: false },
-      ];
-    }
-    if (selectedFeature === 'joins' && selectedLanguage === 'sql') {
-      return [
-        { key: 'tableName1', label: 'Première table', placeholder: 'users', required: true },
-        { key: 'tableName2', label: 'Deuxième table', placeholder: 'posts', required: true },
-      ];
-    }
-    if (selectedFeature === 'transactions' && selectedLanguage === 'sql') {
-      return [
-        { key: 'tableName1', label: 'Première table', placeholder: 'users', required: true },
-        { key: 'tableName2', label: 'Deuxième table', placeholder: 'accounts', required: false },
-      ];
-    }
-    if (selectedFeature === 'indexes' && selectedLanguage === 'sql') {
-      return [
-        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
-        { key: 'columnName', label: 'Nom de la colonne', placeholder: 'email', required: true },
-      ];
-    }
-    if (selectedFeature === 'views' && selectedLanguage === 'sql') {
-      return [
-        { key: 'viewName', label: 'Nom de la vue', placeholder: 'user_summary', required: true },
-        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
-      ];
-    }
-    if (selectedFeature === 'api' && selectedLanguage === 'javascript') {
-      return [
-        { key: 'baseURL', label: 'URL de base', placeholder: 'http://localhost:3000/api', required: false },
-        { key: 'endpoint', label: 'Endpoint', placeholder: '/api/users', required: true },
-      ];
-    }
-    if (selectedFeature === 'fetch' && selectedLanguage === 'javascript') {
-      return [
-        { key: 'baseURL', label: 'URL de base', placeholder: 'http://localhost:3000/api', required: true },
-        { key: 'endpoint', label: 'Endpoint', placeholder: '/api/users', required: true },
-      ];
-    }
-    if (selectedFeature === 'api' && selectedLanguage === 'java') {
-      return [
-        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
-        { key: 'endpoint', label: 'Endpoint', placeholder: '/api/users', required: true },
-      ];
-    }
-    if (selectedFeature === 'model' && selectedLanguage === 'java') {
-      return [
-        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
-        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
-      ];
-    }
-    if (selectedFeature === 'service' && selectedLanguage === 'java') {
-      return [
-        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
-        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
-      ];
-    }
-    if (selectedFeature === 'repository' && selectedLanguage === 'java') {
-      return [
-        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
-        { key: 'tableName', label: 'Nom de la table', placeholder: 'users', required: true },
-      ];
-    }
-    if (selectedFeature === 'dto' && selectedLanguage === 'java') {
-      return [
-        { key: 'entityName', label: 'Nom de l\'entité', placeholder: 'User', required: true },
-      ];
-    }
-    if (selectedFeature === 'api' && selectedLanguage === 'php') {
-      return [
-        { key: 'endpoint', label: 'Endpoint', placeholder: 'users', required: true },
-      ];
-    }
-    if (selectedFeature === 'layout' && selectedLanguage === 'html5') {
-      return [
-        { key: 'title', label: 'Titre de la page', placeholder: 'Ma Page', required: true },
-        { key: 'companyName', label: 'Nom de l\'entreprise', placeholder: 'Mon Entreprise', required: false },
-      ];
-    }
+
+    // Modal HTML5 - Enrichi
     if (selectedFeature === 'modal' && selectedLanguage === 'html5') {
       return [
-        { key: 'modalTitle', label: 'Titre de la modal', placeholder: 'Confirmation', required: true },
-        { key: 'modalContent', label: 'Contenu de la modal', placeholder: 'Êtes-vous sûr ?', required: true },
+        {
+          key: 'modalTitle',
+          label: 'Titre de la modal',
+          type: 'text',
+          placeholder: 'Confirmation',
+          required: true,
+        },
+        {
+          key: 'modalContent',
+          label: 'Contenu de la modal',
+          type: 'textarea',
+          placeholder: 'Êtes-vous sûr de vouloir continuer ?',
+          required: true,
+          description: 'Le texte qui sera affiché dans le corps de la modal',
+        },
+        {
+          key: 'modalWidth',
+          label: 'Largeur de la modal',
+          type: 'select',
+          required: false,
+          defaultValue: '500px',
+          options: [
+            { value: '400px', label: 'Petite (400px)' },
+            { value: '500px', label: 'Moyenne (500px)' },
+            { value: '700px', label: 'Grande (700px)' },
+            { value: '90%', label: 'Pleine largeur' },
+          ],
+        },
+        {
+          key: 'borderRadius',
+          label: 'Rayon des bordures',
+          type: 'select',
+          required: false,
+          defaultValue: '8px',
+          options: [
+            { value: '0px', label: 'Aucun' },
+            { value: '4px', label: 'Petit' },
+            { value: '8px', label: 'Moyen' },
+            { value: '12px', label: 'Grand' },
+            { value: '20px', label: 'Très grand' },
+          ],
+        },
+        {
+          key: 'shadow',
+          label: 'Ombre',
+          type: 'checkbox',
+          required: false,
+          defaultValue: true,
+          description: 'Ajouter une ombre à la modal',
+        },
+        {
+          key: 'closeButton',
+          label: 'Bouton de fermeture',
+          type: 'checkbox',
+          required: false,
+          defaultValue: true,
+          description: 'Afficher le bouton X pour fermer',
+        },
+        {
+          key: 'closeOnOverlay',
+          label: 'Fermer au clic sur overlay',
+          type: 'checkbox',
+          required: false,
+          defaultValue: true,
+          description: 'Fermer la modal en cliquant en dehors',
+        },
+        {
+          key: 'buttonText',
+          label: 'Texte du bouton',
+          type: 'select',
+          required: false,
+          defaultValue: 'Fermer',
+          options: [
+            { value: 'Fermer', label: 'Fermer' },
+            { value: 'Annuler', label: 'Annuler' },
+            { value: 'OK', label: 'OK' },
+            { value: 'Confirmer', label: 'Confirmer' },
+          ],
+        },
       ];
     }
-    if (selectedFeature === 'navbar' && selectedLanguage === 'html5') {
+
+    // CRUD PHP/Java
+    if (selectedFeature === 'crud' && (selectedLanguage === 'php' || selectedLanguage === 'java')) {
       return [
-        { key: 'siteName', label: 'Nom du site', placeholder: 'Mon Site', required: true },
+        {
+          key: 'tableName',
+          label: 'Nom de la table',
+          type: 'text',
+          placeholder: 'users',
+          required: true,
+        },
+        {
+          key: 'entityName',
+          label: 'Nom de l\'entité',
+          type: 'text',
+          placeholder: 'User',
+          required: true,
+        },
+        {
+          key: 'fields',
+          label: 'Champs',
+          type: 'text',
+          placeholder: 'id,name,email,created_at',
+          required: true,
+          description: 'Séparés par des virgules',
+        },
       ];
     }
-    if (selectedFeature === 'card' && selectedLanguage === 'html5') {
+
+    // SQL Query
+    if (selectedFeature === 'query' && selectedLanguage === 'sql') {
       return [
-        { key: 'cardTitle', label: 'Titre de la card', placeholder: 'Titre', required: true },
-        { key: 'cardContent', label: 'Contenu de la card', placeholder: 'Contenu de la card', required: true },
-        { key: 'buttonText', label: 'Texte du bouton', placeholder: 'En savoir plus', required: false },
+        {
+          key: 'tableName',
+          label: 'Nom de la table',
+          type: 'text',
+          placeholder: 'users',
+          required: true,
+        },
+        {
+          key: 'operation',
+          label: 'Type d\'opération',
+          type: 'select',
+          required: false,
+          defaultValue: 'SELECT',
+          options: [
+            { value: 'SELECT', label: 'SELECT' },
+            { value: 'INSERT', label: 'INSERT' },
+            { value: 'UPDATE', label: 'UPDATE' },
+            { value: 'DELETE', label: 'DELETE' },
+          ],
+        },
+        {
+          key: 'columns',
+          label: 'Colonnes',
+          type: 'text',
+          placeholder: 'id,name,email',
+          required: false,
+        },
       ];
     }
-    if (selectedFeature === 'table' && selectedLanguage === 'html5') {
+
+    // API JavaScript
+    if (selectedFeature === 'api' && selectedLanguage === 'javascript') {
       return [
-        { key: 'tableTitle', label: 'Titre du tableau', placeholder: 'Liste des utilisateurs', required: true },
-        { key: 'column1', label: 'Colonne 1', placeholder: 'Nom', required: true },
-        { key: 'column2', label: 'Colonne 2', placeholder: 'Email', required: true },
-        { key: 'column3', label: 'Colonne 3', placeholder: 'Rôle', required: true },
+        {
+          key: 'baseURL',
+          label: 'URL de base',
+          type: 'text',
+          placeholder: 'http://localhost:3000/api',
+          required: false,
+          defaultValue: 'http://localhost:3000/api',
+        },
+        {
+          key: 'endpoint',
+          label: 'Endpoint',
+          type: 'text',
+          placeholder: '/api/users',
+          required: true,
+        },
+        {
+          key: 'includeAuth',
+          label: 'Authentification',
+          type: 'checkbox',
+          required: false,
+          defaultValue: false,
+          description: 'Inclure les headers d\'authentification',
+        },
       ];
     }
-    if (selectedFeature === 'slider' && selectedLanguage === 'html5') {
-      return [
-        { key: 'sliderTitle', label: 'Titre du slider', placeholder: 'Carousel', required: true },
-      ];
-    }
-    if (selectedFeature === 'accordion' && selectedLanguage === 'html5') {
-      return [
-        { key: 'accordionTitle', label: 'Titre de l\'accordion', placeholder: 'FAQ', required: true },
-        { key: 'item1Title', label: 'Titre item 1', placeholder: 'Question 1', required: true },
-        { key: 'item1Content', label: 'Contenu item 1', placeholder: 'Réponse 1', required: true },
-        { key: 'item2Title', label: 'Titre item 2', placeholder: 'Question 2', required: true },
-        { key: 'item2Content', label: 'Contenu item 2', placeholder: 'Réponse 2', required: true },
-        { key: 'item3Title', label: 'Titre item 3', placeholder: 'Question 3', required: true },
-        { key: 'item3Content', label: 'Contenu item 3', placeholder: 'Réponse 3', required: true },
-      ];
-    }
+
     // Features sans options requises
     if (
       (selectedFeature === 'animation' && (selectedLanguage === 'css3' || selectedLanguage === 'javascript')) ||
@@ -214,12 +499,29 @@ export function SnippetOptions() {
     ) {
       return [];
     }
+
     return [];
   };
 
   const featureOptions = getOptionsForFeature();
+  
+  // Appliquer les valeurs par défaut
+  useEffect(() => {
+    const defaults: Record<string, any> = {};
+    featureOptions.forEach((opt) => {
+      if (opt.defaultValue !== undefined && localOptions[opt.key] === undefined) {
+        defaults[opt.key] = opt.defaultValue;
+      }
+    });
+    if (Object.keys(defaults).length > 0) {
+      const newLocalOptions = { ...localOptions, ...defaults };
+      setLocalOptions(newLocalOptions);
+      setOptions(newLocalOptions);
+    }
+  }, [selectedLanguage, selectedFeature, featureOptions.length]);
+
   const canGenerate = featureOptions.every(
-    (opt) => !opt.required || localOptions[opt.key]?.trim()
+    (opt) => !opt.required || (localOptions[opt.key] !== undefined && localOptions[opt.key] !== '')
   );
 
   return (
@@ -246,20 +548,19 @@ export function SnippetOptions() {
       ) : (
         <div className="space-y-5">
           {featureOptions.map((opt) => (
-            <div key={opt.key} className="animate-fade-in">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                {opt.label}
-                {opt.required && <span className="text-red-500 ml-1">*</span>}
-              </label>
-              <input
-                type="text"
-                value={localOptions[opt.key] || ''}
-                onChange={(e) => handleOptionChange(opt.key, e.target.value)}
-                placeholder={opt.placeholder}
-                className="input"
-                required={opt.required}
-              />
-            </div>
+            <OptionInput
+              key={opt.key}
+              type={opt.type}
+              label={opt.label}
+              value={localOptions[opt.key] ?? opt.defaultValue ?? (opt.type === 'checkbox' ? false : opt.type === 'multiselect' ? [] : '')}
+              onChange={(value) => handleOptionChange(opt.key, value)}
+              placeholder={opt.placeholder}
+              required={opt.required}
+              options={opt.options}
+              description={opt.description}
+              min={opt.min}
+              max={opt.max}
+            />
           ))}
         </div>
       )}

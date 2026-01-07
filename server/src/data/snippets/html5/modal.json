@@ -4,7 +4,7 @@
   "description": "Modal responsive avec overlay et fermeture",
   "language": "html5",
   "feature": "modal",
-  "code": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{modalTitle}}</title>\n    <style>\n        .modal-overlay {\n            display: none;\n            position: fixed;\n            top: 0;\n            left: 0;\n            width: 100%;\n            height: 100%;\n            background: rgba(0, 0, 0, 0.5);\n            z-index: 1000;\n        }\n        .modal {\n            position: fixed;\n            top: 50%;\n            left: 50%;\n            transform: translate(-50%, -50%);\n            background: white;\n            padding: 2rem;\n            border-radius: 8px;\n            max-width: 500px;\n            width: 90%;\n            z-index: 1001;\n        }\n        .modal-header {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            margin-bottom: 1rem;\n        }\n        .close-btn {\n            background: none;\n            border: none;\n            font-size: 1.5rem;\n            cursor: pointer;\n        }\n    </style>\n</head>\n<body>\n    <button onclick=\"openModal()\">Ouvrir Modal</button>\n    \n    <div id=\"modalOverlay\" class=\"modal-overlay\" onclick=\"closeModal()\">\n        <div class=\"modal\" onclick=\"event.stopPropagation()\">\n            <div class=\"modal-header\">\n                <h2>{{modalTitle}}</h2>\n                <button class=\"close-btn\" onclick=\"closeModal()\">&times;</button>\n            </div>\n            <div class=\"modal-body\">\n                <p>{{modalContent}}</p>\n            </div>\n            <div class=\"modal-footer\">\n                <button onclick=\"closeModal()\">Fermer</button>\n            </div>\n        </div>\n    </div>\n    \n    <script>\n        function openModal() {\n            document.getElementById('modalOverlay').style.display = 'block';\n        }\n        function closeModal() {\n            document.getElementById('modalOverlay').style.display = 'none';\n        }\n    </script>\n</body>\n</html>",
+  "code": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{modalTitle}}</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        \n        body {\n            font-family: Arial, sans-serif;\n            padding: 20px;\n        }\n        \n        .open-modal-btn {\n            background: #667eea;\n            color: white;\n            padding: 12px 24px;\n            border: none;\n            border-radius: 6px;\n            cursor: pointer;\n            font-size: 16px;\n        }\n        \n        .open-modal-btn:hover {\n            background: #5568d3;\n        }\n        \n        .modal-overlay {\n            display: none;\n            position: fixed;\n            top: 0;\n            left: 0;\n            width: 100%;\n            height: 100%;\n            background: rgba(0, 0, 0, 0.5);\n            z-index: 1000;\n            animation: fadeIn 0.3s;\n        }\n        \n        .modal-overlay.active {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n        }\n        \n        .modal {\n            background: white;\n            padding: 2rem;\n            border-radius: {{borderRadius}};\n            max-width: {{modalWidth}};\n            width: 90%;\n            max-height: 90vh;\n            overflow-y: auto;\n            z-index: 1001;\n            position: relative;\n            animation: slideIn 0.3s;\n            {{#if shadow}}\n            box-shadow: 0 10px 40px rgba(0,0,0,0.2);\n            {{/if}}\n        }\n        \n        .modal-header {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            margin-bottom: 1.5rem;\n            padding-bottom: 1rem;\n            border-bottom: 1px solid #eee;\n        }\n        \n        .modal-header h2 {\n            margin: 0;\n            color: #333;\n        }\n        \n        {{#if closeButton}}\n        .close-btn {\n            background: none;\n            border: none;\n            font-size: 1.8rem;\n            cursor: pointer;\n            color: #999;\n            line-height: 1;\n            padding: 0;\n            width: 30px;\n            height: 30px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n        }\n        \n        .close-btn:hover {\n            color: #333;\n        }\n        {{/if}}\n        \n        .modal-body {\n            margin-bottom: 1.5rem;\n            color: #666;\n            line-height: 1.6;\n        }\n        \n        .modal-footer {\n            display: flex;\n            justify-content: flex-end;\n            gap: 10px;\n            padding-top: 1rem;\n            border-top: 1px solid #eee;\n        }\n        \n        .modal-btn {\n            padding: 10px 20px;\n            border: none;\n            border-radius: 4px;\n            cursor: pointer;\n            font-size: 14px;\n            transition: all 0.3s;\n        }\n        \n        .modal-btn-primary {\n            background: #667eea;\n            color: white;\n        }\n        \n        .modal-btn-primary:hover {\n            background: #5568d3;\n        }\n        \n        .modal-btn-secondary {\n            background: #f0f0f0;\n            color: #333;\n        }\n        \n        .modal-btn-secondary:hover {\n            background: #e0e0e0;\n        }\n        \n        @keyframes fadeIn {\n            from { opacity: 0; }\n            to { opacity: 1; }\n        }\n        \n        @keyframes slideIn {\n            from {\n                transform: translateY(-50px);\n                opacity: 0;\n            }\n            to {\n                transform: translateY(0);\n                opacity: 1;\n            }\n        }\n        \n        @media (max-width: 768px) {\n            .modal {\n                width: 95%;\n                padding: 1.5rem;\n            }\n        }\n    </style>\n</head>\n<body>\n    <button class=\"open-modal-btn\" onclick=\"openModal()\">Ouvrir Modal</button>\n    \n    <div id=\"modalOverlay\" class=\"modal-overlay\" {{#if closeOnOverlay}}onclick=\"closeModal()\"{{/if}}>\n        <div class=\"modal\" onclick=\"event.stopPropagation()\">\n            <div class=\"modal-header\">\n                <h2>{{modalTitle}}</h2>\n                {{#if closeButton}}\n                <button class=\"close-btn\" onclick=\"closeModal()\">&times;</button>\n                {{/if}}\n            </div>\n            <div class=\"modal-body\">\n                <p>{{modalContent}}</p>\n            </div>\n            <div class=\"modal-footer\">\n                <button class=\"modal-btn modal-btn-secondary\" onclick=\"closeModal()\">{{buttonText}}</button>\n            </div>\n        </div>\n    </div>\n    \n    <script>\n        function openModal() {\n            const overlay = document.getElementById('modalOverlay');\n            overlay.classList.add('active');\n            document.body.style.overflow = 'hidden';\n        }\n        \n        function closeModal() {\n            const overlay = document.getElementById('modalOverlay');\n            overlay.classList.remove('active');\n            document.body.style.overflow = '';\n        }\n        \n        // Fermer avec la touche Escape\n        document.addEventListener('keydown', function(event) {\n            if (event.key === 'Escape') {\n                closeModal();\n            }\n        });\n    </script>\n</body>\n</html>",
   "variables": [
     {
       "name": "modalTitle",
@@ -14,9 +14,64 @@
     },
     {
       "name": "modalContent",
-      "type": "string",
+      "type": "textarea",
       "required": true,
       "description": "Contenu de la modal"
+    },
+    {
+      "name": "modalSize",
+      "type": "select",
+      "required": false,
+      "description": "Taille de la modal",
+      "defaultValue": "medium",
+      "options": [
+        { "value": "400px", "label": "Petite (400px)" },
+        { "value": "500px", "label": "Moyenne (500px)" },
+        { "value": "700px", "label": "Grande (700px)" },
+        { "value": "90%", "label": "Pleine largeur" }
+      ]
+    },
+    {
+      "name": "borderRadius",
+      "type": "select",
+      "required": false,
+      "description": "Rayon des bordures",
+      "defaultValue": "8px",
+      "options": [
+        { "value": "0px", "label": "Aucun" },
+        { "value": "4px", "label": "Petit" },
+        { "value": "8px", "label": "Moyen" },
+        { "value": "12px", "label": "Grand" },
+        { "value": "20px", "label": "Très grand" }
+      ]
+    },
+    {
+      "name": "closeButton",
+      "type": "checkbox",
+      "required": false,
+      "description": "Afficher le bouton X pour fermer",
+      "defaultValue": true
+    },
+    {
+      "name": "closeOnOverlay",
+      "type": "checkbox",
+      "required": false,
+      "description": "Fermer la modal en cliquant en dehors",
+      "defaultValue": true
+    },
+    {
+      "name": "shadow",
+      "type": "checkbox",
+      "required": false,
+      "description": "Ajouter une ombre à la modal",
+      "defaultValue": true
+    },
+    {
+      "name": "buttonText",
+      "type": "string",
+      "required": false,
+      "description": "Texte du bouton",
+      "defaultValue": "Fermer"
     }
   ],
   "security": {
@@ -24,4 +79,3 @@
     "xss": true
   }
 }
-
