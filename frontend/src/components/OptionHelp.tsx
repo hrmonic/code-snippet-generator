@@ -21,7 +21,7 @@ export function OptionHelp({ description, examples, recommendedValues }: OptionH
         onMouseLeave={() => setShowTooltip(false)}
         onFocus={() => setShowTooltip(true)}
         onBlur={() => setShowTooltip(false)}
-        className="ml-2 text-gray-400 hover:text-gray-600 transition-colors"
+        className="ml-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
         aria-label="Aide"
       >
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -31,16 +31,16 @@ export function OptionHelp({ description, examples, recommendedValues }: OptionH
 
       {showTooltip && (
         <div
-          className="absolute z-50 w-64 p-3 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg text-sm"
+          className="absolute z-50 w-64 p-3 mt-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg text-sm"
           role="tooltip"
         >
           {description && (
-            <p className="text-gray-700 mb-2">{description}</p>
+            <p className="text-gray-700 dark:text-gray-300 mb-2">{description}</p>
           )}
           {examples && examples.length > 0 && (
             <div className="mb-2">
-              <p className="font-semibold text-gray-900 mb-1">Exemples :</p>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
+              <p className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Exemples :</p>
+              <ul className="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
                 {examples.map((example, index) => (
                   <li key={index} className="font-mono text-xs">{example}</li>
                 ))}
@@ -49,12 +49,12 @@ export function OptionHelp({ description, examples, recommendedValues }: OptionH
           )}
           {recommendedValues && recommendedValues.length > 0 && (
             <div>
-              <p className="font-semibold text-gray-900 mb-1">Valeurs recommandées :</p>
+              <p className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Valeurs recommandées :</p>
               <div className="flex flex-wrap gap-1">
                 {recommendedValues.map((rec, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                    className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs dark:bg-blue-900/40 dark:text-blue-200"
                   >
                     {rec.label}
                   </span>

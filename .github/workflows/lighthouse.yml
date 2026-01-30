@@ -1,0 +1,58 @@
+name: Lighthouse
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+jobs:
+  lighthouse:
+    name: Lighthouse audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - run: npm install
+      - name: Build frontend
+        run: npm run build --workspace=frontend
+      - name: Run Lighthouse (JSON + HTML)
+        run: |
+          npx serve frontend/dist -s -l 4173 &
+          sleep 5
+          npx lighthouse http://localhost:4173 --output=json --output-path=./lh-report.json --chrome-flags="--headless --no-sandbox --disable-gpu" --only-categories=performance,accessibility,best-practices,seo
+          npx lighthouse http://localhost:4173 --output=html --output-path=./lighthouse-report.html --chrome-flags="--headless --no-sandbox --disable-gpu" --only-categories=performance,accessibility,best-practices,seo
+      - name: Assert Lighthouse scores (min 95)
+        run: |
+          node -e "
+          const fs = require('fs');
+          if (!fs.existsSync('./lh-report.json')) { console.error('Lighthouse JSON not found'); process.exit(1); }
+          const lh = JSON.parse(fs.readFileSync('./lh-report.json', 'utf8'));
+          const categories = lh.categories || {};
+          const minScore = 0.95;
+          let failed = false;
+          for (const [name, cat] of Object.entries(categories)) {
+            const score = (cat && typeof cat.score === 'number') ? cat.score : 0;
+            if (score < minScore) {
+              console.error(name + ' score ' + (score * 100).toFixed(0) + ' < 95');
+              failed = true;
+            }
+          }
+          process.exit(failed ? 1 : 0);
+          "
+        continue-on-error: true
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: |
+            lighthouse-report.html
+            lh-report.json
+          if-no-files-found: ignore

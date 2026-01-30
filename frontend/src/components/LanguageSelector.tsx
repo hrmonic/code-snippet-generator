@@ -17,19 +17,23 @@ export function LanguageSelector() {
     <div className="card shadow-lg hover:shadow-xl transition-shadow duration-300">
       <div className="flex items-center gap-2 mb-6">
         <div className="w-1 h-8 bg-gradient-to-b from-primary-600 to-indigo-600 rounded-full"></div>
-        <h2 className="text-2xl font-bold text-gray-900">Sélectionner un langage</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Sélectionner un langage</h2>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {languages.map((lang) => (
           <button
+            type="button"
             key={lang.value}
             onClick={() => setLanguage(lang.value)}
+            aria-pressed={selectedLanguage === lang.value}
+            aria-label={`Sélectionner ${lang.label}`}
             className={`
               group relative p-6 rounded-xl border-2 transition-all duration-300 transform
+              focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900
               ${
                 selectedLanguage === lang.value
-                  ? 'border-primary-500 bg-gradient-to-br from-primary-50 to-indigo-50 scale-105 shadow-lg'
-                  : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50 hover:scale-105 hover:shadow-md'
+                  ? 'border-primary-500 bg-gradient-to-br from-primary-50 to-indigo-50 scale-105 shadow-lg dark:from-primary-900/30 dark:to-indigo-900/30 dark:border-primary-400'
+                  : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50 hover:scale-105 hover:shadow-md dark:border-gray-600 dark:hover:border-primary-500 dark:hover:bg-gray-700'
               }
             `}
           >
@@ -37,7 +41,7 @@ export function LanguageSelector() {
               <div className={`text-4xl transform transition-transform duration-300 ${selectedLanguage === lang.value ? 'scale-110' : 'group-hover:scale-110'}`}>
                 {lang.icon}
               </div>
-              <div className={`font-semibold text-sm ${selectedLanguage === lang.value ? 'text-primary-700' : 'text-gray-700'}`}>
+              <div className={`font-semibold text-sm ${selectedLanguage === lang.value ? 'text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300'}`}>
                 {lang.label}
               </div>
               {selectedLanguage === lang.value && (

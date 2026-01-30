@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { generatePreview as apiGeneratePreview } from '../lib/api';
 import type { Language, FeatureType } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-const PREVIEW_DEBOUNCE_MS = 500;
+const PREVIEW_DEBOUNCE_MS = 280;
 
 interface UsePreviewResult {
   previewCode: string | null;
@@ -22,7 +22,6 @@ export function usePreview(
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const optionsRef = useRef<Record<string, unknown>>(options);
 
-  // Mettre à jour la ref des options
   useEffect(() => {
     optionsRef.current = options;
   }, [options]);
@@ -37,53 +36,20 @@ export function usePreview(
     setError(null);
 
     try {
-      // Essayer d'abord l'API avec timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
-
-      const response = await fetch(`${API_BASE_URL}/api/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          language,
-          feature,
-          options: optionsRef.current,
-          preview: true,
-        }),
-        signal: controller.signal,
+      const result = await apiGeneratePreview({
+        language,
+        feature,
+        options: optionsRef.current,
       });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setPreviewCode(data.code || null);
+      setPreviewCode(result.code ?? null);
     } catch (err) {
-      // Si l'API échoue, utiliser la génération côté client
-      try {
-        const { generateCodeFromSnippet } = await import('../lib/clientCodeGenerator');
-        const result = await generateCodeFromSnippet({
-          language,
-          feature,
-          options: optionsRef.current,
-        });
-        setPreviewCode(result.code || null);
+      const msg = err instanceof Error ? err.message : 'Erreur lors de la prévisualisation';
+      if (msg.includes('non disponible')) {
+        setPreviewCode(null);
         setError(null);
-      } catch (fallbackErr) {
-        // Ne pas afficher d'erreur si c'est juste que le snippet n'existe pas
-        if (fallbackErr instanceof Error && fallbackErr.message.includes('non disponible')) {
-          setPreviewCode(null);
-          setError(null);
-        } else {
-          const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la prévisualisation';
-          setError(errorMessage);
-          setPreviewCode(null);
-        }
+      } else {
+        setError(msg);
+        setPreviewCode(null);
       }
     } finally {
       setIsGenerating(false);
@@ -97,8 +63,8 @@ export function usePreview(
       debounceTimerRef.current = null;
     }
 
-    // Ne pas générer de prévisualisation si les options sont vides
-    if (!enabled || !language || !feature || Object.keys(options).length === 0) {
+    // Autoriser la préview dès que language + feature sont définis (options peut être vide)
+    if (!enabled || !language || !feature) {
       setPreviewCode(null);
       return;
     }

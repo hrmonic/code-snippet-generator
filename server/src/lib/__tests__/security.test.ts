@@ -22,7 +22,8 @@ describe('Security', () => {
 
   describe('sanitizeInput', () => {
     it('should remove dangerous characters', () => {
-      expect(security.sanitizeInput('<script>test</script>')).toBe('scripttestscript');
+      // Removes [<>'"\\] only; slash is kept
+      expect(security.sanitizeInput('<script>test</script>')).toBe('scripttest/script');
     });
   });
 

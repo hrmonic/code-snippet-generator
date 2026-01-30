@@ -24,7 +24,7 @@ export function LoadingSpinner({ size = 'md', text }: LoadingSpinnerProps) {
           <div className={`${innerSizeClasses[size]} bg-primary-600 rounded-full animate-pulse`}></div>
         </div>
       </div>
-      {text && <span className="mt-4 text-gray-600 text-sm">{text}</span>}
+      {text && <span className="mt-4 text-gray-600 dark:text-gray-300 text-sm">{text}</span>}
     </div>
   );
 }

@@ -26,14 +26,13 @@ const initialState: GeneratorState & { previewCode: string | null } = {
 export const useGeneratorStore = create<GeneratorStore>((set) => ({
   ...initialState,
   setLanguage: (language) =>
-    set((state) => ({
+    set({
       selectedLanguage: language,
-      // Reset feature when language changes
-      selectedFeature: state.selectedFeature && language ? state.selectedFeature : null,
+      selectedFeature: null,
       options: {},
       generatedCode: null,
       error: null,
-    })),
+    }),
   setFeature: (feature) =>
     set({
       selectedFeature: feature,

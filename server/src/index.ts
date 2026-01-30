@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import { generateRouter } from './routes/generate.js';
 import { snippetsRouter } from './routes/snippets.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
@@ -7,9 +8,19 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+  message: { message: 'Trop de requêtes. Réessayez dans une minute.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+app.use('/api', apiLimiter);
 
 // Request logging (simple)
 app.use((req, _res, next) => {

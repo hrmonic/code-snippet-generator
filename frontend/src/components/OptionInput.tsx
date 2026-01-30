@@ -101,13 +101,13 @@ function OptionInputComponent({
               aria-expanded={isOpen}
               aria-haspopup="listbox"
             >
-              <span className={value ? 'text-gray-900' : 'text-gray-400'}>
+              <span className={value ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400 dark:text-gray-500'}>
                 {value
                   ? options.find((opt) => opt.value === value)?.label || value
                   : placeholder || 'Sélectionner...'}
               </span>
               <svg
-                className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                className={`w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -122,7 +122,7 @@ function OptionInputComponent({
                   onClick={() => setIsOpen(false)}
                 ></div>
                 <div
-                  className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto"
+                  className="absolute z-20 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto"
                   role="listbox"
                   aria-label={label}
                 >
@@ -133,8 +133,8 @@ function OptionInputComponent({
                       onClick={() => handleSelectChange(option.value)}
                       role="option"
                       aria-selected={value === option.value}
-                      className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
-                        value === option.value ? 'bg-primary-50 text-primary-700' : ''
+                      className={`w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors ${
+                        value === option.value ? 'bg-primary-50 text-primary-700 dark:bg-primary-500/20 dark:text-primary-300' : 'dark:text-gray-200'
                       }`}
                     >
                       {option.label}
@@ -150,19 +150,19 @@ function OptionInputComponent({
         return (
           <div className="space-y-2">
             <div
-              className="border-2 border-gray-300 rounded-lg p-3 min-h-[100px] max-h-48 overflow-y-auto"
+              className="border-2 border-gray-300 dark:border-gray-600 rounded-lg p-3 min-h-[100px] max-h-48 overflow-y-auto dark:bg-gray-700/50"
               role="group"
               aria-label={label}
             >
               {options.length === 0 ? (
-                <p className="text-gray-400 text-sm">Aucune option disponible</p>
+                <p className="text-gray-400 dark:text-gray-500 text-sm">Aucune option disponible</p>
               ) : (
                 options.map((option) => {
                   const isSelected = Array.isArray(value) && value.includes(option.value);
                   return (
                     <label
                       key={option.value}
-                      className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                      className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-600 rounded cursor-pointer"
                     >
                       <input
                         type="checkbox"
@@ -175,14 +175,14 @@ function OptionInputComponent({
                         className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
                         aria-label={option.label}
                       />
-                      <span className="text-sm">{option.label}</span>
+                      <span className="text-sm text-gray-900 dark:text-gray-200">{option.label}</span>
                     </label>
                   );
                 })
               )}
             </div>
             {Array.isArray(value) && value.length > 0 && (
-              <div className="text-xs text-gray-500" aria-live="polite">
+              <div className="text-xs text-gray-500 dark:text-gray-400" aria-live="polite">
                 {value.length} option{value.length > 1 ? 's' : ''} sélectionnée{value.length > 1 ? 's' : ''}
               </div>
             )}
@@ -204,7 +204,7 @@ function OptionInputComponent({
               aria-label={ariaLabel || label}
               aria-describedby={ariaDescribedBy}
             />
-            <span className="text-sm text-gray-700">{description || 'Activer cette option'}</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">{description || 'Activer cette option'}</span>
           </label>
         );
 
@@ -261,7 +261,7 @@ function OptionInputComponent({
                 setIsTouched(true);
               }}
               onBlur={() => setIsTouched(true)}
-              className="w-16 h-10 rounded border border-gray-300 cursor-pointer"
+              className="w-16 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
               aria-label={`${label} - Sélecteur de couleur`}
             />
             <input
@@ -305,12 +305,12 @@ function OptionInputComponent({
                 aria-valuemax={max}
                 aria-valuenow={value as number || min || 0}
               />
-              <span className="text-sm font-medium text-gray-700 min-w-[3rem] text-right" aria-live="polite">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300 min-w-[3rem] text-right" aria-live="polite">
                 {value as number || min || 0}
               </span>
             </div>
             {min !== undefined && max !== undefined && (
-              <div className="flex justify-between text-xs text-gray-500" role="presentation">
+              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400" role="presentation">
                 <span>{min}</span>
                 <span>{max}</span>
               </div>
@@ -336,7 +336,7 @@ function OptionInputComponent({
               aria-describedby={ariaDescribedBy}
               aria-invalid={validationError && isTouched ? 'true' : 'false'}
             />
-            <p className="text-xs text-gray-500" id={ariaDescribedBy}>
+            <p className="text-xs text-gray-500 dark:text-gray-400" id={ariaDescribedBy}>
               Utilisez un éditeur de code pour des fonctionnalités avancées
             </p>
           </div>
@@ -385,7 +385,7 @@ function OptionInputComponent({
 
   return (
     <div className="animate-fade-in">
-      <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
         <span>
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
@@ -397,11 +397,11 @@ function OptionInputComponent({
         />
       </label>
       {description && type !== 'checkbox' && (
-        <p className="text-xs text-gray-500 mb-2">{description}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{description}</p>
       )}
       {renderInput()}
       {validationError && isTouched && (
-        <p className="text-xs text-red-600 mt-1 flex items-center gap-1" role="alert">
+        <p className="text-xs text-red-600 dark:text-red-400 mt-1 flex items-center gap-1" role="alert">
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
           </svg>

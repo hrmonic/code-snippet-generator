@@ -1,44 +1,9 @@
 export type Language = 'html5' | 'css3' | 'javascript' | 'java' | 'php' | 'sql';
 
-export type FeatureType =
-  | 'form'
-  | 'api'
-  | 'crud'
-  | 'animation'
-  | 'query'
-  | 'validation'
-  | 'layout'
-  | 'input'
-  | 'modal'
-  | 'navbar'
-  | 'responsive'
-  | 'flexbox'
-  | 'fetch'
-  | 'model'
-  | 'joins'
-  | 'card'
-  | 'table'
-  | 'grid'
-  | 'buttons'
-  | 'storage'
-  | 'debounce'
-  | 'service'
-  | 'router'
-  | 'transactions'
-  | 'slider'
-  | 'variables'
-  | 'promise'
-  | 'observer'
-  | 'repository'
-  | 'middleware'
-  | 'indexes'
-  | 'accordion'
-  | 'transforms'
-  | 'event'
-  | 'class'
-  | 'dto'
-  | 'auth'
-  | 'views';
+/**
+ * Feature identifier from API/snippets. Accepts any string returned by the snippets API.
+ */
+export type FeatureType = string;
 
 export interface SnippetVariable {
   name: string;
@@ -96,3 +61,18 @@ export interface GeneratorState {
   error: string | null;
 }
 
+/** Option config for snippet variables (aligned with API /api/snippets/:lang/:feature/options). */
+export interface OptionConfig {
+  key: string;
+  label: string;
+  type: 'text' | 'select' | 'checkbox' | 'number' | 'textarea' | 'multiselect' | 'color' | 'range' | 'code';
+  placeholder?: string;
+  required?: boolean;
+  description?: string;
+  options?: Array<{ value: string; label: string }>;
+  defaultValue?: string | boolean | number | string[];
+  min?: number;
+  max?: number;
+  dependsOn?: Record<string, (string | boolean | number)[]>;
+  group?: string;
+}

@@ -22,8 +22,7 @@ router.post('/', async (req, res) => {
     if (isPreview) {
       // Pour la prévisualisation, on peut retourner le code même si certaines validations échouent
       if (isMultiple) {
-        // Retourner le premier fichier pour la prévisualisation
-        res.json({
+        return res.json({
           code: results[0]?.code || '',
           filename: results[0]?.filename,
           language: validatedData.language,
@@ -31,36 +30,31 @@ router.post('/', async (req, res) => {
           isMultiple: true,
           fileCount: results.length,
         });
-      } else {
-        res.json({
-          code: result.code,
-          filename: result.filename,
-          language: validatedData.language,
-          preview: true,
-        });
       }
-    } else {
-      // Mode normal avec tous les détails
-      if (isMultiple) {
-        // Retourner tous les fichiers
-        res.json({
-          files: results.map((r) => ({
-            code: r.code,
-            filename: r.filename,
-            tests: r.tests,
-          })),
-          language: validatedData.language,
-          isMultiple: true,
-        });
-      } else {
-        res.json({
-          code: result.code,
-          filename: result.filename,
-          language: validatedData.language,
-          tests: result.tests,
-        });
-      }
+      return res.json({
+        code: result.code,
+        filename: result.filename,
+        language: validatedData.language,
+        preview: true,
+      });
     }
+    if (isMultiple) {
+      return res.json({
+        files: results.map((r) => ({
+          code: r.code,
+          filename: r.filename,
+          tests: r.tests,
+        })),
+        language: validatedData.language,
+        isMultiple: true,
+      });
+    }
+    return res.json({
+      code: result.code,
+      filename: result.filename,
+      language: validatedData.language,
+      tests: result.tests,
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({
@@ -70,7 +64,7 @@ router.post('/', async (req, res) => {
     }
 
     console.error('Erreur lors de la génération:', error);
-    res.status(500).json({
+    return res.status(500).json({
       message: error instanceof Error ? error.message : 'Erreur interne du serveur',
     });
   }

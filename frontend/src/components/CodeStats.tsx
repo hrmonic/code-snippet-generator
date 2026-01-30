@@ -19,8 +19,8 @@ export function CodeStats({ code }: CodeStatsProps) {
     <div className="flex flex-wrap gap-4 text-sm">
       {stats.map((stat) => (
         <div key={stat.label} className="flex items-center gap-2">
-          <span className="text-gray-500">{stat.label}:</span>
-          <span className="font-semibold text-gray-900">{stat.value}</span>
+          <span className="text-gray-500 dark:text-gray-400">{stat.label}:</span>
+          <span className="font-semibold text-gray-900 dark:text-gray-100">{stat.value}</span>
         </div>
       ))}
     </div>

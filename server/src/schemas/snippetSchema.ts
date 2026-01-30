@@ -24,6 +24,8 @@ export interface SnippetSchema {
   code: string;
   language: string;
   feature: string;
+  /** HTML optionnel pour l'aperçu CSS3 (contenu du body dans DesignPreview) */
+  previewMarkup?: string;
   variables: SnippetVariableSchema[];
   security: {
     sqlInjection: boolean;

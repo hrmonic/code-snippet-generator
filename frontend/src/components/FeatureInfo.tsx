@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { getSnippetPath } from '../config/env';
 import type { Language, FeatureType } from '../types';
 
 interface FeatureInfoProps {
@@ -5,7 +7,8 @@ interface FeatureInfoProps {
   feature: FeatureType;
 }
 
-const featureDescriptions: Record<string, Record<string, string>> = {
+/** Fallback when snippet JSON has no description (e.g. demo or legacy). */
+const FALLBACK_DESCRIPTIONS: Record<string, Record<string, string>> = {
   html5: {
     form: 'Formulaire HTML5 avec validation native, champs sécurisés et accessibilité',
     input: 'Collection de champs input HTML5 modernes (email, date, color, range, etc.)',
@@ -16,7 +19,7 @@ const featureDescriptions: Record<string, Record<string, string>> = {
     animation: 'Animations CSS3 avec keyframes (fadeIn, slideIn, pulse, etc.)',
   },
   javascript: {
-    api: 'Client API JavaScript avec fetch, gestion d\'erreurs et interceptors',
+    api: "Client API JavaScript avec fetch, gestion d'erreurs et interceptors",
     validation: 'Validation de formulaire côté client avec messages d\'erreur',
     animation: 'Animations JavaScript avec requestAnimationFrame pour performance',
   },
@@ -34,22 +37,43 @@ const featureDescriptions: Record<string, Record<string, string>> = {
 };
 
 export function FeatureInfo({ language, feature }: FeatureInfoProps) {
-  const description = featureDescriptions[language]?.[feature];
+  const [description, setDescription] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const path = getSnippetPath(language, feature);
+    fetch(path)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { description?: string } | null) => {
+        if (cancelled) return;
+        const fromJson = data?.description?.trim();
+        setDescription(
+          fromJson || FALLBACK_DESCRIPTIONS[language]?.[feature] || null
+        );
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setDescription(FALLBACK_DESCRIPTIONS[language]?.[feature] ?? null);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [language, feature]);
 
   if (!description) {
     return null;
   }
 
   return (
-    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 dark:bg-blue-900/30 dark:border-blue-700">
       <div className="flex items-start gap-3">
-        <span className="text-blue-600 text-xl">ℹ️</span>
+        <span className="text-blue-600 dark:text-blue-400 text-xl">ℹ️</span>
         <div>
-          <h3 className="font-semibold text-blue-900 mb-1">À propos de ce snippet</h3>
-          <p className="text-blue-800 text-sm">{description}</p>
+          <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-1">À propos de ce snippet</h3>
+          <p className="text-blue-800 dark:text-blue-300 text-sm">{description}</p>
         </div>
       </div>
     </div>
   );
 }
-

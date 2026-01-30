@@ -54,7 +54,7 @@ function replacePlaceholders(
     // Gérer les arrays (pour multiselect)
     if (Array.isArray(value)) {
       const arrayCode = value
-        .map((item, index) => {
+        .map((item) => {
           if (typeof item === 'object' && item !== null) {
             // Objet avec label et value
             return `            <li><a href="#${item.value || item}">${item.label || item}</a></li>`;

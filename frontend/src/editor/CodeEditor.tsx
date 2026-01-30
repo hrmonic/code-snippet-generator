@@ -6,6 +6,7 @@ interface CodeEditorProps {
   language: Language | string;
   onChange?: (value: string | undefined) => void;
   readOnly?: boolean;
+  theme?: 'light' | 'dark';
 }
 
 const languageMap: Record<string, string> = {
@@ -17,17 +18,18 @@ const languageMap: Record<string, string> = {
   sql: 'sql',
 };
 
-export function CodeEditor({ code, language, onChange, readOnly = false }: CodeEditorProps) {
+export function CodeEditor({ code, language, onChange, readOnly = false, theme = 'light' }: CodeEditorProps) {
   const monacoLanguage = languageMap[language] || 'javascript';
+  const monacoTheme = theme === 'dark' ? 'vs-dark' : 'vs-light';
 
   return (
-    <div className="border border-gray-300 rounded-lg overflow-hidden">
+    <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
       <Editor
         height="500px"
         language={monacoLanguage}
         value={code}
         onChange={onChange}
-        theme="vs-light"
+        theme={monacoTheme}
         options={{
           readOnly,
           minimap: { enabled: false },

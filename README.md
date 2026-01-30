@@ -253,6 +253,15 @@ NODE_ENV=development
 
 ## 📖 Documentation complète
 
+### 📚 Documentation technique (dossier `docs/`)
+
+| Document | Description |
+|----------|-------------|
+| [**Architecture**](docs/architecture.md) | Vue d’ensemble, flux de données, rôles experts (agents), objectifs qualité |
+| [**API**](docs/api.md) | Endpoints (`/api/snippets`, `/api/generate`), contrats, exemples, rate limiting |
+| [**Setup**](docs/setup.md) | Installation, scripts npm, variables d’environnement, build, tests, PWA |
+| [**Lighthouse**](docs/lighthouse.md) | Objectif 95/100, exécution manuelle, configuration CI |
+
 ### 🏗️ Architecture du projet
 
 ```

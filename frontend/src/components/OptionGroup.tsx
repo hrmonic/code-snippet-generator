@@ -13,7 +13,7 @@ function OptionGroupComponent({ title, description, children, defaultOpen = true
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -23,16 +23,17 @@ function OptionGroupComponent({ title, description, children, defaultOpen = true
             setIsOpen(!isOpen);
           }
         }}
-        className="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-primary-500"
+        className="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
         aria-expanded={isOpen}
         aria-controls={`option-group-${title}`}
+        aria-label={isOpen ? `Replier ${title}` : `Déplier ${title}`}
       >
         <div className="text-left">
-              <h3 id={`group-title-${title}`} className="font-semibold text-gray-900">{title}</h3>
-          {description && <p className="text-xs text-gray-600 mt-1">{description}</p>}
+              <h3 id={`group-title-${title}`} className="font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+          {description && <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{description}</p>}
         </div>
         <svg
-          className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -68,15 +69,4 @@ export function groupOptionsByCategory(options: OptionConfig[]): Record<string, 
 
   return groups;
 }
-
-// Noms de groupes traduits
-export const GROUP_LABELS: Record<string, string> = {
-  default: 'Options générales',
-  basic: 'Options de base',
-  style: 'Options de style',
-  advanced: 'Options avancées',
-  security: 'Options de sécurité',
-  layout: 'Options de mise en page',
-  behavior: 'Comportement',
-};
 

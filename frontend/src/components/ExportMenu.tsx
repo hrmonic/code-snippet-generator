@@ -113,13 +113,13 @@ export function ExportMenu({ code, language, feature, filename, isPreview = fals
                   onClick={() => setShowMenu(false)}
                 ></div>
                 <div
-                  className="absolute z-20 right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg"
+                  className="absolute z-20 right-0 mt-2 w-48 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
                   role="menu"
                   aria-label="Options de téléchargement"
                 >
                   <button
                     onClick={handleDownloadAll}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors flex items-center gap-2 dark:text-gray-200"
                     role="menuitem"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +134,7 @@ export function ExportMenu({ code, language, feature, filename, isPreview = fals
                         downloadFile(file.content, file.filename, file.mimeType);
                         setShowMenu(false);
                       }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2 text-sm"
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors flex items-center gap-2 text-sm dark:text-gray-200"
                       role="menuitem"
                       aria-label={`Télécharger ${file.filename}`}
                     >
@@ -163,7 +163,7 @@ export function ExportMenu({ code, language, feature, filename, isPreview = fals
         )}
       </div>
       {isPreview && (
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
           Note: La prévisualisation peut différer légèrement du code final généré
         </p>
       )}

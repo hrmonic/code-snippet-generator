@@ -15,7 +15,8 @@
     "test": "npm run test --workspace=frontend && npm run test --workspace=server",
     "lint": "npm run lint --workspace=frontend && npm run lint --workspace=server",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "type-check": "npm run type-check --workspace=frontend && npm run type-check --workspace=server"
+    "type-check": "npm run type-check --workspace=frontend && npm run type-check --workspace=server",
+    "lighthouse": "npm run build && echo 'Serve frontend/dist then run: lighthouse http://localhost:4173 --view'"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

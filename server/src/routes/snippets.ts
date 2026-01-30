@@ -5,13 +5,16 @@ import type { Language, FeatureType } from '../types/index.js';
 
 const router = Router();
 
+const CACHE_MAX_AGE = 60 * 5; // 5 minutes
+
 router.get('/', async (_req, res) => {
   try {
+    res.set('Cache-Control', `public, max-age=${CACHE_MAX_AGE}, stale-while-revalidate=60`);
     const snippets = await snippetLoader.getAllSnippets();
-    res.json(snippets);
+    return res.json(snippets);
   } catch (error) {
     console.error('Erreur lors de la récupération des snippets:', error);
-    res.status(500).json({
+    return res.status(500).json({
       message: error instanceof Error ? error.message : 'Erreur interne du serveur',
     });
   }
@@ -19,12 +22,13 @@ router.get('/', async (_req, res) => {
 
 router.get('/:language', async (req, res) => {
   try {
+    res.set('Cache-Control', `public, max-age=${CACHE_MAX_AGE}, stale-while-revalidate=60`);
     const { language } = req.params;
     const snippets = await snippetLoader.getSnippetsByLanguage(language);
-    res.json(snippets);
+    return res.json(snippets);
   } catch (error) {
     console.error('Erreur lors de la récupération des snippets:', error);
-    res.status(500).json({
+    return res.status(500).json({
       message: error instanceof Error ? error.message : 'Erreur interne du serveur',
     });
   }
@@ -32,6 +36,7 @@ router.get('/:language', async (req, res) => {
 
 router.get('/:language/:feature/options', async (req, res) => {
   try {
+    res.set('Cache-Control', `public, max-age=${CACHE_MAX_AGE}, stale-while-revalidate=60`);
     const { language, feature } = req.params;
 
     // Valider que language et feature sont valides
@@ -47,10 +52,10 @@ router.get('/:language/:feature/options', async (req, res) => {
       feature as FeatureType
     );
 
-    res.json(options);
+    return res.json(options);
   } catch (error) {
     console.error('Erreur lors de la récupération des options:', error);
-    res.status(500).json({
+    return res.status(500).json({
       message: error instanceof Error ? error.message : 'Erreur interne du serveur',
     });
   }

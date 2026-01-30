@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -17,8 +18,19 @@ export default {
           900: '#0c4a6e',
         },
       },
+      borderRadius: {
+        xl: '0.75rem',
+        '2xl': '1rem',
+      },
+      boxShadow: {
+        card: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+        'card-hover': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+      },
+      transitionDuration: {
+        200: '200ms',
+        300: '300ms',
+      },
     },
   },
   plugins: [],
 };
-

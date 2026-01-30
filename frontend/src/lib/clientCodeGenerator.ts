@@ -1,3 +1,4 @@
+import { getSnippetPath } from '../config/env';
 import type { GenerateRequest, GenerateResponse } from '../types';
 
 /**
@@ -105,10 +106,7 @@ function sanitizeInput(text: string): string {
 export async function generateCodeFromSnippet(
   request: GenerateRequest
 ): Promise<GenerateResponse> {
-  // Charger le snippet JSON
-  // Utiliser le base path de Vite (important pour GitHub Pages)
-  const basePath = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '';
-  const snippetPath = `${basePath}/snippets/${request.language}/${request.feature}.json`;
+  const snippetPath = getSnippetPath(request.language, request.feature);
   const snippetResponse = await fetch(snippetPath);
   
   if (!snippetResponse.ok) {

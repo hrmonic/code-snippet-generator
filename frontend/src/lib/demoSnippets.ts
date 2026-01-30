@@ -1,17 +1,5 @@
-import axios from 'axios';
 import type { GenerateRequest, GenerateResponse } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 10000, // 10 secondes de timeout
-});
-
-// Mode démo avec snippets statiques (fallback si API indisponible)
 const DEMO_SNIPPETS: Record<string, Record<string, string>> = {
   html5: {
     form: `<!DOCTYPE html>
@@ -388,92 +376,28 @@ function applyTemplateVariables(code: string, options: Record<string, unknown>):
   return result;
 }
 
-async function generateCodeDemo(
-  request: GenerateRequest
-): Promise<GenerateResponse> {
+export function generateCodeDemo(request: GenerateRequest): Promise<GenerateResponse> {
   const demoCode = DEMO_SNIPPETS[request.language]?.[request.feature];
-  
   if (!demoCode) {
-    throw new Error(
-      `Snippet démo non disponible pour ${request.language} / ${request.feature}`
-    );
+    return Promise.reject(new Error(`Snippet démo non disponible pour ${request.language} / ${request.feature}`));
   }
-
   const code = applyTemplateVariables(demoCode, request.options);
-  
   const extensions: Record<string, string> = {
-    html5: 'html',
-    css3: 'css',
-    javascript: 'js',
-    java: 'java',
-    php: 'php',
-    sql: 'sql',
+    html5: 'html', css3: 'css', javascript: 'js', java: 'java', php: 'php', sql: 'sql',
   };
-
-  return {
+  return Promise.resolve({
     code,
     filename: `code.${extensions[request.language] || 'txt'}`,
     language: request.language,
-  };
+  });
 }
 
-export async function generateCode(
-  request: GenerateRequest
-): Promise<GenerateResponse> {
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
-
-    const response = await api.post<GenerateResponse>('/api/generate', request, {
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-    return response.data;
-  } catch (error) {
-    // Si l'API n'est pas disponible, utiliser la génération côté client
-    if (axios.isAxiosError(error) && (!error.response || error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK' || error.code === 'ERR_ABORTED')) {
-      // Mode production : utiliser la génération côté client silencieusement
-      try {
-        const { generateCodeFromSnippet } = await import('./clientCodeGenerator');
-        return generateCodeFromSnippet(request);
-      } catch (fallbackError) {
-        // Si même le fallback échoue, utiliser le mode démo
-        return generateCodeDemo(request);
-      }
+export function getDemoSnippetList(): Array<{ id: string; language: string; feature: string }> {
+  const list: Array<{ id: string; language: string; feature: string }> = [];
+  for (const [lang, features] of Object.entries(DEMO_SNIPPETS)) {
+    for (const feature of Object.keys(features)) {
+      list.push({ id: `${lang}-${feature}`, language: lang, feature });
     }
-    
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message || 'Erreur lors de la génération du code'
-      );
-    }
-    throw error;
   }
-}
-
-export async function getAvailableSnippets() {
-  try {
-    const response = await api.get('/api/snippets');
-    return response.data;
-  } catch (error) {
-    // Si l'API n'est pas disponible, retourner les snippets démo
-    if (axios.isAxiosError(error) && (!error.response || error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK')) {
-      console.warn('API non disponible, utilisation des snippets démo');
-      const demoList = [];
-      for (const [lang, features] of Object.entries(DEMO_SNIPPETS)) {
-        for (const feature of Object.keys(features)) {
-          demoList.push({ id: `${lang}-${feature}`, language: lang, feature });
-        }
-      }
-      return demoList;
-    }
-    
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message || 'Erreur lors de la récupération des snippets'
-      );
-    }
-    throw error;
-  }
+  return list;
 }

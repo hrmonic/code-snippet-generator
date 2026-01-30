@@ -1,22 +1,27 @@
 import { readFileSync, readdirSync, statSync } from 'fs';
-import { join, dirname, resolve, normalize } from 'path';
-import { fileURLToPath } from 'url';
+import { join, resolve } from 'path';
 import type { Snippet } from '../types/index.js';
+import { validateSnippet } from '../schemas/snippetSchema.js';
 import { security } from './security/index.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+/**
+ * Resolve snippets directory. Uses process.cwd() so it works in both
+ * normal runtime (server started from server/) and Jest (same cwd).
+ */
+function getSnippetsDirectory(): string {
+  return join(process.cwd(), 'src', 'data', 'snippets');
+}
 
 class SnippetLoader {
   private snippetsCache: Map<string, Snippet[]> = new Map();
 
-  private getSnippetsDirectory(): string {
-    return join(__dirname, '../data/snippets');
+  private getSnippetsDir(): string {
+    return getSnippetsDirectory();
   }
 
   async getAllSnippets(): Promise<Snippet[]> {
     const allSnippets: Snippet[] = [];
-    const snippetsDir = this.getSnippetsDirectory();
+    const snippetsDir = this.getSnippetsDir();
 
     const languages = readdirSync(snippetsDir).filter((item) => {
       // Valider que le nom du dossier est sûr
@@ -50,7 +55,7 @@ class SnippetLoader {
       return this.snippetsCache.get(sanitizedLanguage)!;
     }
 
-    const baseDir = this.getSnippetsDirectory();
+    const baseDir = this.getSnippetsDir();
     const snippetsDir = resolve(baseDir, sanitizedLanguage);
     
     // Vérifier que le chemin résolu reste dans le répertoire de base
@@ -75,8 +80,11 @@ class SnippetLoader {
         }
         
         const content = readFileSync(filePath, 'utf-8');
-        const snippet = JSON.parse(content) as Snippet;
-        snippets.push(snippet);
+        const parsed = JSON.parse(content) as Snippet;
+        if (!validateSnippet(parsed)) {
+          console.warn(`[snippetLoader] Invalid snippet schema: ${filePath}`);
+        }
+        snippets.push(parsed);
       }
 
       this.snippetsCache.set(sanitizedLanguage, snippets);

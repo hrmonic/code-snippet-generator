@@ -4,6 +4,7 @@
   "description": "Animations CSS3 avec keyframes",
   "language": "css3",
   "feature": "animation",
+  "previewMarkup": "<div style=\"padding:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;\"><div class=\"fade-in\" style=\"padding:1rem;background:#e0e7ff;border-radius:8px;\">Fade in</div><div class=\"slide-in\" style=\"padding:1rem;background:#c7d2fe;border-radius:8px;\">Slide in</div><div class=\"pulse\" style=\"padding:1rem;background:#a5b4fc;border-radius:8px;\">Pulse</div></div>",
   "code": "@keyframes fadeIn {\n    from {\n        opacity: 0;\n        transform: translateY(20px);\n    }\n    to {\n        opacity: 1;\n        transform: translateY(0);\n    }\n}\n\n@keyframes slideIn {\n    from {\n        transform: translateX(-100%);\n    }\n    to {\n        transform: translateX(0);\n    }\n}\n\n@keyframes pulse {\n    0%, 100% {\n        transform: scale(1);\n    }\n    50% {\n        transform: scale(1.05);\n    }\n}\n\n.fade-in {\n    animation: fadeIn 0.5s ease-in-out;\n}\n\n.slide-in {\n    animation: slideIn 0.3s ease-out;\n}\n\n.pulse {\n    animation: pulse 2s infinite;\n}",
   "variables": [
     {

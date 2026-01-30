@@ -19,7 +19,7 @@ jobs:
           cache-dependency-path: package-lock.json
       - run: npm install
       - name: Run ESLint
-        run: npm run lint || echo "Lint completed with warnings"
+        run: npm run lint
       - name: Check Prettier formatting
         continue-on-error: true
         run: npx prettier --check "**/*.{ts,tsx,js,jsx,json,css,md}" || echo "Prettier check completed"
@@ -40,7 +40,7 @@ jobs:
           cache-dependency-path: package-lock.json
       - run: npm install
       - name: Run tests
-        run: npm run test --workspace=${{ matrix.workspace }} || echo "Tests completed"
+        run: npm run test --workspace=${{ matrix.workspace }}
       - name: Upload coverage (optional)
         if: always()
         continue-on-error: true
@@ -51,6 +51,20 @@ jobs:
           name: ${{ matrix.workspace }}-coverage
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  validate-snippets:
+    name: Validate Snippets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - run: npm install
+      - name: Validate snippet variables vs placeholders
+        run: npm run validate:snippets --workspace=server
 
   build:
     name: Build
@@ -64,9 +78,9 @@ jobs:
           cache-dependency-path: package-lock.json
       - run: npm install
       - name: Build frontend
-        run: npm run build --workspace=frontend || echo "Frontend build completed"
+        run: npm run build --workspace=frontend
       - name: Build backend
-        run: npm run build --workspace=server || echo "Backend build completed"
+        run: npm run build --workspace=server
       - name: Upload build artifacts
         if: always()
         continue-on-error: true

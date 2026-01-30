@@ -22,8 +22,8 @@ describe('useGeneratorStore', () => {
   });
 
   it('should reset feature when language changes', () => {
-    useGeneratorStore.getState().setFeature('form');
     useGeneratorStore.getState().setLanguage('html5');
+    useGeneratorStore.getState().setFeature('form');
     expect(useGeneratorStore.getState().selectedFeature).toBe('form');
 
     useGeneratorStore.getState().setLanguage('css3');

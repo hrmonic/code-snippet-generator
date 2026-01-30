@@ -2,6 +2,12 @@
 
 Merci de votre intérêt pour contribuer à Code Snippet Generator ! 🎉
 
+## Documentation
+
+- [**Setup**](docs/setup.md) – Installation, scripts npm, variables d'environnement
+- [**Architecture**](docs/architecture.md) – Flux de données, rôles experts, objectifs qualité
+- [**API**](docs/api.md) – Endpoints et contrats du serveur
+
 ## Processus de Contribution
 
 1. **Fork** le repository
@@ -38,6 +44,7 @@ Lors de l'ajout d'un nouveau snippet, respectez cette structure :
   "description": "Description détaillée",
   "language": "html5|css3|javascript|java|php|sql",
   "feature": "form|api|crud|animation|query|validation|layout|input",
+  "previewMarkup": "HTML optionnel pour l'aperçu CSS3 (body de la démo)",
   "code": "Code avec {{placeholders}}",
   "variables": [
     {

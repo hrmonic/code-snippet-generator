@@ -1,44 +1,8 @@
+import type { FeatureType } from '../constants/features.js';
+
 export type Language = 'html5' | 'css3' | 'javascript' | 'java' | 'php' | 'sql';
 
-export type FeatureType =
-  | 'form'
-  | 'api'
-  | 'crud'
-  | 'animation'
-  | 'query'
-  | 'validation'
-  | 'layout'
-  | 'input'
-  | 'modal'
-  | 'navbar'
-  | 'responsive'
-  | 'flexbox'
-  | 'fetch'
-  | 'model'
-  | 'joins'
-  | 'card'
-  | 'table'
-  | 'grid'
-  | 'buttons'
-  | 'storage'
-  | 'debounce'
-  | 'service'
-  | 'router'
-  | 'transactions'
-  | 'slider'
-  | 'variables'
-  | 'promise'
-  | 'observer'
-  | 'repository'
-  | 'middleware'
-  | 'indexes'
-  | 'accordion'
-  | 'transforms'
-  | 'event'
-  | 'class'
-  | 'dto'
-  | 'auth'
-  | 'views';
+export type { FeatureType };
 
 export interface SnippetVariable {
   name: string;
@@ -63,7 +27,7 @@ export interface Snippet {
   security: SnippetSecurity;
   tests?: string;
   language: Language;
-  feature: FeatureType;
+  feature: string;
 }
 
 export interface GenerateRequest {

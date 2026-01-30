@@ -1,10 +1,8 @@
 import { snippetLoader } from '../snippetLoader.js';
 import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
 
-// Mock fs module
+// Mock fs module only; path must be real for security.isPathSafe and resolve()
 jest.mock('fs');
-jest.mock('path');
 
 describe('SnippetLoader', () => {
   beforeEach(() => {

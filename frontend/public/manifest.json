@@ -1,0 +1,18 @@
+{
+  "name": "Code Snippet Generator",
+  "short_name": "Snippet Gen",
+  "description": "Générateur de code intelligent pour développeurs - HTML5, CSS3, JavaScript, Java, PHP, SQL",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#0284c7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

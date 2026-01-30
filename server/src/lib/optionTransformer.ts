@@ -163,7 +163,6 @@ class OptionTransformer {
    */
   private mergeOptions(baseOptions: OptionConfig[], enrichedOptions: OptionConfig[]): OptionConfig[] {
     const merged: OptionConfig[] = [...baseOptions];
-    const baseKeys = new Set(baseOptions.map((opt) => opt.key));
 
     for (const enriched of enrichedOptions) {
       const existingIndex = merged.findIndex((opt) => opt.key === enriched.key);
