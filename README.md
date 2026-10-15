@@ -22,7 +22,6 @@ Code Snippet Generator helps users configure, inspect and export commonly needed
 
 | Capability | What it does |
 | --- | --- |
-
 | **Six languages** | HTML5, CSS3, JavaScript, Java, PHP and SQL template categories. |
 | **Configurable templates** | Parameters and grouped options submitted to the generation service. |
 | **Monaco integration** | Editable code workspace using Microsoft's Monaco Editor. |

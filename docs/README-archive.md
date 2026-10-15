@@ -1,6 +1,6 @@
 # Archived README — historical documentation
 
-This file preserves the previous README for reference. It may contain outdated marketing claims, technical instructions or version information. Use [the current README](../../README.md) as the up-to-date entry point.
+This file preserves the previous README for reference. It may contain outdated marketing claims, technical instructions or version information. Use [the current README](../README.md) as the up-to-date entry point.
 
 ---
 

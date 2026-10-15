@@ -22,7 +22,6 @@ Code Snippet Generator permet de configurer, inspecter et exporter des modèles 
 
 | Fonction | Bénéfice |
 | --- | --- |
-
 | **Six langages** | Catégories de modèles HTML5, CSS3, JavaScript, Java, PHP et SQL. |
 | **Templates configurables** | Paramètres et groupes d'options transmis au service de génération. |
 | **Éditeur Monaco** | Espace de lecture et d'édition de code basé sur Monaco Editor. |
